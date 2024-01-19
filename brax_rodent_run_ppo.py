@@ -67,9 +67,9 @@ class Rodent(MjxEnv):
             self,
             forward_reward_weight=5,
             ctrl_cost_weight=0.1,
-            healthy_reward=0.0,
-            terminate_when_unhealthy=False,
-            healthy_z_range=(0.0, 2.0),
+            healthy_reward=0.5,
+            terminate_when_unhealthy=True,
+            healthy_z_range=(0.2, 1.0),
             reset_noise_scale=1e-2,
             exclude_current_positions_from_observation=False,
             **kwargs,
@@ -198,18 +198,20 @@ env = envs.get_environment(env_name)
 jit_reset = jax.jit(env.reset)
 jit_step = jax.jit(env.step)
 
+# Change config to conservative measure for debug purposes.
 config = {
     "env_name": env_name,
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 2048,
-    "num_timesteps": 10_000_000,
-    "eval_every": 10_000,
+    "num_envs": 256,
+    "num_timesteps": 10_000,
+    "eval_every": 100,
     "episode_length": 1000,
     "num_evals": 1000,
-    "batch_size": 512,
+    "batch_size": 256,
     "learning_rate": 3e-4,
-    "terminate_when_unhealthy": False
+    "terminate_when_unhealthy": False,
+    "run_platform": "Local",
 }
 
 
@@ -225,12 +227,14 @@ run = wandb.init(
     config=config
 )
 
-wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_brax"
+
+wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{config['run_platform']}_brax"
 
 
 def wandb_progress(num_steps, metrics):
     metrics["num_steps"] = num_steps
     wandb.log(metrics)
+    print(metrics)
     
 
 make_inference_fn, params, _= train_fn(environment=env, progress_fn=wandb_progress)
