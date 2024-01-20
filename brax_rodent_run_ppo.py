@@ -205,15 +205,15 @@ config = {
     "env_name": env_name,
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 128,
-    "num_timesteps": 10_000,
-    "eval_every": 10,
+    "num_envs": 256,
+    "num_timesteps": 100_000,
+    "eval_every": 1000,
     "episode_length": 500,
     "num_evals": 1000,
-    "batch_size": 64,
+    "batch_size": 256,
     "learning_rate": 6e-4,
     "terminate_when_unhealthy": False,
-    "run_platform": "runai",
+    "run_platform": "local",
 }
 
 
@@ -239,7 +239,7 @@ def wandb_progress(num_steps, metrics):
     print(metrics)
     
 def policy_params_fn(num_steps, make_policy, params, model_path = './model_checkpoints/brax_ppo_rodent_run'):
-    os.makedirs("./model_checkpoints")
+    os.makedirs("./model_checkpoints", exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
     
 
