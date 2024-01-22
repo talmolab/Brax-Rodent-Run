@@ -205,8 +205,8 @@ config = {
     "env_name": env_name,
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 256,
-    "num_timesteps": 100_000,
+    "num_envs": 128,
+    "num_timesteps": 10_000,
     "eval_every": 1000,
     "episode_length": 500,
     "num_evals": 1000,
@@ -238,14 +238,13 @@ def wandb_progress(num_steps, metrics):
     wandb.log(metrics)
     print(metrics)
     
-def policy_params_fn(num_steps, make_policy, params, model_path = './model_checkpoints/brax_ppo_rodent_run'):
-    os.makedirs("./model_checkpoints", exist_ok=True)
+def policy_params_fn(num_steps, make_policy, params, model_path = './model_checkpoints'):
+    os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
     
 
-make_inference_fn, params, _= train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
+make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
 
 
-#@title Save Model
 model_path = './model_checkpoints/brax_ppo_rodent_run_finished'
 model.save_params(model_path, params)
