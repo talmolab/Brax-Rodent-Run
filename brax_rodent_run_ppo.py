@@ -161,11 +161,12 @@ class Rodent(MjxEnv):
             x_velocity=velocity[0],
             y_velocity=velocity[1],
         )
-
+        print(state.metrics)
         return state.replace(
             pipeline_state=data, obs=obs, reward=reward, done=done
         )
 
+    # this get observation might be faulty?
     def _get_obs(
             self, data: mjx.Data, action: jp.ndarray
     ) -> jp.ndarray:
@@ -173,13 +174,11 @@ class Rodent(MjxEnv):
         position = data.qpos
         if self._exclude_current_positions_from_observation:
             position = position[2:]
-            
+        
         # external_contact_forces are excluded
         return jp.concatenate([
             position,
             data.qvel,
-            data.cinert[1:].ravel(),
-            data.cvel[1:].ravel(),
             data.qfrc_actuator,
         ])
 
@@ -205,7 +204,7 @@ config = {
     "env_name": env_name,
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 128,
+    "num_envs": 512,
     "num_timesteps": 10_000,
     "eval_every": 1000,
     "episode_length": 500,
@@ -219,10 +218,12 @@ config = {
 
 train_fn = functools.partial(
     ppo.train, num_timesteps=config["num_timesteps"], num_evals=int(config["num_timesteps"]/config["eval_every"]),
-    reward_scaling=0.1, episode_length=config["episode_length"], normalize_observations=True, action_repeat=1,
-    unroll_length=10, num_minibatches=8, num_updates_per_batch=4,
-    discounting=0.98, learning_rate=config["learning_rate"], entropy_cost=1e-3, num_envs=config["num_envs"],
-    batch_size=config["batch_size"], seed=0)
+    reward_scaling=1, episode_length=config["episode_length"], normalize_observations=True, action_repeat=1,
+    unroll_length=10, num_minibatches=32, num_updates_per_batch=8,
+    discounting=0.95, learning_rate=config["learning_rate"], entropy_cost=1e-3, num_envs=config["num_envs"],
+    batch_size=config["batch_size"], seed=0
+)
+
 
 run = wandb.init(
     project="vnl",
