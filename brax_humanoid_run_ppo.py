@@ -216,7 +216,7 @@ config = {
     "env_name": env_name,
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 5,
+    "num_envs": 8,
     "num_timesteps": 1_000,
     "eval_every": 100,
     "episode_length": 500,
