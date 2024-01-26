@@ -1,5 +1,3 @@
-
-
 # In[1]:
 
 import numpy as np
@@ -251,6 +249,7 @@ def wandb_progress(num_steps, metrics):
     wandb.log(metrics)
     print(metrics)
     
+# create saving model parameters
 def policy_params_fn(num_steps, make_policy, params, model_path = './model_checkpoints'):
     os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
