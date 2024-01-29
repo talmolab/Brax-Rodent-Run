@@ -32,6 +32,7 @@ import os
 
 import yaml
 from typing import List, Dict, Text
+from dm_control import mjcf
 
 
 def load_params(param_path: Text) -> Dict:
