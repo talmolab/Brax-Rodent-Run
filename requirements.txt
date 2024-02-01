@@ -3,5 +3,7 @@ mujoco-mjx
 brax
 wandb
 mediapy
+dm_control
+tqdm
 # pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 # pip install -U numba
