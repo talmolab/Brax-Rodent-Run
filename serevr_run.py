@@ -50,31 +50,22 @@ class Gap_Vnl(corr_arenas.GapsCorridor):
                        aesthetic = aesthetic,
                        platform_length = platform_length,
                        gap_length = gap_length)
-
+    
     def regenerate(self, random_state):
         super().regenerate(random_state)
 
-
+# Task now just serve as a wrapper
 class Task_Vnl(corr_tasks.RunThroughCorridor):
     def __init__(self,
                walker,
                arena,
-               walker_spawn_position=(0, 0, 0),
-               walker_spawn_rotation=None,
-               target_velocity=3.0,
-               contact_termination=True,
-               terminate_at_height=-0.5,
-               physics_timestep=0.005,
-               control_timestep=0.025):
-        super().__init__(walker=walker,
-                         arena=arena,
-                         walker_spawn_position=walker_spawn_position,
-                         walker_spawn_rotation=walker_spawn_rotation,
-                         target_velocity=target_velocity,
-                         contact_termination=contact_termination,
-                         terminate_at_height=terminate_at_height,
-                         physics_timestep=physics_timestep,
-                         control_timestep=control_timestep)
+               walker_spawn_position):
+        
+        # we don't really need the rest of the reward setup in dm_control, just how the walker is attached to the arena
+        spawn_site =  arena._mjcf_root.worldbody.add('site', pos = walker_spawn_position)
+        self._arena = arena
+        self._walker = walker
+        self._walker.create_root_joints(self._arena.attach(self._walker, attach_site=spawn_site)) # customize starting environment
 
 # Define environment class in brax
 class Walker(MjxEnv):
