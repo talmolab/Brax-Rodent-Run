@@ -234,11 +234,7 @@ walker = ant.Ant(observable_options={'egocentric_camera': dict(enabled=True)})
 task = Task_Vnl(
     walker=walker,
     arena=arena,
-    walker_spawn_position=(5, 0, 0),
-    walker_spawn_rotation=0,
-    target_velocity=1.0,
-    contact_termination=False,
-    terminate_at_height=-0.3)
+    walker_spawn_position=(3, 0, 0))
 
 # Export from dm_control
 random_state = np.random.RandomState(12345)
