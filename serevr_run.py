@@ -1,3 +1,4 @@
+# Import
 from datetime import datetime
 import functools
 from IPython.display import HTML
@@ -40,6 +41,7 @@ from brax.training.agents.ppo import networks as ppo_networks
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
+# Define inheritence relationships from dm_control
 class Gap_Vnl(corr_arenas.GapsCorridor):
     def _build(self, corridor_width, corridor_length, visible_side_planes, aesthetic, platform_length, gap_length):
         super()._build(corridor_width=corridor_width,
@@ -74,6 +76,7 @@ class Task_Vnl(corr_tasks.RunThroughCorridor):
                          physics_timestep=physics_timestep,
                          control_timestep=control_timestep)
 
+# Define environment class in brax
 class Walker(MjxEnv):
   '''
   This is greatly coustomizable of what reward you want to give: reward engineering
@@ -88,9 +91,6 @@ class Walker(MjxEnv):
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,):
-    '''
-    Defining initilization of the agent
-    '''
 
     mj_model = physics.model.ptr
     # this is directly a mj_model already of type mujoco_py.MjModel (This is already a MJModel, same as previously in brax)
@@ -228,43 +228,40 @@ class Walker(MjxEnv):
     ])
   
 
-test = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
+# Initilizing dm_control
+arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
       gap_length=distributions.Uniform(.05, .2),
       corridor_width=5, # walker width follows corridor width
       corridor_length=40,
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 
-test.regenerate(random_state=None)
+arena.regenerate(random_state=None)
 
 walker = ant.Ant(observable_options={'egocentric_camera': dict(enabled=True)})
 
 task = Task_Vnl(
     walker=walker,
-    arena=test,
+    arena=arena,
     walker_spawn_position=(5, 0, 0),
     walker_spawn_rotation=0,
     target_velocity=1.0,
     contact_termination=False,
     terminate_at_height=-0.3)
 
-
+# Export from dm_control
 random_state = np.random.RandomState(12345)
 task.initialize_episode_mjcf(random_state)
 physics = mjcf_dm.Physics.from_mjcf_model(task.root_entity.mjcf_model)
 
-# Registering the environment setup in env as humanoid_mjx
+# Brax environment initilization
 envs.register_environment('walker', Walker)
-
 env = envs.get_environment(env_name='walker')
-
-# define the jit reset/step functions
 jit_reset = jax.jit(env.reset)
 jit_step = jax.jit(env.step)
-
-# initialize the state
 state = jit_reset(jax.random.PRNGKey(0))
 
+# Training configuration
 config = {
     "env_name": 'walker',
     "algo_name": "ppo",
@@ -278,7 +275,6 @@ config = {
     "num_updates_per_batch": 4,
     "unroll_length": 5,
     }
-
 
 train_fn = functools.partial(
     ppo.train, num_timesteps=config['num_timesteps'], num_evals=config['num_evals'], reward_scaling=0.1,
@@ -300,14 +296,11 @@ def wandb_progress(num_steps, metrics):
     wandb.log(metrics)
     print(metrics)
     
-# create saving model parameters
 def policy_params_fn(num_steps, make_policy, params, model_path = './model_checkpoints'):
     os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
     
-
 make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
-
 
 model_path = './model_checkpoints/brax_ppo_task_finished'
 model.save_params(model_path, params)
