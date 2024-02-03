@@ -8,6 +8,7 @@ from typing import List, Dict, Text, Callable, NamedTuple, Optional, Union, Any,
 from matplotlib import pyplot as plt
 import mediapy as media
 import wandb
+import os
 
 import numpy as np
 
@@ -78,7 +79,7 @@ class Walker(MjxEnv):
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
       terminate_when_unhealthy=True,
-      healthy_z_range=(1.0, 1.5),
+      healthy_z_range=(0.2, 1.0),
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,):
@@ -254,9 +255,9 @@ config = {
     "algo_name": "ppo",
     "task_name": "gap",
     "num_timesteps": 30_000_000,
-    "num_evals": 3,
+    "num_evals": 5,
     "episode_length": 1000,
-    "num_envs": 1024,
+    "num_envs": 1,
     "batch_size": 1024,
     "num_minibatches": 32,
     "num_updates_per_batch": 4,
