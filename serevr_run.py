@@ -76,7 +76,7 @@ class Walker(MjxEnv):
   def __init__(
       self,
       forward_reward_weight=1.25,
-      reach_target_reward=5.0, # reward for reaching target area
+      reach_target_reward=0.0, # reward for reaching target area
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
       terminate_when_unhealthy=True,
@@ -172,9 +172,9 @@ class Walker(MjxEnv):
     forward_reward = self._forward_reward_weight * velocity[0] * 2
 
     #Reaching the target location
-    if jp.linalg.norm(com_after) > jp.linalg.norm(com_before):
-      reach_target_reward = 2 * self.reach_target_reward
-
+    # if jp.linalg.norm(com_after) > jp.linalg.norm(com_before):
+    #   reach_target_reward = 2 * self.reach_target_reward
+    reach_target_reward = self.reach_target_reward
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
