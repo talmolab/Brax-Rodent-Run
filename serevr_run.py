@@ -76,7 +76,6 @@ class Walker(MjxEnv):
   def __init__(
       self,
       forward_reward_weight=1.25,
-      reach_target_reward=0.0, # reward for reaching target area
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
       terminate_when_unhealthy=True,
@@ -112,7 +111,6 @@ class Walker(MjxEnv):
 
     # Global vraiable for later calling them
     self._forward_reward_weight = forward_reward_weight
-    self.reach_target_reward = reach_target_reward
     self._ctrl_cost_weight = ctrl_cost_weight
     self._healthy_reward = healthy_reward
     self._terminate_when_unhealthy = terminate_when_unhealthy
@@ -146,7 +144,6 @@ class Walker(MjxEnv):
     reward, done, zero = jp.zeros(3)
     metrics = {
         'forward_reward': zero,
-        'reach_reward': zero,
         'reward_linvel': zero,
         'reward_quadctrl': zero,
         'reward_alive': zero,
@@ -175,7 +172,6 @@ class Walker(MjxEnv):
     #Reaching the target location
     # if jp.linalg.norm(com_after) > jp.linalg.norm(com_before):
     #   reach_target_reward = 2 * self.reach_target_reward
-    reach_target_reward = self.reach_target_reward
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
@@ -193,14 +189,13 @@ class Walker(MjxEnv):
 
     #Feedback from env
     obs = self._get_obs(data.data, action)
-    reward = forward_reward + healthy_reward + reach_target_reward - ctrl_cost
+    reward = forward_reward + healthy_reward - ctrl_cost
 
     #Termination State
     done = 1.0 - is_healthy if self._terminate_when_unhealthy else 0.0
 
     state.metrics.update(
         forward_reward=forward_reward,
-        reach_target_reward = reach_target_reward,
         reward_linvel=forward_reward,
         reward_quadctrl=-ctrl_cost,
         reward_alive=healthy_reward,
@@ -231,7 +226,6 @@ class Walker(MjxEnv):
         data.qfrc_actuator,
     ])
   
-
 # Initilizing dm_control
 arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
       gap_length=distributions.Uniform(.05, .2),
