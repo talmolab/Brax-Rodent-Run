@@ -172,7 +172,7 @@ class Walker(MjxEnv):
     forward_reward = self._forward_reward_weight * velocity[0] * 2
 
     #Reaching the target location
-    if state.metrics.distance_from_origin == 35:
+    if state.metrics['distance_from_origin'] == 35:
       reach_target_reward = 2 * self.reach_target_reward
 
 
@@ -192,7 +192,7 @@ class Walker(MjxEnv):
 
     #Feedback from env
     obs = self._get_obs(data.data, action)
-    reward = forward_reward + healthy_reward - ctrl_cost
+    reward = forward_reward + healthy_reward + reach_target_reward - ctrl_cost
 
     #Termination State
     done = 1.0 - is_healthy if self._terminate_when_unhealthy else 0.0
