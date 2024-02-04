@@ -76,13 +76,17 @@ class Walker(MjxEnv):
   def __init__(
       self,
       forward_reward_weight=1.25,
+      reach_target_reward=5.0, # reward for reaching target area
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
       terminate_when_unhealthy=True,
-      healthy_z_range=(0.2, 1.0),
+      healthy_z_range=(0.2, 1.0), # healthy reward takes care of not falling
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,):
+    '''
+    Defining initilization of the agent
+    '''
 
     mj_model = physics.model.ptr
     # this is directly a mj_model already of type mujoco_py.MjModel (This is already a MJModel, same as previously in brax)
@@ -108,6 +112,7 @@ class Walker(MjxEnv):
 
     # Global vraiable for later calling them
     self._forward_reward_weight = forward_reward_weight
+    self.reach_target_reward = reach_target_reward
     self._ctrl_cost_weight = ctrl_cost_weight
     self._healthy_reward = healthy_reward
     self._terminate_when_unhealthy = terminate_when_unhealthy
@@ -166,6 +171,11 @@ class Walker(MjxEnv):
     velocity = (com_after - com_before) / self.dt
     forward_reward = self._forward_reward_weight * velocity[0] * 2
 
+    #Reaching the target location
+    if jp.linalg.norm(com_after) == 35:
+      reach_target_reward = 2 * self.reach_target_reward
+
+
     #Height being healthy
     min_z, max_z = self._healthy_z_range
     is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
@@ -189,6 +199,7 @@ class Walker(MjxEnv):
 
     state.metrics.update(
         forward_reward=forward_reward,
+        reach_target_reward = reach_target_reward,
         reward_linvel=forward_reward,
         reward_quadctrl=-ctrl_cost,
         reward_alive=healthy_reward,
@@ -254,13 +265,13 @@ config = {
     "env_name": 'walker',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 30_000_000,
-    "num_evals": 5,
+    "num_timesteps": 10_000_000,
+    "num_evals": 25,
     "episode_length": 1000,
     "num_envs": 1,
-    "batch_size": 1024,
+    "batch_size": 512,
     "num_minibatches": 32,
-    "num_updates_per_batch": 4,
+    "num_updates_per_batch": 2,
     "unroll_length": 5,
     }
 
