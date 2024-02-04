@@ -146,6 +146,7 @@ class Walker(MjxEnv):
     reward, done, zero = jp.zeros(3)
     metrics = {
         'forward_reward': zero,
+        'reach_reward': zero,
         'reward_linvel': zero,
         'reward_quadctrl': zero,
         'reward_alive': zero,
