@@ -172,7 +172,7 @@ class Walker(MjxEnv):
     forward_reward = self._forward_reward_weight * velocity[0] * 2
 
     #Reaching the target location
-    if jp.linalg.norm(com_after) == 35:
+    if state.metrics.distance_from_origin == 35:
       reach_target_reward = 2 * self.reach_target_reward
 
 
