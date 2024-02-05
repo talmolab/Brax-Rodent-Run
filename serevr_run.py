@@ -276,7 +276,7 @@ config = {
     "num_timesteps": 10_000_000,
     "num_evals": 5,
     "episode_length": 1000,
-    "num_envs": 27,
+    "num_envs": 32,
     "batch_size": 512,
     "num_minibatches": 32,
     "num_updates_per_batch": 2,
