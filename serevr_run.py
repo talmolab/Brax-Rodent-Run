@@ -180,7 +180,7 @@ class Walker(MjxEnv):
     #Reaching the target location distance
     #distance = state.metrics['distance_from_origin']
     #distance_reward = [self._distance_rewaed * distance if isinstance(distance, int) else 0]
-    distance_reward = self._distance_rewaed * velocity * self.dt
+    distance_reward = self._distance_rewaed * velocity[0] * self.dt
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
