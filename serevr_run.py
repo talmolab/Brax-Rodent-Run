@@ -68,7 +68,11 @@ class Task_Vnl(corr_tasks.RunThroughCorridor):
         self._walker = walker
         self._walker.create_root_joints(self._arena.attach(self._walker, attach_site=spawn_site)) # customize starting environment
 
-# Define environment class in brax
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------------------- 
+# MjxEnv is directly an API to the Mujoco mjx
 class Walker(MjxEnv):
   '''
   This is greatly coustomizable of what reward you want to give: reward engineering
@@ -79,7 +83,8 @@ class Walker(MjxEnv):
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
       terminate_when_unhealthy=True,
-      healthy_z_range=(0.2, 1.0), # healthy reward takes care of not falling
+      healthy_z_range=(0.2, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
+      distance_reward=5.0,
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,):
@@ -115,6 +120,7 @@ class Walker(MjxEnv):
     self._healthy_reward = healthy_reward
     self._terminate_when_unhealthy = terminate_when_unhealthy
     self._healthy_z_range = healthy_z_range
+    self._distance_rewaed = distance_reward
     self._reset_noise_scale = reset_noise_scale
     self._exclude_current_positions_from_observation = (exclude_current_positions_from_observation)
 
@@ -149,29 +155,32 @@ class Walker(MjxEnv):
         'reward_alive': zero,
         'x_position': zero,
         'y_position': zero,
+        'distance_reward': zero,
         'distance_from_origin': zero,
         'x_velocity': zero,
         'y_velocity': zero,
     }
-    return State(data, obs, reward, done, metrics)
+    return State(data, obs, reward, done, metrics) # State is a big wrapper that contains all information about the environment
 
-  def step(self, state: State, action: jp.ndarray) -> State:
+  def step(self, state: State, action: jp.ndarray) -> State: # push towards another State
     """Runs one timestep of the environment's dynamics."""
     #Previous Pipeline
     data0 = state.pipeline_state
 
     #Current pipeline state, step 1
+    #Looking at the documenttaion of pipeline_step, "->" means return a modified State
     data = self.pipeline_step(data0, action)
 
-    #Running forward (Velocity)
+    #Running forward (Velocity) tracking base on center of mass movement
     com_before = data0.data.subtree_com[1]
     com_after = data.data.subtree_com[1]
     velocity = (com_after - com_before) / self.dt
-    forward_reward = self._forward_reward_weight * velocity[0] * 2
+    forward_reward = self._forward_reward_weight * velocity[0]
 
-    #Reaching the target location
-    # if jp.linalg.norm(com_after) > jp.linalg.norm(com_before):
-    #   reach_target_reward = 2 * self.reach_target_reward
+    #Reaching the target location distance
+    distance = state.metrics['distance_from_origin']
+    if distance >= 10:
+      distance_reward = self._distance_rewaed * distance
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
@@ -184,12 +193,12 @@ class Walker(MjxEnv):
     else:
       healthy_reward = self._healthy_reward * is_healthy
 
-    #Control quad cost
+    #Control force cost
     ctrl_cost = self._ctrl_cost_weight * jp.sum(jp.square(action))
 
     #Feedback from env
     obs = self._get_obs(data.data, action)
-    reward = forward_reward + healthy_reward - ctrl_cost
+    reward = forward_reward + distance_reward + healthy_reward - ctrl_cost
 
     #Termination State
     done = 1.0 - is_healthy if self._terminate_when_unhealthy else 0.0
@@ -201,18 +210,17 @@ class Walker(MjxEnv):
         reward_alive=healthy_reward,
         x_position=com_after[0],
         y_position=com_after[1],
+        distance_reward=distance_reward,
         distance_from_origin=jp.linalg.norm(com_after),
         x_velocity=velocity[0],
         y_velocity=velocity[1],
     )
-
-    return state.replace(
-        pipeline_state=data, obs=obs, reward=reward, done=done
-    )
+    return state.replace(pipeline_state=data, obs=obs, reward=reward, done=done)
 
   def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
     """Observes humanoid body position, velocities, and angles."""
     position = data.qpos
+
     if self._exclude_current_positions_from_observation:
       position = position[2:]
 
@@ -225,7 +233,8 @@ class Walker(MjxEnv):
         data.cvel[1:].ravel(),
         data.qfrc_actuator,
     ])
-  
+
+# -------------------------------------------------------------------------------------------------------------------------------------- 
 # Initilizing dm_control
 arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
       gap_length=distributions.Uniform(.05, .2),
@@ -248,6 +257,10 @@ random_state = np.random.RandomState(12345)
 task.initialize_episode_mjcf(random_state)
 physics = mjcf_dm.Physics.from_mjcf_model(task.root_entity.mjcf_model)
 
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------------------- 
 # Brax environment initilization
 envs.register_environment('walker', Walker)
 env = envs.get_environment(env_name='walker')
