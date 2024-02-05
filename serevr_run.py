@@ -83,7 +83,7 @@ class Walker(MjxEnv):
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
       terminate_when_unhealthy=True,
-      healthy_z_range=(0.2, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
+      healthy_z_range=(0.0, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
       distance_reward=5.0,
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
@@ -274,9 +274,9 @@ config = {
     "algo_name": "ppo",
     "task_name": "gap",
     "num_timesteps": 10_000_000,
-    "num_evals": 25,
+    "num_evals": 5,
     "episode_length": 1000,
-    "num_envs": 1,
+    "num_envs": 20,
     "batch_size": 512,
     "num_minibatches": 32,
     "num_updates_per_batch": 2,
