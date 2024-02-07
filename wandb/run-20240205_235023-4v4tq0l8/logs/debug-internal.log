@@ -1,0 +1,194 @@
+2024-02-05 23:50:23,413 INFO    StreamThr :7346 [internal.py:wandb_internal():86] W&B internal server running at pid: 7346, started at: 2024-02-05 23:50:23.412830
+2024-02-05 23:50:23,414 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: status
+2024-02-05 23:50:23,415 INFO    WriterThread:7346 [datastore.py:open_for_write():87] open: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/run-4v4tq0l8.wandb
+2024-02-05 23:50:23,415 DEBUG   SenderThread:7346 [sender.py:send():382] send: header
+2024-02-05 23:50:23,419 DEBUG   SenderThread:7346 [sender.py:send():382] send: run
+2024-02-05 23:50:23,648 INFO    SenderThread:7346 [dir_watcher.py:__init__():211] watching files in: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files
+2024-02-05 23:50:23,648 INFO    SenderThread:7346 [sender.py:_start_run_threads():1136] run started: 4v4tq0l8 with start time 1707177023.412712
+2024-02-05 23:50:23,652 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: check_version
+2024-02-05 23:50:23,653 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: check_version
+2024-02-05 23:50:23,703 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: run_start
+2024-02-05 23:50:23,727 DEBUG   HandlerThread:7346 [system_info.py:__init__():27] System info init
+2024-02-05 23:50:23,727 DEBUG   HandlerThread:7346 [system_info.py:__init__():42] System info init done
+2024-02-05 23:50:23,727 INFO    HandlerThread:7346 [system_monitor.py:start():194] Starting system monitor
+2024-02-05 23:50:23,727 INFO    SystemMonitor:7346 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-02-05 23:50:23,727 INFO    HandlerThread:7346 [system_monitor.py:probe():214] Collecting system info
+2024-02-05 23:50:23,728 INFO    SystemMonitor:7346 [interfaces.py:start():190] Started cpu monitoring
+2024-02-05 23:50:23,728 INFO    SystemMonitor:7346 [interfaces.py:start():190] Started disk monitoring
+2024-02-05 23:50:23,728 INFO    SystemMonitor:7346 [interfaces.py:start():190] Started gpu monitoring
+2024-02-05 23:50:23,729 INFO    SystemMonitor:7346 [interfaces.py:start():190] Started memory monitoring
+2024-02-05 23:50:23,729 INFO    SystemMonitor:7346 [interfaces.py:start():190] Started network monitoring
+2024-02-05 23:50:23,737 DEBUG   HandlerThread:7346 [system_info.py:probe():151] Probing system
+2024-02-05 23:50:23,738 DEBUG   HandlerThread:7346 [system_info.py:_probe_git():136] Probing git
+2024-02-05 23:50:23,742 DEBUG   HandlerThread:7346 [system_info.py:_probe_git():144] Probing git done
+2024-02-05 23:50:23,742 DEBUG   HandlerThread:7346 [system_info.py:probe():199] Probing system done
+2024-02-05 23:50:23,742 DEBUG   HandlerThread:7346 [system_monitor.py:probe():223] {'os': 'Linux-5.4.0-169-generic-x86_64-with-glibc2.35', 'python': '3.10.10', 'heartbeatAt': '2024-02-05T23:50:23.737394', 'startedAt': '2024-02-05T23:50:23.409738', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/jovyan/Brax-Rodent-Run/serevr_run.py', 'codePathLocal': 'serevr_run.py', 'codePath': 'serevr_run.py', 'git': {'remote': 'https://github.com/talmolab/Brax-Rodent-Run.git', 'commit': 'a28f6dbc4fa957ec396497322285a90c0c868db4'}, 'email': 'kaiwenbian107@gmail.com', 'root': '/home/jovyan/Brax-Rodent-Run', 'host': 'kaiwen-brax-task-ppo-1-0-0', 'username': 'jovyan', 'executable': '/opt/conda/bin/python', 'cpu_count': 32, 'cpu_count_logical': 64, 'cpu_freq': {'current': 3300.29678125, 'min': 0.0, 'max': 0.0}, 'cpu_freq_per_core': [{'current': 3300.238, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3311.186, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3299.878, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3307.692, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}, {'current': 3300.0, 'min': 0.0, 'max': 0.0}], 'disk': {'/': {'total': 5913.542510986328, 'used': 783.8707656860352}}, 'gpu': 'NVIDIA A40', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA A40', 'memory_total': 48305799168}], 'memory': {'total': 503.3535919189453}}
+2024-02-05 23:50:23,742 INFO    HandlerThread:7346 [system_monitor.py:probe():224] Finished collecting system info
+2024-02-05 23:50:23,742 INFO    HandlerThread:7346 [system_monitor.py:probe():227] Publishing system info
+2024-02-05 23:50:23,742 DEBUG   HandlerThread:7346 [system_info.py:_save_conda():208] Saving list of conda packages installed into the current environment
+2024-02-05 23:50:24,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/conda-environment.yaml
+2024-02-05 23:50:28,058 DEBUG   HandlerThread:7346 [system_info.py:_save_conda():220] Saving conda packages done
+2024-02-05 23:50:28,058 INFO    HandlerThread:7346 [system_monitor.py:probe():229] Finished publishing system info
+2024-02-05 23:50:28,062 DEBUG   SenderThread:7346 [sender.py:send():382] send: files
+2024-02-05 23:50:28,062 INFO    SenderThread:7346 [sender.py:_save_file():1403] saving file wandb-metadata.json with policy now
+2024-02-05 23:50:28,066 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: python_packages
+2024-02-05 23:50:28,067 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: python_packages
+2024-02-05 23:50:28,068 DEBUG   SenderThread:7346 [sender.py:send():382] send: telemetry
+2024-02-05 23:50:28,068 DEBUG   SenderThread:7346 [sender.py:send():382] send: telemetry
+2024-02-05 23:50:28,068 DEBUG   SenderThread:7346 [sender.py:send():382] send: run
+2024-02-05 23:50:28,071 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-05 23:50:28,071 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-05 23:50:28,191 INFO    SenderThread:7346 [sender.py:send_run():1010] updated run: 4v4tq0l8
+2024-02-05 23:50:28,191 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: stop_status
+2024-02-05 23:50:28,323 DEBUG   SenderThread:7346 [sender.py:send():382] send: exit
+2024-02-05 23:50:28,323 INFO    SenderThread:7346 [sender.py:send_exit():589] handling exit code: 1
+2024-02-05 23:50:28,323 INFO    SenderThread:7346 [sender.py:send_exit():591] handling runtime: 4
+2024-02-05 23:50:28,324 INFO    SenderThread:7346 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-05 23:50:28,324 INFO    SenderThread:7346 [sender.py:send_exit():597] send defer
+2024-02-05 23:50:28,324 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,324 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 0
+2024-02-05 23:50:28,324 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,324 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 0
+2024-02-05 23:50:28,324 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 1
+2024-02-05 23:50:28,324 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,324 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 1
+2024-02-05 23:50:28,324 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,324 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 1
+2024-02-05 23:50:28,324 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 2
+2024-02-05 23:50:28,324 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,324 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 2
+2024-02-05 23:50:28,324 INFO    HandlerThread:7346 [system_monitor.py:finish():203] Stopping system monitor
+2024-02-05 23:50:28,324 DEBUG   SystemMonitor:7346 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-02-05 23:50:28,325 INFO    HandlerThread:7346 [interfaces.py:finish():202] Joined cpu monitor
+2024-02-05 23:50:28,325 DEBUG   SystemMonitor:7346 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-02-05 23:50:28,325 INFO    HandlerThread:7346 [interfaces.py:finish():202] Joined disk monitor
+2024-02-05 23:50:28,325 DEBUG   SystemMonitor:7346 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-02-05 23:50:28,330 INFO    HandlerThread:7346 [interfaces.py:finish():202] Joined gpu monitor
+2024-02-05 23:50:28,330 INFO    HandlerThread:7346 [interfaces.py:finish():202] Joined memory monitor
+2024-02-05 23:50:28,330 INFO    HandlerThread:7346 [interfaces.py:finish():202] Joined network monitor
+2024-02-05 23:50:28,330 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,330 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 2
+2024-02-05 23:50:28,330 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 3
+2024-02-05 23:50:28,330 DEBUG   SenderThread:7346 [sender.py:send():382] send: stats
+2024-02-05 23:50:28,330 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,330 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 3
+2024-02-05 23:50:28,331 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,331 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 3
+2024-02-05 23:50:28,331 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 4
+2024-02-05 23:50:28,331 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,331 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 4
+2024-02-05 23:50:28,331 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,331 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 4
+2024-02-05 23:50:28,331 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 5
+2024-02-05 23:50:28,331 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,331 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 5
+2024-02-05 23:50:28,331 DEBUG   SenderThread:7346 [sender.py:send():382] send: summary
+2024-02-05 23:50:28,331 INFO    SenderThread:7346 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-05 23:50:28,331 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,331 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 5
+2024-02-05 23:50:28,331 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 6
+2024-02-05 23:50:28,331 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,331 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 6
+2024-02-05 23:50:28,332 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,332 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 6
+2024-02-05 23:50:28,334 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: status_report
+2024-02-05 23:50:28,418 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 7
+2024-02-05 23:50:28,418 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:28,418 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 7
+2024-02-05 23:50:28,419 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:28,419 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 7
+2024-02-05 23:50:28,515 INFO    wandb-upload_0:7346 [upload_job.py:push():131] Uploaded file /tmp/tmpviv9sik6wandb/iroyn8om-wandb-metadata.json
+2024-02-05 23:50:28,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/config.yaml
+2024-02-05 23:50:28,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/conda-environment.yaml
+2024-02-05 23:50:28,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/wandb-summary.json
+2024-02-05 23:50:28,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/output.log
+2024-02-05 23:50:28,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/requirements.txt
+2024-02-05 23:50:28,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_created():271] file/dir created: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/wandb-metadata.json
+2024-02-05 23:50:29,074 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-05 23:50:30,326 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 8
+2024-02-05 23:50:30,327 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: poll_exit
+2024-02-05 23:50:30,327 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:30,327 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 8
+2024-02-05 23:50:30,327 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:30,327 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 8
+2024-02-05 23:50:30,327 INFO    SenderThread:7346 [job_builder.py:build():296] Attempting to build job artifact
+2024-02-05 23:50:30,327 INFO    SenderThread:7346 [job_builder.py:_get_source_type():426] is repo sourced job
+2024-02-05 23:50:30,344 INFO    SenderThread:7346 [job_builder.py:build():402] adding wandb-job metadata file
+2024-02-05 23:50:30,345 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 9
+2024-02-05 23:50:30,345 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:30,345 DEBUG   SenderThread:7346 [sender.py:send():382] send: artifact
+2024-02-05 23:50:30,345 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 9
+2024-02-05 23:50:30,649 INFO    Thread-13 :7346 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/output.log
+2024-02-05 23:50:30,886 INFO    wandb-upload_1:7346 [upload_job.py:push():86] Skipped uploading /home/jovyan/.local/share/wandb/artifacts/staging/tmpjzcb0dj6
+2024-02-05 23:50:31,075 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-05 23:50:31,154 INFO    wandb-upload_0:7346 [upload_job.py:push():89] Uploaded file /home/jovyan/.local/share/wandb/artifacts/staging/tmpcabvwl3d
+2024-02-05 23:50:31,974 INFO    SenderThread:7346 [sender.py:send_artifact():1494] sent artifact job-https___github.com_talmolab_Brax-Rodent-Run.git_serevr_run.py - {'id': 'QXJ0aWZhY3Q6NzE0Njc5MzY1', 'state': 'PENDING', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjEzNjUwNDE2OA==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NzE0NDk1MTU0', 'versionIndex': 10}}}
+2024-02-05 23:50:31,974 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:31,974 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 9
+2024-02-05 23:50:31,974 INFO    SenderThread:7346 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-02-05 23:50:32,650 INFO    SenderThread:7346 [dir_watcher.py:finish():388] scan: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files
+2024-02-05 23:50:32,650 INFO    SenderThread:7346 [dir_watcher.py:finish():402] scan save: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/conda-environment.yaml conda-environment.yaml
+2024-02-05 23:50:32,650 INFO    SenderThread:7346 [dir_watcher.py:finish():402] scan save: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/wandb-metadata.json wandb-metadata.json
+2024-02-05 23:50:32,650 INFO    SenderThread:7346 [dir_watcher.py:finish():402] scan save: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/wandb-summary.json wandb-summary.json
+2024-02-05 23:50:32,650 INFO    SenderThread:7346 [dir_watcher.py:finish():402] scan save: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/requirements.txt requirements.txt
+2024-02-05 23:50:32,652 INFO    SenderThread:7346 [dir_watcher.py:finish():402] scan save: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/output.log output.log
+2024-02-05 23:50:32,653 INFO    SenderThread:7346 [dir_watcher.py:finish():402] scan save: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/config.yaml config.yaml
+2024-02-05 23:50:32,655 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 10
+2024-02-05 23:50:32,657 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: poll_exit
+2024-02-05 23:50:32,658 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:32,658 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 10
+2024-02-05 23:50:32,659 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:32,659 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 10
+2024-02-05 23:50:32,659 INFO    SenderThread:7346 [file_pusher.py:finish():175] shutting down file pusher
+2024-02-05 23:50:32,915 INFO    wandb-upload_0:7346 [upload_job.py:push():131] Uploaded file /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/wandb-summary.json
+2024-02-05 23:50:32,956 INFO    wandb-upload_1:7346 [upload_job.py:push():131] Uploaded file /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/conda-environment.yaml
+2024-02-05 23:50:33,013 INFO    wandb-upload_4:7346 [upload_job.py:push():131] Uploaded file /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/config.yaml
+2024-02-05 23:50:33,051 INFO    wandb-upload_3:7346 [upload_job.py:push():131] Uploaded file /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/output.log
+2024-02-05 23:50:33,061 INFO    wandb-upload_2:7346 [upload_job.py:push():131] Uploaded file /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/files/requirements.txt
+2024-02-05 23:50:33,075 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-05 23:50:33,076 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: poll_exit
+2024-02-05 23:50:33,261 INFO    Thread-12 (_thread_body):7346 [sender.py:transition_state():617] send defer: 11
+2024-02-05 23:50:33,261 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:33,261 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 11
+2024-02-05 23:50:33,261 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:33,262 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 11
+2024-02-05 23:50:33,262 INFO    SenderThread:7346 [file_pusher.py:join():181] waiting for file pusher
+2024-02-05 23:50:33,262 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 12
+2024-02-05 23:50:33,262 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:33,262 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 12
+2024-02-05 23:50:33,262 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:33,262 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 12
+2024-02-05 23:50:33,262 INFO    SenderThread:7346 [file_stream.py:finish():595] file stream finish called
+2024-02-05 23:50:33,334 INFO    SenderThread:7346 [file_stream.py:finish():599] file stream finish is done
+2024-02-05 23:50:33,334 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 13
+2024-02-05 23:50:33,334 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:33,334 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 13
+2024-02-05 23:50:33,334 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:33,334 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 13
+2024-02-05 23:50:33,334 INFO    SenderThread:7346 [sender.py:transition_state():617] send defer: 14
+2024-02-05 23:50:33,334 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: defer
+2024-02-05 23:50:33,334 INFO    HandlerThread:7346 [handler.py:handle_request_defer():172] handle defer: 14
+2024-02-05 23:50:33,334 DEBUG   SenderThread:7346 [sender.py:send():382] send: final
+2024-02-05 23:50:33,334 DEBUG   SenderThread:7346 [sender.py:send():382] send: footer
+2024-02-05 23:50:33,335 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: defer
+2024-02-05 23:50:33,335 INFO    SenderThread:7346 [sender.py:send_request_defer():613] handle sender defer: 14
+2024-02-05 23:50:33,335 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-05 23:50:33,335 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: poll_exit
+2024-02-05 23:50:33,335 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-05 23:50:33,335 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: poll_exit
+2024-02-05 23:50:33,335 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: server_info
+2024-02-05 23:50:33,336 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: server_info
+2024-02-05 23:50:33,337 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: get_summary
+2024-02-05 23:50:33,338 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: sampled_history
+2024-02-05 23:50:33,338 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-05 23:50:33,339 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: job_info
+2024-02-05 23:50:33,412 DEBUG   SenderThread:7346 [sender.py:send_request():409] send_request: job_info
+2024-02-05 23:50:33,412 INFO    MainThread:7346 [wandb_run.py:_footer_history_summary_info():3857] rendering history
+2024-02-05 23:50:33,412 INFO    MainThread:7346 [wandb_run.py:_footer_history_summary_info():3889] rendering summary
+2024-02-05 23:50:33,412 INFO    MainThread:7346 [wandb_run.py:_footer_sync_info():3816] logging synced files
+2024-02-05 23:50:33,412 DEBUG   HandlerThread:7346 [handler.py:handle_request():146] handle_request: shutdown
+2024-02-05 23:50:33,412 INFO    HandlerThread:7346 [handler.py:finish():869] shutting down handler
+2024-02-05 23:50:34,339 INFO    WriterThread:7346 [datastore.py:close():296] close: /home/jovyan/Brax-Rodent-Run/wandb/run-20240205_235023-4v4tq0l8/run-4v4tq0l8.wandb
+2024-02-05 23:50:34,412 INFO    SenderThread:7346 [sender.py:finish():1572] shutting down sender
+2024-02-05 23:50:34,412 INFO    SenderThread:7346 [file_pusher.py:finish():175] shutting down file pusher
+2024-02-05 23:50:34,412 INFO    SenderThread:7346 [file_pusher.py:join():181] waiting for file pusher

@@ -1,0 +1,29 @@
+jax.errors.SimplifiedTraceback: For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "/home/jovyan/Brax-Rodent-Run/serevr_run.py", line 310, in <module>
+    make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/agents/ppo/train.py", line 405, in train
+    metrics = evaluator.run_evaluation(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 125, in run_evaluation
+    eval_state = self._generate_eval_unroll(policy_params, unroll_key)
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 107, in generate_eval_unroll
+    return generate_unroll(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 75, in generate_unroll
+    (final_state, _), data = jax.lax.scan(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 71, in f
+    nstate, transition = actor_step(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 43, in actor_step
+    nstate = env.step(env_state, actions)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 176, in step
+    nstate = self.env.step(state, action)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 122, in step
+    state = self.env.step(state, action)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 71, in step
+    return jax.vmap(self.env.step)(state, action)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 93, in step
+    state, rewards = jax.lax.scan(f, state, (), self.action_repeat)
+TypeError: Scanned function carry input and carry output must have equal types (e.g. shapes and dtypes of arrays), but they differ:
+  * the input carry component state.reward has type float32[] but the corresponding output carry component has type float32[3], so the shapes do not match
+  * the input carry component state.metrics['distance_reward'] has type float32[] but the corresponding output carry component has type float32[3], so the shapes do not match
+Revise the scanned function so that all output types (e.g. shapes and dtypes) match the corresponding input types.

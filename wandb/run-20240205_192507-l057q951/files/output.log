@@ -1,0 +1,34 @@
+jax.errors.SimplifiedTraceback: For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "/home/jovyan/Brax-Rodent-Run/serevr_run.py", line 309, in <module>
+    make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/agents/ppo/train.py", line 405, in train
+    metrics = evaluator.run_evaluation(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 125, in run_evaluation
+    eval_state = self._generate_eval_unroll(policy_params, unroll_key)
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 107, in generate_eval_unroll
+    return generate_unroll(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 75, in generate_unroll
+    (final_state, _), data = jax.lax.scan(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 71, in f
+    nstate, transition = actor_step(
+  File "/opt/conda/lib/python3.10/site-packages/brax/training/acting.py", line 43, in actor_step
+    nstate = env.step(env_state, actions)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 176, in step
+    nstate = self.env.step(state, action)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 122, in step
+    state = self.env.step(state, action)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 71, in step
+    return jax.vmap(self.env.step)(state, action)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 93, in step
+    state, rewards = jax.lax.scan(f, state, (), self.action_repeat)
+  File "/opt/conda/lib/python3.10/site-packages/brax/envs/wrappers/training.py", line 90, in f
+    nstate = self.env.step(state, action)
+  File "/home/jovyan/Brax-Rodent-Run/serevr_run.py", line 200, in step
+    reward = forward_reward + distance_reward + healthy_reward - ctrl_cost
+  File "/opt/conda/lib/python3.10/site-packages/jax/_src/numpy/array_methods.py", line 743, in op
+    return getattr(self.aval, f"_{name}")(self, *args)
+  File "/opt/conda/lib/python3.10/site-packages/jax/_src/numpy/array_methods.py", line 275, in deferring_binary_op
+    raise TypeError(f"unsupported operand type(s) for {opchar}: "
+TypeError: unsupported operand type(s) for +: 'DynamicJaxprTracer' and 'list'
