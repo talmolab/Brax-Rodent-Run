@@ -82,7 +82,7 @@ class Walker(MjxEnv):
       forward_reward_weight=1.25,
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
-      terminate_when_unhealthy=True,
+      terminate_when_unhealthy=False,
       healthy_z_range=(0.0, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
       distance_reward=5.0,
       reset_noise_scale=1e-2,
@@ -102,8 +102,8 @@ class Walker(MjxEnv):
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     #Iterations for solver
-    mj_model.opt.iterations = 6
-    mj_model.opt.ls_iterations = 6
+    mj_model.opt.iterations = 1
+    mj_model.opt.ls_iterations = 4
 
     # Defult framne to be 5, but can self define in kwargs
     physics_steps_per_control_step = 5
@@ -229,9 +229,9 @@ class Walker(MjxEnv):
     return jp.concatenate([
         position,
         data.qvel,
-        data.cinert[1:].ravel(),
-        data.cvel[1:].ravel(),
-        data.qfrc_actuator,
+        # data.cinert[1:].ravel(),
+        # data.cvel[1:].ravel(),
+        # data.qfrc_actuator,
     ])
 
 # -------------------------------------------------------------------------------------------------------------------------------------- 
@@ -258,8 +258,6 @@ task.initialize_episode_mjcf(random_state)
 physics = mjcf_dm.Physics.from_mjcf_model(task.root_entity.mjcf_model)
 
 
-
-
 # -------------------------------------------------------------------------------------------------------------------------------------- 
 # Brax environment initilization
 envs.register_environment('walker', Walker)
@@ -274,7 +272,7 @@ config = {
     "algo_name": "ppo",
     "task_name": "gap",
     "num_timesteps": 10_000_000,
-    "num_evals": 5,
+    "num_evals": 5000,
     "episode_length": 1000,
     "num_envs": 32,
     "batch_size": 512,
@@ -309,5 +307,5 @@ def policy_params_fn(num_steps, make_policy, params, model_path = './model_check
     
 make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
 
-model_path = './model_checkpoints/brax_ppo_task_finished'
+model_path = './model_checkpoints/brax_ant_task_finished'
 model.save_params(model_path, params)
