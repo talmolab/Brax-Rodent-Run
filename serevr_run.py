@@ -172,8 +172,8 @@ class Walker(MjxEnv):
     data = self.pipeline_step(data0, action)
 
     #Running forward (Velocity) tracking base on center of mass movement
-    com_before = data0.data.subtree_com[1]
-    com_after = data.data.subtree_com[1]
+    com_before = data0.data.subtree_com[5]
+    com_after = data.data.subtree_com[5]
     velocity = (com_after - com_before) / self.dt
     forward_reward = self._forward_reward_weight * velocity[0]
 
