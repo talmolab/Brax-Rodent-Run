@@ -79,9 +79,9 @@ class Walker(MjxEnv):
   '''
   def __init__(
       self,
-      forward_reward_weight=1.25,
+      forward_reward_weight=5.0,
       ctrl_cost_weight=0.1,
-      healthy_reward=5.0,
+      healthy_reward=0.5,
       terminate_when_unhealthy=False,
       healthy_z_range=(0.0, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
       distance_reward=5.0,
@@ -271,8 +271,8 @@ config = {
     "env_name": 'walker',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 10_000_000,
-    "num_evals": 5000,
+    "num_timesteps": 10_000_0,
+    "num_evals": 50,
     "episode_length": 1000,
     "num_envs": 32,
     "batch_size": 512,
