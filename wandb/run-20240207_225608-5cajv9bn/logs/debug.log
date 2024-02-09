@@ -25,3 +25,4 @@ config: {'env_name': 'walker', 'algo_name': 'ppo', 'task_name': 'gap', 'num_time
 2024-02-07 22:56:14,002 INFO    MainThread:9495 [wandb_run.py:_redirect():2153] Wrapping output streams.
 2024-02-07 22:56:14,002 INFO    MainThread:9495 [wandb_run.py:_redirect():2178] Redirects installed.
 2024-02-07 22:56:14,002 INFO    MainThread:9495 [wandb_init.py:init():847] run started, returning control to user process
+2024-02-09 18:00:51,390 WARNING MsgRouterThr:9495 [router.py:message_loop():77] message_loop has been closed
