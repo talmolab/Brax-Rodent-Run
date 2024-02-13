@@ -102,7 +102,7 @@ class Walker(MjxEnv):
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     #Iterations for solver
-    mj_model.opt.iterations = 1
+    mj_model.opt.iterations = 2
     mj_model.opt.ls_iterations = 4
 
     # Defult framne to be 5, but can self define in kwargs
@@ -271,8 +271,8 @@ config = {
     "env_name": 'walker',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 10_000_0,
-    "num_evals": 50,
+    "num_timesteps": 10_000_00,
+    "num_evals": 100,
     "episode_length": 1000,
     "num_envs": 32,
     "batch_size": 512,
