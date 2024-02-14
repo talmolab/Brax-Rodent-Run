@@ -1,0 +1,368 @@
+{
+    "os": "Linux-5.4.0-169-generic-x86_64-with-glibc2.35",
+    "python": "3.10.10",
+    "heartbeatAt": "2024-02-13T21:58:25.606014",
+    "startedAt": "2024-02-13T21:58:25.163956",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/jovyan/Brax-Rodent-Run/serevr_run.py",
+    "codePathLocal": "serevr_run.py",
+    "codePath": "serevr_run.py",
+    "git": {
+        "remote": "https://github.com/talmolab/Brax-Rodent-Run.git",
+        "commit": "991fe425e5c1b0943b988828559d0aa7d95b1bfb"
+    },
+    "email": "kaiwenbian107@gmail.com",
+    "root": "/home/jovyan/Brax-Rodent-Run",
+    "host": "kaiwen-brax-task-ppo-1-0-0",
+    "username": "jovyan",
+    "executable": "/opt/conda/bin/python",
+    "cpu_count": 32,
+    "cpu_count_logical": 64,
+    "cpu_freq": {
+        "current": 3299.5412343750004,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3288.421,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3306.483,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3289.719,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3286.016,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3300.0,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 5913.542510986328,
+            "used": 796.9556083679199
+        }
+    },
+    "gpu": "NVIDIA A40",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA A40",
+            "memory_total": 48305799168
+        }
+    ],
+    "memory": {
+        "total": 503.3535919189453
+    }
+}
