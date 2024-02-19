@@ -1,4 +1,5 @@
-# Brax Rodent Run - Online Training Script
+# Brax Tasks - Online Training Script with Proprioreceptor Data Only
+***(Adding Vision Currently)***
 
 ## Environment Setup
 Currently everything is done through pip. TODO for conda env.
@@ -8,7 +9,6 @@ Currently everything is done through pip. TODO for conda env.
 4. `pip install -U numba`
 
 ## Training Script
-
 Change the environment setup and hyper-parameter settings in `server_run.py`, currently the config is:
 
 ```python
