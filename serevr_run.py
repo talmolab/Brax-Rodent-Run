@@ -115,6 +115,7 @@ class Walker(MjxEnv):
     super().__init__(model=mj_model, **kwargs)
 
     # Global vraiable for later calling them
+    self._model = mj_model
     self._forward_reward_weight = forward_reward_weight
     self._ctrl_cost_weight = ctrl_cost_weight
     self._healthy_reward = healthy_reward
@@ -218,21 +219,41 @@ class Walker(MjxEnv):
     return state.replace(pipeline_state=data, obs=obs, reward=reward, done=done)
 
   def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
-    """Observes humanoid body position, velocities, and angles."""
-    position = data.qpos
+    """environment feedback of observing walker's proprioreceptive and vision data"""
 
+    # Vision Data
+    # passed in data is a pipeline_state.data object, pipeline_state is the sate
+    renderer = mujoco.Renderer(model = self._model)
+
+    # this here is the correct format, need qpos in calling
+    #d = mjx.get_data(self._model, data)
+    d = mujoco.MjData(self._model)
+
+    mujoco.mj_forward(self._model, d)
+    renderer.update_scene(d, camera=3)
+    image = renderer.render()
+    image_jax = jax.numpy.array(image)
+    image_jax = image_jax.flatten()
+    # print(image)
+    # print(data.qpos)
+
+    # Proprioreceptive Data
+    position = data.qpos
     if self._exclude_current_positions_from_observation:
       position = position[2:]
-
     # external_contact_forces are excluded
     # environment observation described later
     return jp.concatenate([
         position,
         data.qvel,
+        image_jax,
         # data.cinert[1:].ravel(),
         # data.cvel[1:].ravel(),
         # data.qfrc_actuator,
     ])
+  
+
+  
 
 # -------------------------------------------------------------------------------------------------------------------------------------- 
 # Initilizing dm_control
