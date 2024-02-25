@@ -68,7 +68,11 @@ class Task_Vnl(corr_tasks.RunThroughCorridor):
         self._walker = walker
         self._walker.create_root_joints(self._arena.attach(self._walker, attach_site=spawn_site)) # customize starting environment
 
-
+# This is the direct inherent data class just like mjx.Data
+class BraxData(mujoco.mjx._src.dataclasses.PyTreeNode):
+    position:jax.Array
+    velocity:jax.Array
+    image:jax.Array
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------- 
@@ -147,7 +151,7 @@ class Walker(MjxEnv):
     data = self.pipeline_init(qpos, qvel)
 
     #Reset everything
-    obs = self._get_obs(data.data, jp.zeros(self.sys.nu))
+    obs = self._get_obs(data.data, jp.zeros(self.sys.nu)) #['proprioceptive']
     reward, done, zero = jp.zeros(3)
     metrics = {
         'forward_reward': zero,
@@ -175,6 +179,9 @@ class Walker(MjxEnv):
     #Running forward (Velocity) tracking base on center of mass movement
     com_before = data0.data.subtree_com[3]
     com_after = data.data.subtree_com[3]
+
+    #print(data.data)
+    
     velocity = (com_after - com_before) / self.dt
     forward_reward = self._forward_reward_weight * velocity[0]
 
@@ -200,6 +207,8 @@ class Walker(MjxEnv):
     #Feedback from env
     obs = self._get_obs(data.data, action)
     reward = forward_reward + distance_reward + healthy_reward - ctrl_cost
+
+    print(obs)
 
     #Termination State
     done = 1.0 - is_healthy if self._terminate_when_unhealthy else 0.0
@@ -234,26 +243,24 @@ class Walker(MjxEnv):
     image = renderer.render()
     image_jax = jax.numpy.array(image)
     image_jax = image_jax.flatten()
-    # print(image)
-    # print(data.qpos)
 
     # Proprioreceptive Data
     position = data.qpos
+    velocity = data.qvel
     if self._exclude_current_positions_from_observation:
       position = position[2:]
-    # external_contact_forces are excluded
-    # environment observation described later
-    return jp.concatenate([
-        position,
-        data.qvel,
-        image_jax,
-        # data.cinert[1:].ravel(),
-        # data.cvel[1:].ravel(),
-        # data.qfrc_actuator,
-    ])
-  
-
-  
+    
+    # print(position, velocity, image_jax)
+      
+    return BraxData(
+      position = position,
+      velocity = velocity,
+      image = image_jax,
+      # data.cinert[1:].ravel(),
+      # data.cvel[1:].ravel(),
+      # data.qfrc_actuator,
+    )
+      
 
 # -------------------------------------------------------------------------------------------------------------------------------------- 
 # Initilizing dm_control
