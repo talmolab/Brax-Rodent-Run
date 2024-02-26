@@ -68,6 +68,8 @@ class Task_Vnl(corr_tasks.RunThroughCorridor):
         self._walker = walker
         self._walker.create_root_joints(self._arena.attach(self._walker, attach_site=spawn_site)) # customize starting environment
 
+# -------------------------------------------------------------------------------------------------------------------------------------- 
+# BraxData Class
 # This is the direct inherent data class just like mjx.Data
 class BraxData(mujoco.mjx._src.dataclasses.PyTreeNode):
     position:jax.Array
