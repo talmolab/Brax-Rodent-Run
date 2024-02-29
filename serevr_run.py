@@ -42,6 +42,17 @@ from brax.training.agents.ppo import networks as ppo_networks
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning) 
+
+os.environ['XLA_FLAGS'] = (
+    '--xla_gpu_enable_triton_softmax_fusion=true '
+    '--xla_gpu_triton_gemm_any=True '
+    '--xla_gpu_enable_async_collectives=true '
+    '--xla_gpu_enable_latency_hiding_scheduler=true '
+    '--xla_gpu_enable_highest_priority_async_stream=true '
+)
+
 # Define inheritence relationships from dm_control
 class Gap_Vnl(corr_arenas.GapsCorridor):
     def _build(self, corridor_width, corridor_length, visible_side_planes, aesthetic, platform_length, gap_length):
@@ -98,12 +109,12 @@ class Walker(MjxEnv):
     # but this pass in one doesn't, it uses the default mjCONE_PYRAMIDAL, but MjModel now uses the eliptic model, so reset is needed
 
     # solver is an optimization system
-    mj_model.opt.solver = mujoco.mjtSolver.mjSOL_CG
+    mj_model.opt.solver = mujoco.mjtSolver.mjSOL_NEWTON
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     #Iterations for solver
-    mj_model.opt.iterations = 2
-    mj_model.opt.ls_iterations = 4
+    mj_model.opt.iterations = 1
+    mj_model.opt.ls_iterations = 1
 
     # Defult framne to be 5, but can self define in kwargs
     physics_steps_per_control_step = 3
@@ -223,22 +234,23 @@ class Walker(MjxEnv):
 
     # Vision Data
     # passed in data is a pipeline_state.data object, pipeline_state is the sate
-    renderer = mujoco.Renderer(model = self._model)
+    # renderer = mujoco.Renderer(model = self._model)
 
-    # this here is the correct format, need qpos in calling
-    #d = mjx.get_data(self._model, data)
-    d = mujoco.MjData(self._model)
+    # # this here is the correct format, need qpos in calling
+    # # d = mjx.get_data(self._model, data)
+    # d = mujoco.MjData(self._model)
 
-    mujoco.mj_forward(self._model, d)
-    renderer.update_scene(d, camera=3)
-    image = renderer.render()
-    image_jax = jax.numpy.array(image)
-    image_jax = image_jax.flatten()
-    # print(image)
-    # print(data.qpos)
-
+    # mujoco.mj_forward(self._model, d)
+    # renderer.update_scene(d, camera=3)
+    # image = renderer.render()
+    # image_jax = jax.numpy.array(image)
+    # image_jax = image_jax.flatten()
+    # # print(image)
+    # # print(data.qpos)
+    # s = jax.numpy.sum(image_jax) * 1e-12
+    s = 0
     # Proprioreceptive Data
-    position = data.qpos
+    position = data.qpos + s
     if self._exclude_current_positions_from_observation:
       position = position[2:]
     # external_contact_forces are excluded
@@ -246,7 +258,7 @@ class Walker(MjxEnv):
     return jp.concatenate([
         position,
         data.qvel,
-        image_jax,
+        # image_jax,
         # data.cinert[1:].ravel(),
         # data.cvel[1:].ravel(),
         # data.qfrc_actuator,
@@ -257,10 +269,10 @@ class Walker(MjxEnv):
 
 # -------------------------------------------------------------------------------------------------------------------------------------- 
 # Initilizing dm_control
-arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
-      gap_length=distributions.Uniform(.05, .2),
-      corridor_width=5, # walker width follows corridor width
-      corridor_length=40,
+arena = Gap_Vnl(platform_length=distributions.Uniform(.8, 1.6),
+      gap_length=distributions.Uniform(.1, .4),
+      corridor_width=10, # walker width follows corridor width
+      corridor_length=50,
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 
@@ -292,15 +304,16 @@ config = {
     "env_name": 'walker',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 10_000_000,
+    "num_timesteps": 200_000_000,
     "num_evals": 1000,
-    "eval_every": 10_000,
+    "eval_every": 200_000,
     "episode_length": 1000,
-    "num_envs": 512,
+    "num_envs": 1024,
     "batch_size": 512,
     "num_minibatches": 32,
     "num_updates_per_batch": 2,
     "unroll_length": 5,
+    "vision": "False"
     }
 
 train_fn = functools.partial(
@@ -329,5 +342,5 @@ def policy_params_fn(num_steps, make_policy, params, model_path = './model_check
     
 make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
 
-model_path = './model_checkpoints/brax_ppo_task_finished'
+model_path = './model_checkpoints/brax_no_vision_charles'
 model.save_params(model_path, params)
