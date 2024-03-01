@@ -26,14 +26,26 @@ from brax.base import Base, Motion, Transform
 from brax.envs.base import Env, MjxEnv, State
 from brax.mjx.base import State as MjxState
 from brax.training.agents.ppo import train as ppo
-from brax.training.agents.ppo import networks as ppo_networks
+#from brax.training.agents.ppo import networks as ppo_networks
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
 from vnl_brax.base import Walker
+import vnl_brax.networks_vision as ppo_networks_vision
 
 
 ''' Main Training Loop'''
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning) 
+
+os.environ['XLA_FLAGS'] = (
+    '--xla_gpu_enable_triton_softmax_fusion=true '
+    '--xla_gpu_triton_gemm_any=True '
+    '--xla_gpu_enable_async_collectives=true '
+    '--xla_gpu_enable_latency_hiding_scheduler=true '
+    '--xla_gpu_enable_highest_priority_async_stream=true '
+)
 
 # Brax environment initilization
 envs.register_environment('walker', Walker)
@@ -59,11 +71,23 @@ config = {
     }
 
 train_fn = functools.partial(
-    ppo.train, num_timesteps=config['num_timesteps'], num_evals=config['num_evals'], reward_scaling=0.1,
-    episode_length=config['episode_length'], normalize_observations=True, action_repeat=1,
-    unroll_length=config['unroll_length'], num_minibatches=config['num_minibatches'], num_updates_per_batch=config['num_updates_per_batch'],
-    discounting=0.97, learning_rate=3e-4, entropy_cost=1e-3, num_envs=config['num_envs'],
-    batch_size=config['batch_size'], seed=0)
+    ppo.train,
+    num_timesteps=config['num_timesteps'],
+    num_evals=config['num_evals'],
+    reward_scaling=0.1,
+    episode_length=config['episode_length'],
+    normalize_observations=True, action_repeat=1,
+    unroll_length=config['unroll_length'],
+    num_minibatches=config['num_minibatches'],
+    num_updates_per_batch=config['num_updates_per_batch'],
+    discounting=0.97, 
+    earning_rate=3e-4,
+    entropy_cost=1e-3,
+    num_envs=config['num_envs'],
+    batch_size=config['batch_size'],
+    seed=0,
+    ppo_networks=ppo_networks_vision, # not official import, may need to modify train.py file?
+    )
 
 run = wandb.init(
     project="vnl_task",
@@ -71,7 +95,6 @@ run = wandb.init(
 )
 
 wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_brax"
-
 
 def wandb_progress(num_steps, metrics):
     metrics["num_steps"] = num_steps
