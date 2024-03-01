@@ -6,6 +6,7 @@ from brax.training.types import PRNGKey
 import flax
 from flax import linen
 from jax import numpy as jp
+from brax.training import acting
 
 '''Actor, Value, and Vision Network'''
 
@@ -29,18 +30,16 @@ def make_inference_fn(ppo_networks: PPONetworks):
     # brax obs space passed in from ppo.train.py calling
     def policy(observations: types.Observation, key_sample: PRNGKey) -> Tuple[types.Action, types.Extra]:
        
-       # ToDo, figure out a way to use ppo to train vision_net
+       # ToDo, figure out a way to use ppo to train vision_net to step once
        ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.image
-       visio_param = vision_network.apply(*params, vision_raw_obs)
-       
-       
-       
+       vision_param = vision_network.apply(*params, vision_raw_obs) # we actually already have the parameters here, but would it be trained?
+       # this is a jax.numpy.array of parameter (in networks.make_value_network function)
        
        '''data combined here'''
        velocity = observations.velocity
        position = observations.position
-       visions_activation = ...
+       visions_activation = vision_param
 
        observations_processed = jp.concatenate([position, velocity, visions_activation]) # now type as expected in brax
        
@@ -99,7 +98,7 @@ def make_ppo_networks(
       hidden_layer_sizes=value_hidden_layer_sizes,
       activation=activation)
   
-  # ToDo: add AlexNet strcuture for vision network
+  # ToDo: add AlexNet strcuture for vision network change the base_network.py file
   # vision network
   vision_network = networks.make_value_network(
       observation_size,
