@@ -231,7 +231,7 @@ class Walker(MjxEnv):
 
     fake_image = jax.numpy.array(np.random.rand(240, 320, 3))
     image_jax = fake_image.flatten()
-    print(image_jax)
+    #print(image_jax)
 
     # Proprioreceptive Data
     position = data.qpos
@@ -243,6 +243,7 @@ class Walker(MjxEnv):
     
     # for shape call in train.py of ppo
     shape0 = jp.concatenate([position, velocity, image_jax]).shape[0]
+    print(jp.concatenate([position, velocity, image_jax]).shape[1])
 
       
     return BraxData(
