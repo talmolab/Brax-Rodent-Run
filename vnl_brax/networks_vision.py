@@ -8,6 +8,8 @@ from flax import linen
 from jax import numpy as jp
 from brax.training import acting
 
+from vnl_brax.data import BraxData
+
 '''Actor, Value, and Vision Network'''
 
 # PPO network class data container
@@ -17,6 +19,7 @@ class PPONetworks:
   value_network: networks.FeedForwardNetwork
   vision_network: networks.FeedForwardNetwork # maximize the utilization of ppo
   parametric_action_distribution: distribution.ParametricDistribution
+  
 
 # main function for training
 def make_inference_fn(ppo_networks: PPONetworks):
@@ -45,11 +48,10 @@ def make_inference_fn(ppo_networks: PPONetworks):
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
        
        '''data combined here'''
-       velocity = observations.velocity
-       position = observations.position
+       proprioception = observations.proprioception
        visions_activation = vision_param
 
-       observations_processed = jp.concatenate([position, velocity, visions_activation]) # now type as expected in brax
+       observations_processed = jp.concatenate([proprioception, visions_activation]) # now type as expected in brax
        
        # same with brax implementation from here
        logits = policy_network.apply(*params, observations_processed)
@@ -77,7 +79,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
 
 # return a PPO class that have being instantiated
 def make_ppo_networks(
-    observation_size: int,
+    observation: BraxData,
     action_size: int,
     preprocess_observations_fn: types.PreprocessObservationFn = types
     .identity_observation_preprocessor,
@@ -94,14 +96,14 @@ def make_ppo_networks(
   # actor network
   policy_network = networks.make_policy_network(
       parametric_action_distribution.param_size,
-      observation_size,
+      observation_size=observation.proprioception.shape[-1],
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=policy_hidden_layer_sizes,
       activation=activation)
   
   # critic network
   value_network = networks.make_value_network(
-      observation_size,
+      observation_size=observation.proprioception.shape[-1],
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=value_hidden_layer_sizes,
       activation=activation)
@@ -109,7 +111,7 @@ def make_ppo_networks(
   # ToDo: add AlexNet strcuture for vision network change the base_network.py file
   # vision network
   vision_network = networks.make_value_network(
-      observation_size,
+      observation_size=observation.vision.shape[-1],
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=vision_hidden_layer_sizes,
       activation=activation)

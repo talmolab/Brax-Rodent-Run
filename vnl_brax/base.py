@@ -238,6 +238,8 @@ class Walker(MjxEnv):
     velocity = data.qvel
     if self._exclude_current_positions_from_observation:
       position = position[2:]
+
+    proprioception = jp.concatenate([position, velocity])
     
     # print(position, velocity, image_jax)
     
@@ -247,9 +249,8 @@ class Walker(MjxEnv):
 
       
     return BraxData(
-      position = position,
-      velocity = velocity,
-      image = image_jax,
+      proprioception = proprioception,
+      vision = image_jax,
       shape = shape,
       # data.cinert[1:].ravel(),
       # data.cvel[1:].ravel(),

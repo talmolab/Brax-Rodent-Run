@@ -230,11 +230,19 @@ def train(
   normalize = lambda x, y: x
   if normalize_observations:
     normalize = running_statistics.normalize
+  
+
+
   ppo_network = network_factory(
       #env_state.obs.shape[-1],
-      env_state.obs.image.shape[-1],
+      #env_state.obs.image.shape[-1],
+      env_state,
       env.action_size,
       preprocess_observations_fn=normalize)
+  
+
+
+  
   make_policy = ppo_networks.make_inference_fn(ppo_network)
 
   optimizer = optax.adam(learning_rate=learning_rate)
