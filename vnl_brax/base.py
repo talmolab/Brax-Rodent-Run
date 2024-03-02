@@ -246,7 +246,7 @@ class Walker(MjxEnv):
     shape = jp.concatenate([position, velocity, image_jax]).shape # shape -1 is one number, give as shape tuple
     #print(jp.concatenate([position, velocity, image_jax]).shape[-1])
     
-    return proprioception
+    #return proprioception
   
     return BraxData(
       proprioception = proprioception,
