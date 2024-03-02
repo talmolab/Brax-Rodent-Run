@@ -233,6 +233,7 @@ def train(
   
 
 
+  # directly feed in only the sate obs, obs.shape customized later
   ppo_network = network_factory(
       #env_state.obs.shape[-1],
       #env_state.obs.image.shape[-1],
@@ -240,7 +241,6 @@ def train(
       env.action_size,
       preprocess_observations_fn=normalize)
   
-
 
   
   make_policy = ppo_networks.make_inference_fn(ppo_network)
