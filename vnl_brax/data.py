@@ -12,3 +12,10 @@ class BraxData(mujoco.mjx._src.dataclasses.PyTreeNode):
     position:jax.Array
     velocity:jax.Array
     image:jax.Array
+
+    def __init__(self, size):
+        self.size = size
+    
+    # for the shape function in calling
+    def shape(self):
+        return (self.size,)

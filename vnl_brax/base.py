@@ -239,11 +239,14 @@ class Walker(MjxEnv):
       position = position[2:]
     
     # print(position, velocity, image_jax)
+    
+    size = jp.concatenate([position, velocity, image_jax]).shape[0]
       
     return BraxData(
       position = position,
       velocity = velocity,
       image = image_jax,
+      size = size,
       # data.cinert[1:].ravel(),
       # data.cvel[1:].ravel(),
       # data.qfrc_actuator,
