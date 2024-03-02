@@ -36,9 +36,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        # ToDo, figure out a way to use ppo to train vision_net to step once
        ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.vision
-
        print(vision_raw_obs)
-       print(observations.position)
        # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>)
        # maybe just concat then?
 

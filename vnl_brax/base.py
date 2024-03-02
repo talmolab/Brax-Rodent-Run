@@ -245,7 +245,7 @@ class Walker(MjxEnv):
     
     # for shape call in train.py of ppo
     shape = jp.concatenate([position, velocity, image_jax]).shape # shape -1 is one number, give as shape tuple
-    print(jp.concatenate([position, velocity, image_jax]).shape[-1])
+    #print(jp.concatenate([position, velocity, image_jax]).shape[-1])
 
       
     return BraxData(
