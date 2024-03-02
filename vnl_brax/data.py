@@ -12,4 +12,4 @@ class BraxData(mujoco.mjx._src.dataclasses.PyTreeNode):
     position:jax.Array
     velocity:jax.Array
     image:jax.Array
-    shape: int  # for the shape function in calling, attribute directly, not a method
+    shape: tuple  # for the shape function in calling, attribute directly, not a method
