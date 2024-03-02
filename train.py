@@ -59,7 +59,7 @@ config = {
     "env_name": 'walker',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 10_000_000,
+    "num_timesteps": 10_000_00, #10_000_000,
     "num_evals": 1000,
     "eval_every": 10_000,
     "episode_length": 1000,
