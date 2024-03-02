@@ -231,6 +231,7 @@ class Walker(MjxEnv):
 
     fake_image = jax.numpy.array(np.random.rand(240, 320, 3))
     image_jax = fake_image.flatten()
+    print(image_jax)
 
     # Proprioreceptive Data
     position = data.qpos
