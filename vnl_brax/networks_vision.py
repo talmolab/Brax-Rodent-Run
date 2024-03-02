@@ -33,9 +33,10 @@ def make_inference_fn(ppo_networks: PPONetworks):
        # ToDo, figure out a way to use ppo to train vision_net to step once
        ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.image
+
+       print(vision_raw_obs)
        vision_param = vision_network.apply(*params, vision_raw_obs) # we actually already have the parameters here, but would it be trained?
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
-       print(vision_raw_obs)
        print(vision_param)
        
        '''data combined here'''
