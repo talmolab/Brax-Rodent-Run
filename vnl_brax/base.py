@@ -242,7 +242,7 @@ class Walker(MjxEnv):
     # print(position, velocity, image_jax)
     
     # for shape call in train.py of ppo
-    shape0 = jp.concatenate([position, velocity, image_jax]).shape[0]
+    shape = jp.concatenate([position, velocity, image_jax]).shape[-1] # shape -1 is one number
     print(jp.concatenate([position, velocity, image_jax]).shape[-1])
 
       
@@ -250,7 +250,7 @@ class Walker(MjxEnv):
       position = position,
       velocity = velocity,
       image = image_jax,
-      shape = (shape0,),
+      shape = shape,
       # data.cinert[1:].ravel(),
       # data.cvel[1:].ravel(),
       # data.qfrc_actuator,
