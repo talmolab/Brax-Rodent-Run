@@ -242,7 +242,7 @@ class Walker(MjxEnv):
     # print(position, velocity, image_jax)
     
     # for shape call in train.py of ppo
-    shape = jp.concatenate([position, velocity, image_jax]).shape[-1] # shape -1 is one number
+    shape = jp.concatenate([position, velocity, image_jax]).shape # shape -1 is one number, give as shape tuple
     print(jp.concatenate([position, velocity, image_jax]).shape[-1])
 
       
