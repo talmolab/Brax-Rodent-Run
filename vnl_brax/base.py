@@ -31,7 +31,7 @@ from brax.mjx.base import State as MjxState
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
-# customized
+# customized import
 from vnl_brax.data import BraxData
 from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
