@@ -35,8 +35,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        
        # ToDo, figure out a way to use ppo to train vision_net to step once
        ''' vision processing first, similar to train.py'''
-       vision_raw_obs = observations.image
-
+       vision_raw_obs = observations.vision
 
        print(vision_raw_obs)
        print(observations.position)
@@ -96,14 +95,14 @@ def make_ppo_networks(
   # actor network
   policy_network = networks.make_policy_network(
       parametric_action_distribution.param_size,
-      observation.proprioception.shape[-1],
+      observation.proprioception.shape[-1]+1325,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=policy_hidden_layer_sizes,
       activation=activation)
   
   # critic network
   value_network = networks.make_value_network(
-      observation.proprioception.shape[-1],
+      observation.proprioception.shape[-1]+1325,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=value_hidden_layer_sizes,
       activation=activation)
