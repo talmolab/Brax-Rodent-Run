@@ -236,7 +236,7 @@ def train(
   ppo_network = network_factory(
       #env_state.obs.shape[-1],
       #env_state.obs.image.shape[-1],
-      env_state,
+      env_state.obs,
       env.action_size,
       preprocess_observations_fn=normalize)
   
