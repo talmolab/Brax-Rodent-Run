@@ -13,3 +13,6 @@ class BraxData(mujoco.mjx._src.dataclasses.PyTreeNode):
     velocity:jax.Array
     image:jax.Array
     shape:tuple  # for the shape function in calling, attribute directly, not a method
+
+    # after shape[-1] should be int
+    # at obs level, data should be a concatenated jax array
