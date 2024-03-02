@@ -34,7 +34,13 @@ def make_inference_fn(ppo_networks: PPONetworks):
        ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.image
 
+
        print(vision_raw_obs)
+       print(observations.position)
+       # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>)
+       # maybe just concat then?
+
+
        vision_param = vision_network.apply(*params, vision_raw_obs) # we actually already have the parameters here, but would it be trained?
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
        
