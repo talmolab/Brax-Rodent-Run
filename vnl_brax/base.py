@@ -240,19 +240,16 @@ class Walker(MjxEnv):
       position = position[2:]
 
     proprioception = jp.concatenate([position, velocity])
-    
     # print(position, velocity, image_jax)
     
     # for shape call in train.py of ppo
     shape = jp.concatenate([position, velocity, image_jax]).shape # shape -1 is one number, give as shape tuple
     #print(jp.concatenate([position, velocity, image_jax]).shape[-1])
-
-      
+    
+    return proprioception
+  
     return BraxData(
       proprioception = proprioception,
       vision = image_jax,
       shape = shape,
-      # data.cinert[1:].ravel(),
-      # data.cvel[1:].ravel(),
-      # data.qfrc_actuator,
     )
