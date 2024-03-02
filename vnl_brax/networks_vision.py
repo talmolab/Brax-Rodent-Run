@@ -37,7 +37,6 @@ def make_inference_fn(ppo_networks: PPONetworks):
        print(vision_raw_obs)
        vision_param = vision_network.apply(*params, vision_raw_obs) # we actually already have the parameters here, but would it be trained?
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
-       print(vision_param)
        
        '''data combined here'''
        velocity = observations.velocity
