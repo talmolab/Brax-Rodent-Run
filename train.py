@@ -86,7 +86,7 @@ train_fn = functools.partial(
     num_envs=config['num_envs'],
     batch_size=config['batch_size'],
     seed=0,
-    ppo_networks=ppo_networks_vision, # not official import, may need to modify train.py file?
+    network_factory=ppo_networks_vision.make_ppo_networks, # This function create the PPO class
     )
 
 run = wandb.init(
