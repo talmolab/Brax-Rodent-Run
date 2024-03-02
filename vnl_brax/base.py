@@ -240,13 +240,14 @@ class Walker(MjxEnv):
     
     # print(position, velocity, image_jax)
     
+    # for shape call in train.py of ppo
     size = jp.concatenate([position, velocity, image_jax]).shape[0]
       
     return BraxData(
       position = position,
       velocity = velocity,
       image = image_jax,
-      size = size,
+      shape = size,
       # data.cinert[1:].ravel(),
       # data.cvel[1:].ravel(),
       # data.qfrc_actuator,
