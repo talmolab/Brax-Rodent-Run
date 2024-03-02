@@ -32,8 +32,8 @@ from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
 # customized
-from data import BraxData
-from arena import Task_Vnl, Gap_Vnl
+from vnl_brax.data import BraxData
+from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
 
 ''' Calling dm_control + Brax Walker Class Adapted'''
