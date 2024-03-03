@@ -383,12 +383,21 @@ def train(
   init_params = ppo_losses.PPONetworkParams(
       policy=ppo_network.policy_network.init(key_policy),
       value=ppo_network.value_network.init(key_value))
+  
+  
+  
+
+  
   training_state = TrainingState(  # pytype: disable=wrong-arg-types  # jax-ndarray
       optimizer_state=optimizer.init(init_params),  # pytype: disable=wrong-arg-types  # numpy-scalars
       params=init_params,
       normalizer_params=running_statistics.init_state(
-          specs.Array(env_state.obs.shape[-1:], jnp.dtype('float32'))),
+          specs.Array(size, jnp.dtype('float32'))),
       env_steps=0)
+  #size replace env_state.obs.shape[-1:]
+  
+  
+  
   training_state = jax.device_put_replicated(
       training_state,
       jax.local_devices()[:local_devices_to_use])

@@ -40,8 +40,9 @@ def make_inference_fn(ppo_networks: PPONetworks):
     def policy(observations: types.Observation, key_sample: PRNGKey) -> Tuple[types.Action, types.Extra]:
        
        # ToDo, figure out a way to use ppo to train vision_net to step once
-       ''' vision processing first, similar to train.py'''
        
+       
+       ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.vision
        buffer_pro = observations.buffer_proprioception
        # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
@@ -57,8 +58,6 @@ def make_inference_fn(ppo_networks: PPONetworks):
        print(vision_param) #should be an 16 value array
        
        '''data combined here'''
-
-
        proprioception = observations.proprioception
        full_processed = jp.concatenate([_unpmap(proprioception), vision_param]) # now type as expected in brax
        
