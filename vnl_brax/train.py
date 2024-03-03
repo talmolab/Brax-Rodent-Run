@@ -248,7 +248,7 @@ def train(
 
   # change back to prefered form!
   new_obs = env_state.obs.full
-  env_state = env_state.replace(obs=new_obs)
+  env_state = env_state.replace(obs=new_obs) #may be no need to return? in place changes?
 
   # changed successfully, but only need to change once, later iterations use isinstance, change back in the start
 
