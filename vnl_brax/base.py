@@ -240,22 +240,22 @@ class Walker(MjxEnv):
       position = position[2:]
 
     proprioception = jp.concatenate([position, velocity])
-    # print(position, velocity, image_jax)
     
-    # for shape call in train.py of ppo
-    shape = jp.concatenate([position, velocity, image_jax]).shape # shape -1 is one number, give as shape tuple
-    #print(jp.concatenate([position, velocity, image_jax]).shape[-1])
     
-    #return proprioception
-
+    
+    
     buffer_proprioception = jax.numpy.array(np.random.rand(27,))
 
     num = (230427-(27+16)) # image size - (proprioreception + activation parameter)
     buffer_vision = jax.numpy.array(np.random.rand(num,))
+
+    # for shape call in train.py of ppo
+    shape = jp.concatenate([proprioception,image_jax]).shape # shape -1 is one number, give as shape tuple
   
     return BraxData(
       proprioception = proprioception,
       vision = image_jax,
       buffer_proprioception = buffer_proprioception,
       buffer_vision = buffer_vision,
+      shape=shape
     )

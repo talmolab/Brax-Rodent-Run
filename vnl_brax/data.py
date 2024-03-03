@@ -10,9 +10,10 @@ from jax import numpy as jp
 
 class BraxData(mujoco.mjx._src.dataclasses.PyTreeNode):
     proprioception: jax.Array
-    vision:jax.Array
+    vision:jax.Arrayxs
     buffer_vision: jax.Array
     buffer_proprioception: jax.Array
+    shape: tuple
     
     # after shape[-1] should be int
     # at obs level, data should be a concatenated jax array
