@@ -39,10 +39,8 @@ def make_inference_fn(ppo_networks: PPONetworks):
        # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
        
        proprioception = observations.proprioception
-       visions_activation = vision_param
-
-       observations_processed = jp.concatenate([proprioception, visions_activation])
-
+       vision = observations.vision
+       observations_processed = jp.concatenate([proprioception, vision])
 
        print(vision_raw_obs)
        print(*params) # tells you the architecture
