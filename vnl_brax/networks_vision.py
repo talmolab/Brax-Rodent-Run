@@ -38,33 +38,37 @@ def make_inference_fn(ppo_networks: PPONetworks):
 
     # brax obs space passed in from ppo.train.py calling
     def policy(observations: types.Observation, key_sample: PRNGKey) -> Tuple[types.Action, types.Extra]:
+
+
+       ''' vision processing first'''
+       #ToDo: figure out a way to use ppo to train vision_net to step once
        
-       # ToDo, figure out a way to use ppo to train vision_net to step once
-       ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.vision
        buffer_pro = observations.buffer_proprioception
-       # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
        vision_buffered = jp.concatenate([_unpmap(vision_raw_obs), _unpmap(buffer_pro)])
 
        print(*params) # tells you the architecture
 
        # parameter created must have all obs sapce
-       vision_param = vision_network.apply(*params, vision_buffered) #run correctly
+       vision_param = vision_network.apply(*params, vision_buffered)
        # we actually already have the parameters here, but would it be trained?
-       # this is a jax.numpy.array of parameter (in networks.make_value_network function)
 
-       print(vision_param) #should be an 16 value array
+       print(vision_param) #should be an 16 value array, (in networks.make_value_network function)
        
-       '''data combined here'''
+
+
+
+       '''proprioception + vision actiavtions'''
+       #ToDo: adding buffer now, but should figure out how to replace later
+
        proprioception = observations.proprioception
        buffer_vis = observations.buffer_vision
-       
-
-      # ToDo: adding buffer now, but should figure out how to replace later!
        full_processed = jp.concatenate([_unpmap(proprioception), vision_param,_unpmap(buffer_vis)]) # now type as expected in brax
-       
-       '''same with brax implementation from here'''
        logits = policy_network.apply(*params, full_processed)
+
+       print(logits)
+
+       '''same with brax implementation from here'''
        
        if deterministic:
          return ppo_networks.parametric_action_distribution.mode(logits), {}
@@ -98,7 +102,8 @@ def make_ppo_networks(
     vision_hidden_layer_sizes: Sequence[int] = (256,) * 5,
     activation: networks.ActivationFn = linen.swish) -> PPONetworks:
   
-  """Make PPO networks with preprocessor."""
+  """Make PPO networks with Vision"""
+  #ToDo: Find a way to change the parameter initilization
 
   parametric_action_distribution = distribution.NormalTanhDistribution(
       event_size=action_size)
