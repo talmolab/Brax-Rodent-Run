@@ -14,11 +14,11 @@ from vnl_brax.data import BraxData
 
 '''Actor, Value, and Vision Network'''
 
-
+# functions to vectorize mapping and un_vectorize mapping
 def _unpmap(v):
   return jax.tree_util.tree_map(lambda x: x[0], v)
 
-def _re_vmap(v, new_axis_size=128*2):
+def _re_vmap(v, new_axis_size=128):
   def replicate_across_new_axis(x):
     return jp.repeat(jp.expand_dims(x, axis=0), new_axis_size, axis=0)
   return jax.tree_util.tree_map(lambda x: jax.vmap(replicate_across_new_axis)(x), v).T
