@@ -8,6 +8,7 @@ from flax import linen
 from jax import numpy as jp
 import jax
 from brax.training import acting
+import numpy as np
 
 from vnl_brax.data import BraxData
 
@@ -40,28 +41,29 @@ def make_inference_fn(ppo_networks: PPONetworks):
        
        # ToDo, figure out a way to use ppo to train vision_net to step once
        ''' vision processing first, similar to train.py'''
-       vision_raw_obs = observations.vision
-       # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
        
-       proprioception = observations.proprioception
-       vision = observations.vision
-       observations_processed = jp.concatenate([_unpmap(proprioception), _unpmap(vision)])
+       vision_raw_obs = observations.vision
+       buffer_pro = observations.buffer_proprioception
+       # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
+       vision_buffered = jp.concatenate([_unpmap(vision_raw_obs), _unpmap(buffer_pro)])
 
-       print(vision_raw_obs)
        print(*params) # tells you the architecture
 
-       vision_param = vision_network.apply(*params, observations_processed)
+       # parameter created must have all obs sapce
+       vision_param = vision_network.apply(*params, vision_buffered) #run correctly
        # we actually already have the parameters here, but would it be trained?
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
+
+       print(vision_param) #should be an 16 value array
        
        '''data combined here'''
-       proprioception = observations.proprioception
-       visions_activation = vision_param
 
-       observations_processed = jp.concatenate([proprioception, visions_activation]) # now type as expected in brax
+
+       proprioception = observations.proprioception
+       full_processed = jp.concatenate([_unpmap(proprioception), vision_param]) # now type as expected in brax
        
        # same with brax implementation from here
-       logits = policy_network.apply(*params, observations_processed)
+       logits = policy_network.apply(*params, full_processed)
        
        if deterministic:
          return ppo_networks.parametric_action_distribution.mode(logits), {}

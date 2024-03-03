@@ -247,9 +247,13 @@ class Walker(MjxEnv):
     #print(jp.concatenate([position, velocity, image_jax]).shape[-1])
     
     #return proprioception
+
+    buffer_proprioception = jax.numpy.array(np.random.rand(27,))
+    buffer_vision = jax.numpy.array(np.random.rand(240, 320, 3)).flatten()
   
     return BraxData(
       proprioception = proprioception,
       vision = image_jax,
-      shape = shape,
+      buffer_proprioception = buffer_proprioception,
+      buffer_vision = buffer_vision,
     )
