@@ -18,9 +18,9 @@ from vnl_brax.data import BraxData
 def _unpmap(v):
   return jax.tree_util.tree_map(lambda x: x[0], v)
 
-def _re_vmap(v, new_axis_size=128):
+def _re_vmap(v, new_axis_size=128*2):
   def replicate_across_new_axis(x):
-    return jp.repeat(jp.expand_dims(x, axis=0), new_axis_size, axis=0)
+    return jp.repeat(jp.expand_dims(x, axis=1), new_axis_size, axis=1)
   return jax.tree_util.tree_map(lambda x: jax.vmap(replicate_across_new_axis)(x), v)
 
 
