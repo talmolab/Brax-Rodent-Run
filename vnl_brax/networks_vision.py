@@ -36,12 +36,12 @@ def make_inference_fn(ppo_networks: PPONetworks):
        # ToDo, figure out a way to use ppo to train vision_net to step once
        ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.vision
+       # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
        print(vision_raw_obs)
-       # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>)
-       # maybe just concat then?
+       print(*params)
 
-
-       vision_param = vision_network.apply(*params, vision_raw_obs) # we actually already have the parameters here, but would it be trained?
+       vision_param = vision_network.apply(*params, vision_raw_obs)
+       # we actually already have the parameters here, but would it be trained?
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
        
        '''data combined here'''
@@ -108,8 +108,7 @@ def make_ppo_networks(
   # ToDo: add AlexNet strcuture for vision network change the base_network.py file
   # vision network
   vision_network = networks.make_value_network(
-      #observation_size,
-      1,
+      observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=vision_hidden_layer_sizes,
       activation=activation)
