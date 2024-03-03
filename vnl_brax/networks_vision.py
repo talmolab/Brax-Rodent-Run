@@ -52,7 +52,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        
        vision_raw_obs = observations.vision
        buffer_pro = observations.buffer_proprioception
-       vision_buffered = jp.concatenate([vision_raw_obs, buffer_pro], axis=1) # must unpmap for concatination purpose
+       vision_buffered = jp.concatenate([vision_raw_obs, buffer_pro], axis=1) # don't need to unmap, can directly concat on axis 1
 
        print(*params) # tells you the architecture
 
@@ -68,12 +68,13 @@ def make_inference_fn(ppo_networks: PPONetworks):
 
        proprioception = observations.proprioception
        buffer_vis = observations.buffer_vision
-       full_processed = jp.concatenate([_unpmap(proprioception), vision_param,_unpmap(buffer_vis)]) # now type as expected in brax
+       full_processed = jp.concatenate([proprioception, vision_param,buffer_vis], axis=1) # now type as expected in brax
        logits = policy_network.apply(*params, full_processed)
 
        print(logits) # this is a Traced<ShapedArray(float32[16])>with<DynamicJaxprTrace(level=3/0)>
        
-       logits = _re_vmap(logits)
+      #  logits = _re_vmap(logits)
+       print(logits)
        print(observations.shape)
 
        '''same with brax implementation from here'''
