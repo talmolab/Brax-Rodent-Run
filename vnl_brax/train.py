@@ -233,7 +233,10 @@ def train(
   
 
   size = env_state.obs.proprioception.shape[-1]
-  
+
+  print(env_state.obs.proprioception.shape[-1])
+  print(env_state.obs.proprioception.shape[-1])
+
   # directly feed in only the sate obs, obs.shape customized later
   ppo_network = network_factory(
       #env_state.obs.shape[-1],
