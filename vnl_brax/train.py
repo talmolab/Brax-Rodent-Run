@@ -421,9 +421,10 @@ def train(
     eval_env = environment
 
     # also need to change for eval_env
-    print(env_state.obs.shape)
+    print(env_state.obs.shape) # changed from BraxData to jax array
     new_obs = env_state.obs
-    eval_env = eval_env.replace(obs=new_obs)
+
+    print(eval_env.reset.obs)
 
 
 
