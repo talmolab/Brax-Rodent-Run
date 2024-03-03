@@ -235,8 +235,7 @@ def train(
 
 
 
-  size = env_state.obs.proprioception.shape[-1] + env_state.obs.vision.shape[-1]
-
+  #size = env_state.obs.proprioception.shape[-1] + env_state.obs.vision.shape[-1]
   # make_ppo_network in here
   ppo_network = network_factory(
       #env_state.obs.shape[-1],
