@@ -246,6 +246,8 @@ def train(
   # make_policy in brax is the network.py make_inference function passing in ppo_network class defined in train.py
   make_policy = ppo_networks.make_inference_fn(ppo_network) # make policy then used in evaluator
 
+  env_state.obs = env_state.obs.full
+
 
 
 

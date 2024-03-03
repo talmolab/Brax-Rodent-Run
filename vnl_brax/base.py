@@ -251,11 +251,14 @@ class Walker(MjxEnv):
 
     # for shape call in train.py of ppo
     shape = jp.concatenate([proprioception,image_jax]).shape[0] # shape -1 is one number, give as shape tuple
+
+    full = jp.concatenate([proprioception,image_jax])
   
     return BraxData(
       proprioception = proprioception,
       vision = image_jax,
+      full=full,
       buffer_proprioception = buffer_proprioception,
       buffer_vision = buffer_vision,
-      shape=(128, shape)
+      shape = (128, shape) # this works, but there is a type check in jax
     )
