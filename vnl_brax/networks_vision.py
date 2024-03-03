@@ -19,7 +19,9 @@ def _unpmap(v):
   return jax.tree_util.tree_map(lambda x: x[0], v)
 
 def _re_vmap(v, new_axis_size=128):
-  return jp.repeat(jp.expand_dims(v, axis=0), new_axis_size, axis=0)
+  def replicate_across_new_axis(x):
+    return jp.repeat(jp.expand_dims(x, axis=0), new_axis_size, axis=0)
+  return jax.tree_util.tree_map(lambda x: jax.vmap(replicate_across_new_axis)(1), v)
 
 # PPO network class data container
 @flax.struct.dataclass
