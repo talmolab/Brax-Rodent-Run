@@ -103,14 +103,14 @@ def make_ppo_networks(
   # actor network
   policy_network = networks.make_policy_network(
       parametric_action_distribution.param_size,
-      observation_size+12325,
+      observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=policy_hidden_layer_sizes,
       activation=activation)
   
   # critic network
   value_network = networks.make_value_network(
-      observation_size+12325,
+      observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=value_hidden_layer_sizes,
       activation=activation)
