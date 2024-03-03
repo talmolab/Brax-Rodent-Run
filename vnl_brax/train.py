@@ -232,17 +232,22 @@ def train(
     normalize = running_statistics.normalize
   
 
+
+
+
   size = env_state.obs.proprioception.shape[-1] + env_state.obs.vision.shape[-1]
 
-  # directly feed in only the sate obs, obs.shape customized later
+  # make_ppo_network in here
   ppo_network = network_factory(
       #env_state.obs.shape[-1],
       size,
       env.action_size,
       preprocess_observations_fn=normalize)
-
   
-  make_policy = ppo_networks.make_inference_fn(ppo_network)
+  # make_policy in brax is the network.py make_inference function passing in ppo_network class defined in train.py
+  make_policy = ppo_networks.make_inference_fn(ppo_network) # make policy then used in evaluator
+
+
 
   optimizer = optax.adam(learning_rate=learning_rate)
 

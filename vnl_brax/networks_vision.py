@@ -37,8 +37,9 @@ def make_inference_fn(ppo_networks: PPONetworks):
        ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.vision
        # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
+       
        print(vision_raw_obs)
-       print(*params)
+       print(*params) # tells you the architecture
 
        vision_param = vision_network.apply(*params, vision_raw_obs)
        # we actually already have the parameters here, but would it be trained?
@@ -89,6 +90,7 @@ def make_ppo_networks(
 
   parametric_action_distribution = distribution.NormalTanhDistribution(
       event_size=action_size)
+  print(action_size)
   
   # actor network
   policy_network = networks.make_policy_network(
