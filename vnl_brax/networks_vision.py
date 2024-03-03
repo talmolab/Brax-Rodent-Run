@@ -74,7 +74,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        print(logits) # this is a Traced<ShapedArray(float32[16])>with<DynamicJaxprTrace(level=3/0)>
        
        logits = _re_vmap(logits)
-       observations.shape = _re_vmap(observations.shape)
+       print(observations.shape)
 
        '''same with brax implementation from here'''
        
