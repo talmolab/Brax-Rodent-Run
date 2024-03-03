@@ -421,7 +421,8 @@ def train(
     eval_env = environment
 
     # also need to change for eval_env
-    new_obs = env_state.obs.full
+    print(env_state.obs)
+    new_obs = env_state.obs
     eval_env = eval_env.state.replace(obs=new_obs)
 
 
