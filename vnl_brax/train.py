@@ -232,10 +232,7 @@ def train(
     normalize = running_statistics.normalize
   
 
-  size = env_state.obs.proprioception.shape[-1]
-
-  print(env_state.obs.proprioception.shape[-1])
-  print(env_state.obs.proprioception.shape[-1])
+  size = env_state.obs.proprioception.shape[-1] + env_state.obs.vision.shape[-1]
 
   # directly feed in only the sate obs, obs.shape customized later
   ppo_network = network_factory(
