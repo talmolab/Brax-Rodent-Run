@@ -12,6 +12,10 @@ from vnl_brax.data import BraxData
 
 '''Actor, Value, and Vision Network'''
 
+
+def _unpmap(v):
+  return jp.tree_util.tree_map(lambda x: x[0], v)
+
 # PPO network class data container
 @flax.struct.dataclass
 class PPONetworks:
@@ -40,7 +44,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        
        proprioception = observations.proprioception
        vision = observations.vision
-       observations_processed = jp.concatenate([proprioception, vision])
+       observations_processed = jp.concatenate([_unpmap(proprioception), _unpmap(vision)])
 
        print(vision_raw_obs)
        print(*params) # tells you the architecture
