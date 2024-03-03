@@ -102,7 +102,8 @@ def make_ppo_networks(
   # critic network
   value_network = networks.make_value_network(
       #observation.shape[-1],
-      observation.proprioception.shape[-1]+1325,
+      #observation.proprioception.shape[-1]+1325,
+      (128, 230400),
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=value_hidden_layer_sizes,
       activation=activation)
