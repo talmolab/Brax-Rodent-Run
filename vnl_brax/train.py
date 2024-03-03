@@ -58,7 +58,7 @@ class TrainingState:
   normalizer_params: running_statistics.RunningStatisticsState
   env_steps: jnp.ndarray
 
-
+# this works pretty well
 def _unpmap(v):
   return jax.tree_util.tree_map(lambda x: x[0], v)
 
