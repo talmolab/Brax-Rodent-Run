@@ -250,7 +250,7 @@ class Walker(MjxEnv):
 
     buffer_proprioception = jax.numpy.array(np.random.rand(27,))
 
-    num = (230427-(23+16)) # image size - (proprioreception + activation parameter)
+    num = (230427-(27+16)) # image size - (proprioreception + activation parameter)
     buffer_vision = jax.numpy.array(np.random.rand(num,))
   
     return BraxData(

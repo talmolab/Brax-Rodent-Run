@@ -40,8 +40,6 @@ def make_inference_fn(ppo_networks: PPONetworks):
     def policy(observations: types.Observation, key_sample: PRNGKey) -> Tuple[types.Action, types.Extra]:
        
        # ToDo, figure out a way to use ppo to train vision_net to step once
-       
-       
        ''' vision processing first, similar to train.py'''
        vision_raw_obs = observations.vision
        buffer_pro = observations.buffer_proprioception
@@ -65,7 +63,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
       # ToDo: adding buffer now, but should figure out how to replace later!
        full_processed = jp.concatenate([_unpmap(proprioception), vision_param,_unpmap(buffer_vis)]) # now type as expected in brax
        
-       # same with brax implementation from here
+       '''same with brax implementation from here'''
        logits = policy_network.apply(*params, full_processed)
        
        if deterministic:
