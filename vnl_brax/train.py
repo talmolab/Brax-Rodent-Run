@@ -248,7 +248,7 @@ def train(
 
   # change back to prefered form!
   new_obs = env_state.obs.full
-  env_state.replace(obs=new_obs)
+  env_state = env_state.replace(obs=new_obs)
 
 
 
@@ -417,6 +417,17 @@ def train(
 
   if not eval_env:
     eval_env = environment
+
+    # also need to change for eval_env
+    new_obs = env_state.obs.full
+    eval_env = eval_env.state.replace(obs=new_obs)
+
+
+
+
+
+
+
   if randomization_fn is not None:
     v_randomization_fn = functools.partial(
         randomization_fn, rng=jax.random.split(eval_key, num_eval_envs)

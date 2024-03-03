@@ -88,6 +88,7 @@ train_fn = functools.partial(
     batch_size=config['batch_size'],
     seed=0,
     network_factory=ppo_networks_vision.make_ppo_networks, # This function create the PPO class
+    eval_env=None, #we can make an env with normal jax array?
     )
 
 run = wandb.init(
