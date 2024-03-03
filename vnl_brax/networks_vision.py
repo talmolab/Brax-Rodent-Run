@@ -117,7 +117,7 @@ def make_ppo_networks(
   
   # ToDo: add AlexNet strcuture for vision network change the base_network.py file
   # vision network
-  vision_network = networks.make_value_network(
+  vision_network = networks.make_policy_network(
       observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=vision_hidden_layer_sizes,
