@@ -76,7 +76,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
 
 # return a PPO class that have being instantiated
 def make_ppo_networks(
-    observation_size: int,
+    observation_size: int, # cannot change this, or pipeline broken issue
     action_size: int,
     preprocess_observations_fn: types.PreprocessObservationFn = types
     .identity_observation_preprocessor,
@@ -108,7 +108,8 @@ def make_ppo_networks(
   # ToDo: add AlexNet strcuture for vision network change the base_network.py file
   # vision network
   vision_network = networks.make_value_network(
-      observation_size,
+      #observation_size,
+      1,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=vision_hidden_layer_sizes,
       activation=activation)
