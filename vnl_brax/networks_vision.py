@@ -38,15 +38,21 @@ def make_inference_fn(ppo_networks: PPONetworks):
        vision_raw_obs = observations.vision
        # this mismatch the data class.image (Traced<ShapedArray(float32[128,230400])>with<DynamicJaxprTrace(level=3/0)>), due to vmap
        
+       proprioception = observations.proprioception
+       visions_activation = vision_param
+
+       observations_processed = jp.concatenate([proprioception, visions_activation])
+
+
        print(vision_raw_obs)
        print(*params) # tells you the architecture
 
-       vision_param = vision_network.apply(*params, vision_raw_obs)
+       vision_param = vision_network.apply(*params, observations_processed)
        # we actually already have the parameters here, but would it be trained?
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
        
        '''data combined here'''
-       proprioception = jp.concatenate([proprioception, visions_activation]) #observations.proprioception
+       proprioception = observations.proprioception
        visions_activation = vision_param
 
        observations_processed = jp.concatenate([proprioception, visions_activation]) # now type as expected in brax
