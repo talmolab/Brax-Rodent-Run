@@ -198,8 +198,6 @@ class Walker(MjxEnv):
     #Termination State
     done = 1.0 - is_healthy if self._terminate_when_unhealthy else 0.0
 
-    print(done.shape)
-
     state.metrics.update(
         forward_reward=forward_reward,
         reward_linvel=forward_reward,
