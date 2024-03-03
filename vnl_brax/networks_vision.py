@@ -71,13 +71,14 @@ def make_inference_fn(ppo_networks: PPONetworks):
        full_processed = jp.concatenate([proprioception, vision_param,buffer_vis], axis=1) # now type as expected in brax
        logits = policy_network.apply(*params, full_processed)
 
-       print(logits) # this is a Traced<ShapedArray(float32[16])>with<DynamicJaxprTrace(level=3/0)>
-       
-      #  logits = _re_vmap(logits)
        print(logits)
+       # this is previously a Traced<ShapedArray(float32[16])>with<DynamicJaxprTrace(level=3/0)>
+       # now it is a Traced<ShapedArray(float32[128,16])>with<DynamicJaxprTrace(level=3/0)>
+       
+       #logits = _re_vmap(logits)
        print(observations.shape)
 
-       '''same with brax implementation from here'''
+       '''this should be the same with brax implementation from here brax should output a [128, 16] on this level as well'''
        
        if deterministic:
          return ppo_networks.parametric_action_distribution.mode(logits), {}
