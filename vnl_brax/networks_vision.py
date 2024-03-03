@@ -76,7 +76,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
 
 # return a PPO class that have being instantiated
 def make_ppo_networks(
-    observation: BraxData,
+    observation_size: int,
     action_size: int,
     preprocess_observations_fn: types.PreprocessObservationFn = types
     .identity_observation_preprocessor,
@@ -93,16 +93,14 @@ def make_ppo_networks(
   # actor network
   policy_network = networks.make_policy_network(
       parametric_action_distribution.param_size,
-      #observation.shape[-1],
-      observation.proprioception.shape[-1]+1325,
+      observation_size+12325,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=policy_hidden_layer_sizes,
       activation=activation)
   
   # critic network
   value_network = networks.make_value_network(
-      #observation.shape[-1],
-      observation.proprioception.shape[-1]+1325,
+      observation_size+12325,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=value_hidden_layer_sizes,
       activation=activation)
@@ -110,12 +108,10 @@ def make_ppo_networks(
   # ToDo: add AlexNet strcuture for vision network change the base_network.py file
   # vision network
   vision_network = networks.make_value_network(
-      #observation.shape[-1],
-      observation.vision.shape[-1],
+      observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=vision_hidden_layer_sizes,
       activation=activation)
-  print(observation.vision.shape[-1])
 
 
   return PPONetworks(
