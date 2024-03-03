@@ -6,6 +6,7 @@ from brax.training.types import PRNGKey
 import flax
 from flax import linen
 from jax import numpy as jp
+import jax
 from brax.training import acting
 
 from vnl_brax.data import BraxData
@@ -14,7 +15,7 @@ from vnl_brax.data import BraxData
 
 
 def _unpmap(v):
-  return jp.tree_util.tree_map(lambda x: x[0], v)
+  return jax.tree_util.tree_map(lambda x: x[0], v)
 
 # PPO network class data container
 @flax.struct.dataclass
