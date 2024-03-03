@@ -52,7 +52,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        
        vision_raw_obs = observations.vision
        buffer_pro = observations.buffer_proprioception
-       vision_buffered = jp.concatenate([_unpmap(vision_raw_obs), _unpmap(buffer_pro)]) # must unpmap for concatination purpose
+       vision_buffered = jp.concatenate([vision_raw_obs, buffer_pro], axis=1) # must unpmap for concatination purpose
 
        print(*params) # tells you the architecture
 
