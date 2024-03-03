@@ -20,7 +20,7 @@ def _unpmap(v):
 
 def _re_vmap(v, new_axis_size=128*2):
   def replicate_across_new_axis(x):
-    return jp.repeat(jp.expand_dims(x, axis=1), new_axis_size, axis=1)
+    return jp.repeat(jp.expand_dims(x, axis=0), new_axis_size, axis=1)
   return jax.tree_util.tree_map(lambda x: jax.vmap(replicate_across_new_axis)(x), v)
 
 
