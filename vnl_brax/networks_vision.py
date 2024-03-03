@@ -78,6 +78,9 @@ def make_inference_fn(ppo_networks: PPONetworks):
        #logits = _re_vmap(logits)
        print(observations.shape)
 
+       # change back to array
+       observations = observations.full
+
        '''this should be the same with brax implementation from here brax should output a [128, 16] on this level as well'''
        
        if deterministic:
