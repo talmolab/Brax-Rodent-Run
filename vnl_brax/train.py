@@ -240,7 +240,7 @@ def train(
   # make_ppo_network in here
   ppo_network = network_factory(
       #env_state.obs.shape[-1],
-      size,
+      env_state.obs.shape[-1],
       env.action_size,
       preprocess_observations_fn=normalize)
   
@@ -390,7 +390,7 @@ def train(
   
   
 
-  
+
   
 
   
@@ -398,9 +398,9 @@ def train(
       optimizer_state=optimizer.init(init_params),  # pytype: disable=wrong-arg-types  # numpy-scalars
       params=init_params,
       normalizer_params=running_statistics.init_state(
-          specs.Array(size, jnp.dtype('float32'))),
+          specs.Array(env_state.obs.shape[-1:], jnp.dtype('float32'))),
       env_steps=0)
-  #size replace env_state.obs.shape[-1:]
+  #replace env_state.obs.shape[-1:]
   
   
 
