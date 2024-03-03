@@ -102,8 +102,8 @@ def make_ppo_networks(
   
   # actor network
   policy_network = networks.make_policy_network(
-      parametric_action_distribution.param_size,
-     obs_size=observation_size,
+      param_size=parametric_action_distribution.param_size,
+      obs_size=observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=policy_hidden_layer_sizes,
       activation=activation)
@@ -118,6 +118,7 @@ def make_ppo_networks(
   # ToDo: add AlexNet strcuture for vision network change the base_network.py file
   # vision network
   vision_network = networks.make_policy_network(
+      param_size=parametric_action_distribution.param_size,
       obs_size=observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
       hidden_layer_sizes=vision_hidden_layer_sizes,
