@@ -249,6 +249,10 @@ def train(
 
 
 
+
+
+
+
   optimizer = optax.adam(learning_rate=learning_rate)
 
   loss_fn = functools.partial(
@@ -385,6 +389,8 @@ def train(
       value=ppo_network.value_network.init(key_value))
   
   
+
+  
   
 
   
@@ -397,6 +403,10 @@ def train(
   #size replace env_state.obs.shape[-1:]
   
   
+
+
+
+
   
   training_state = jax.device_put_replicated(
       training_state,

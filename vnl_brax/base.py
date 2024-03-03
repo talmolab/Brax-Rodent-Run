@@ -249,7 +249,9 @@ class Walker(MjxEnv):
     #return proprioception
 
     buffer_proprioception = jax.numpy.array(np.random.rand(27,))
-    buffer_vision = jax.numpy.array(np.random.rand(240, 320, 3)).flatten()
+
+    num = (230427-(23+16)) # image size - (proprioreception + activation parameter)
+    buffer_vision = jax.numpy.array(np.random.rand(num,))
   
     return BraxData(
       proprioception = proprioception,

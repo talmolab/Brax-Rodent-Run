@@ -59,7 +59,11 @@ def make_inference_fn(ppo_networks: PPONetworks):
        
        '''data combined here'''
        proprioception = observations.proprioception
-       full_processed = jp.concatenate([_unpmap(proprioception), vision_param]) # now type as expected in brax
+       buffer_vis = observations.buffer_vision
+       
+
+      # ToDo: adding buffer now, but should figure out how to replace later!
+       full_processed = jp.concatenate([_unpmap(proprioception), vision_param,_unpmap(buffer_vis)]) # now type as expected in brax
        
        # same with brax implementation from here
        logits = policy_network.apply(*params, full_processed)
