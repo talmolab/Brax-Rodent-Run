@@ -247,8 +247,9 @@ def train(
   make_policy = ppo_networks.make_inference_fn(ppo_network) # make policy then used in evaluator
 
   # change back to prefered form!
-  new = env_state.obs.full
-  env_state.obs = new
+  new_obs = env_state.obs.full
+  
+  env_state.replace(obs=new_obs)
 
 
 
