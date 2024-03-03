@@ -46,7 +46,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        # this is a jax.numpy.array of parameter (in networks.make_value_network function)
        
        '''data combined here'''
-       proprioception = observations.proprioception
+       proprioception = jp.concatenate([proprioception, visions_activation]) #observations.proprioception
        visions_activation = vision_param
 
        observations_processed = jp.concatenate([proprioception, visions_activation]) # now type as expected in brax
@@ -90,7 +90,6 @@ def make_ppo_networks(
 
   parametric_action_distribution = distribution.NormalTanhDistribution(
       event_size=action_size)
-  print(action_size)
   
   # actor network
   policy_network = networks.make_policy_network(
