@@ -45,7 +45,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        
        vision_raw_obs = observations.vision
        buffer_pro = observations.buffer_proprioception
-       vision_buffered = jp.concatenate([_unpmap(vision_raw_obs), _unpmap(buffer_pro)])
+       vision_buffered = jp.concatenate([vision_raw_obs, buffer_pro])
 
        print(*params) # tells you the architecture
 
@@ -65,8 +65,6 @@ def make_inference_fn(ppo_networks: PPONetworks):
        logits = policy_network.apply(*params, full_processed)
 
        print(logits) # this is a Traced<ShapedArray(float32[16])>with<DynamicJaxprTrace(level=3/0)>
-
-       logits = jax.jit(jax.vmap(logits))
 
        '''same with brax implementation from here'''
        
