@@ -54,8 +54,6 @@ def make_inference_fn(ppo_networks: PPONetworks):
        # we actually already have the parameters here, but would it be trained?
 
        print(vision_param) #should be an 16 value array, (in networks.make_value_network function)
-       
-
 
 
        '''proprioception + vision actiavtions'''
@@ -66,7 +64,9 @@ def make_inference_fn(ppo_networks: PPONetworks):
        full_processed = jp.concatenate([_unpmap(proprioception), vision_param,_unpmap(buffer_vis)]) # now type as expected in brax
        logits = policy_network.apply(*params, full_processed)
 
-       print(logits)
+       print(logits) # this is a Traced<ShapedArray(float32[16])>with<DynamicJaxprTrace(level=3/0)>
+
+       logits = jax.jit(jax.vmap(logits))
 
        '''same with brax implementation from here'''
        
