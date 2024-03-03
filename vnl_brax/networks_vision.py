@@ -92,7 +92,7 @@ def make_ppo_networks(
     .identity_observation_preprocessor,
     policy_hidden_layer_sizes: Sequence[int] = (256,) * 4,
     value_hidden_layer_sizes: Sequence[int] = (256,) * 4,
-    vision_hidden_layer_sizes: Sequence[int] = (256,) * ,
+    vision_hidden_layer_sizes: Sequence[int] = (256,) * 4,
     activation: networks.ActivationFn = linen.swish) -> PPONetworks:
   
   """Make PPO networks with preprocessor."""
