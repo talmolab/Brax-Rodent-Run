@@ -101,7 +101,7 @@ class MLP(linen.Module):
     # handling dynamic new shape issues
     out_new_shape = tuple()
     for i in range(len(pro_data.shape)-1):
-      out_new_shape = (pro_data.shape[i],) + out_new_shape
+      out_new_shape = out_new_shape + (pro_data.shape[i],)
     out_new_shape = out_new_shape + (-1,)
     vision_out = vision_out.reshape(out_new_shape)
 
