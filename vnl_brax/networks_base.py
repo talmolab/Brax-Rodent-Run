@@ -88,14 +88,14 @@ class MLP(linen.Module):
                       dtype=dtype,
                       )(vision_data)
     vision_data = linen.relu(vision_data)
-    vision_data = vision_data.reshape((vision_data.shape[0], -1))  # flatten
+    vision_data = vision_data.reshape((vision_data.shape[-2], -1))  # flatten acording not counting from head but from tail
     print(f'After reshape dimension: {vision_data.shape}')
 
 
     
     #fully connected
-    #vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
-    #vision_data = linen.relu(vision_data)
+    vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
+    vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data)
 
     hidden = jnp.concatenate([pro_data, vision_out], axis=1)
