@@ -95,9 +95,10 @@ class MLP(linen.Module):
     #fully connected
     vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
     vision_data = linen.relu(vision_data)
-    vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data)
+    vision_out = linen.Dense(features=512, name='logits', dtype=dtype)(vision_data) # this is (2560, 1)
 
-    hidden = jnp.concatenate([pro_data, vision_out], axis=1)
+    hidden = jnp.concatenate([pro_data, vision_out], axis=-1)
+
     for i, hidden_size in enumerate(self.layer_sizes):
       print(f'hidden_unit_size:{hidden_size}')
       print(f'hidden_input_size:{hidden.shape}')
