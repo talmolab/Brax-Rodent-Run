@@ -60,8 +60,8 @@ class MLP(linen.Module):
     # vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered
 
     new_shape = (240,320,3)
-    for i in range(len(vision_data.shape)-1):
-      new_shape = vision_data[i] + new_shape
+    for i in range(len(vision_data.shape)-1): #avoid error in case of 1 d as well, add anything that is not the [-1] position
+      new_shape = vision_data.shape[i] + new_shape
 
     vision_data = vision_data.reshape(new_shape)
 
