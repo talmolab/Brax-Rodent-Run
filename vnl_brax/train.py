@@ -248,9 +248,8 @@ def train(
   make_policy = ppo_networks.make_inference_fn(ppo_network) # make policy then used in evaluator, not passing in env yet
 
   # change back to prefered form!
-  new_obs = env_state.obs.full
-  env_state = env_state.replace(obs=new_obs) #may be no need to return? in place changes?
-
+  # new_obs = env_state.obs.full
+  # env_state = env_state.replace(obs=new_obs)
   # changed successfully, but only need to change once, later iterations use isinstance, change back in the start
 
 
