@@ -69,6 +69,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
        proprioception = observations.proprioception
        buffer_vis = observations.buffer_vision
        full_processed = jp.concatenate([proprioception, vision_param,buffer_vis], axis=1) # now type as expected in brax
+
        logits = policy_network.apply(*params, full_processed)
 
        print(logits)

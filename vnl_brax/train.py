@@ -24,7 +24,7 @@ from typing import Callable, Optional, Tuple, Union
 from absl import logging
 from brax import base
 from brax import envs
-from brax.training import acting
+#from brax.training import acting
 from brax.training import gradients
 from brax.training import pmap
 from brax.training import types
@@ -42,6 +42,7 @@ import numpy as np
 import optax
 
 import vnl_brax.networks_vision as ppo_networks
+import vnl_brax.acting_vision as acting
 
 
 InferenceParams = Tuple[running_statistics.NestedMeanStd, Params]
@@ -244,15 +245,13 @@ def train(
       preprocess_observations_fn=normalize)
   
   # make_policy in brax is the network.py make_inference function passing in ppo_network class defined in train.py
-  make_policy = ppo_networks.make_inference_fn(ppo_network) # make policy then used in evaluator
+  make_policy = ppo_networks.make_inference_fn(ppo_network) # make policy then used in evaluator, not passing in env yet
 
   # change back to prefered form!
   new_obs = env_state.obs.full
   env_state = env_state.replace(obs=new_obs) #may be no need to return? in place changes?
 
   # changed successfully, but only need to change once, later iterations use isinstance, change back in the start
-
-
 
 
 
@@ -419,17 +418,6 @@ def train(
 
   if not eval_env:
     eval_env = environment
-
-    # also need to change for eval_env
-    print(env_state.obs.shape) # changed from BraxData to jax array
-    new_obs = env_state.obs
-
-
-
-
-
-
-
 
   if randomization_fn is not None:
     v_randomization_fn = functools.partial(
