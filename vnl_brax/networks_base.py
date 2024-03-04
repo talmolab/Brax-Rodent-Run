@@ -60,10 +60,10 @@ class MLP(linen.Module):
     # vmap_size = -1 # automatically infered size #vision_data.shape[0]
     # vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered
 
+    #handling dynamic new shape issues
     new_shape = (240,320,3)
     for i in range(len(vision_data.shape)-1): #avoid error in case of 1 d as well, add anything that is not the [-1] position
       new_shape = (vision_data.shape[i],) + new_shape
-
     vision_data = vision_data.reshape(new_shape)
 
 
@@ -89,18 +89,19 @@ class MLP(linen.Module):
                       )(vision_data)
     vision_data = linen.relu(vision_data)
     
-    vision_data = vision_data.reshape((-1, 76800))  # flatten preserving first dimension, then fit automaticall for next
+    # flatten preserving expected dimension of 76800, then fit automaticall
+    vision_data = vision_data.reshape((-1, 76800))
     print(f'After reshape dimension: {vision_data.shape}')
 
-    #fully connected
+    # fully connected layer
     vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
     vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data) # this is (2560, 1)
 
+    # handling dynamic new shape issues
     out_new_shape = (-1,)
-    for i in range(len(vision_data.shape)-1):
-      out_new_shape = (vision_data.shape[i],) + out_new_shape
-
+    for i in range(len(pro_data.shape)-1):
+      out_new_shape = (pro_data.shape[i],) + out_new_shape
     vision_out = vision_out.reshape(out_new_shape)
 
     hidden = jnp.concatenate([pro_data, vision_out], axis=-1)
