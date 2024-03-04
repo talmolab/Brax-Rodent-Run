@@ -44,7 +44,7 @@ def make_inference_fn(ppo_networks: PPONetworks):
 
        logits = policy_network.apply(*params, observations)
 
-       print(logits) # Traced<ShapedArray(float32[128,16])>with<DynamicJaxprTrace(level=3/0)>
+       print('logits:',logits) # Traced<ShapedArray(float32[128,16])>with<DynamicJaxprTrace(level=3/0)>
 
        if deterministic:
          return ppo_networks.parametric_action_distribution.mode(logits), {}
