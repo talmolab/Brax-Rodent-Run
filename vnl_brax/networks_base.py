@@ -101,9 +101,10 @@ class MLP(linen.Module):
       # hidden size is a list[hidden_layer_size, parameter size (which is a NormalTanhDistribution)]
       modified_hidden_size = hidden_size / [new_shape[0] if new_shape[0] < 128 else 1][0]
       modified_hidden_size = int(modified_hidden_size)
+      print(f'multiply by {new_shape[0]}')
 
       hidden = linen.Dense(
-          hidden_size,
+          modified_hidden_size,
           name=f'hidden_{i}',
           kernel_init=self.kernel_init,
           use_bias=self.bias,
