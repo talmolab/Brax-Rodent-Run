@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Network definitions."""
+# making it a inherent class later！
 
 import dataclasses
 from typing import Any, Callable, Sequence, Tuple
@@ -49,6 +50,7 @@ class MLP(linen.Module):
 
     dtype = jnp.float32
     vision_data = vision_data.astype(dtype) / 255.0
+    print(vision_data)
     vision_data = linen.Conv(features=32,
                       kernel_size=(8, 8),
                       strides=(4, 4),
