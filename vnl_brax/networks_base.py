@@ -35,7 +35,7 @@ class FeedForwardNetwork:
 
 
 class MLP(linen.Module):
-  """MLP module."""
+  """MLP module, both network (policy and value) have conv_net"""
   layer_sizes: Sequence[int]
   activation: ActivationFn = linen.relu
   kernel_init: Initializer = jax.nn.initializers.lecun_uniform()
@@ -114,13 +114,14 @@ class SNMLP(linen.Module):
 
 
 def make_policy_network(
-    #param_size: int,
+    param_size: int,
     obs_size: int,
     preprocess_observations_fn: types.PreprocessObservationFn = types
     .identity_observation_preprocessor,
     hidden_layer_sizes: Sequence[int] = (256, 256),
     activation: ActivationFn = linen.relu) -> FeedForwardNetwork:
   """Creates a policy network."""
+  
   policy_module = MLP(
       layer_sizes=list(hidden_layer_sizes) + [27+16], #[param_size],
       activation=activation,
@@ -142,6 +143,7 @@ def make_value_network(
     hidden_layer_sizes: Sequence[int] = (256, 256),
     activation: ActivationFn = linen.relu) -> FeedForwardNetwork:
   """Creates a policy network."""
+
   value_module = MLP(
       layer_sizes=list(hidden_layer_sizes) + [1],
       activation=activation,
