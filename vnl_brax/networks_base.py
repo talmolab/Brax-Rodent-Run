@@ -55,7 +55,7 @@ class MLP(linen.Module):
     vision_data = vision_data.astype(dtype) / 255.0
     print(vision_data.shape)
 
-    vision_data = vision_data.reshape((vision_data.shape[0], 240, 320, 3)) # reshape back to 3d image
+    vision_data = vision_data.reshape((vision_data.shape[0], 240, 320, 3)) # reshape back to 3d image with vmap considered
 
     vision_data = linen.Conv(features=32,
                       kernel_size=(8, 8),
@@ -83,7 +83,7 @@ class MLP(linen.Module):
     vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data)
 
-    hidden = jnp.concatenate([pro_data, vision_out.T], axis=1)
+    hidden = jnp.concatenate([pro_data, vision_out], axis=1)
     for i, hidden_size in enumerate(self.layer_sizes):
       hidden = linen.Dense(
           hidden_size,
