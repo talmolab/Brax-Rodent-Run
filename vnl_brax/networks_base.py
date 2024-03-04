@@ -37,7 +37,7 @@ class FeedForwardNetwork:
 
 class MLP(linen.Module):
   """MLP module, both network (policy and value) have conv_net,
-  maximize flexibility, creating any model needed"""
+  Maximize flexibility -> creating any model needed"""
   layer_sizes: Sequence[int]
   activation: ActivationFn = linen.relu
   kernel_init: Initializer = jax.nn.initializers.lecun_uniform()
@@ -89,9 +89,8 @@ class MLP(linen.Module):
                       )(vision_data)
     vision_data = linen.relu(vision_data)
     
-    vision_data = vision_data.reshape((vision_data.shape[0], 76800))  # flatten preserving first dimension, then fit automaticall for next
+    vision_data = vision_data.reshape((-1, 76800))  # flatten preserving first dimension, then fit automaticall for next
     print(f'After reshape dimension: {vision_data.shape}')
-
 
     #fully connected
     vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
