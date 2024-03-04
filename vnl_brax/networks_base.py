@@ -88,15 +88,11 @@ class MLP(linen.Module):
                       dtype=dtype,
                       )(vision_data)
     vision_data = linen.relu(vision_data)
-
-    for i in range(len(vision_data.shape)-1):
-      new_shape = (vision_data.shape[i],) + new_shape
-
-    vision_data = vision_data.reshape((new_shape, -1))  # flatten preserving any dimension that's not [-1], then fit automatically
+    
+    vision_data = vision_data.reshape((vision_data.shape[0], 76800))  # flatten preserving first dimension, then fit automaticall for next
     print(f'After reshape dimension: {vision_data.shape}')
 
 
-    
     #fully connected
     vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
     vision_data = linen.relu(vision_data)
