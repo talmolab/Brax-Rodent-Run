@@ -46,8 +46,8 @@ class MLP(linen.Module):
   @linen.compact
   def __call__(self, data: jnp.ndarray):
     print(data)
-    vision_data = data[27:] #just vision
-    pro_data = data[:26] #just proprioception
+    vision_data = data[0][27:] #just vision
+    pro_data = data[0][:26] #just proprioception
 
     dtype = jnp.float32
     vision_data = vision_data.astype(dtype) / 255.0
