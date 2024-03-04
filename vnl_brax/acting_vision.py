@@ -64,8 +64,9 @@ def generate_unroll(
 ) -> Tuple[State, Transition]:
   """Collect trajectories of given unroll_length."""
 
-  # generate unroll takes in state, swap it here
-  env_state = env_state.replace(obs=env_state.obs.full)
+  # generate unroll takes in state, swap it here, but this wouldn't work for later passing
+  original_obs = env_state.obs
+  env_state = env_state.replace(obs=original_obs.full)
   print(env_state.obs)
 
   @jax.jit
@@ -75,9 +76,11 @@ def generate_unroll(
     nstate, transition = actor_step(
         env, state, policy, current_key, extra_fields=extra_fields)
     return (nstate, next_key), transition
-
+  
   (final_state, _), data = jax.lax.scan(
       f, (env_state, key), (), length=unroll_length)
+  
+  final_state = final_state.replace(obs=original_obs)
   return final_state, data
 
 
