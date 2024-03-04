@@ -61,7 +61,7 @@ class MLP(linen.Module):
 
     new_shape = (240,320,3)
     for i in range(len(vision_data.shape)-1): #avoid error in case of 1 d as well, add anything that is not the [-1] position
-      new_shape = vision_data.shape[i] + new_shape
+      new_shape = (vision_data.shape[i],) + new_shape
 
     vision_data = vision_data.reshape(new_shape)
 
