@@ -36,7 +36,8 @@ class FeedForwardNetwork:
 
 
 class MLP(linen.Module):
-  """MLP module, both network (policy and value) have conv_net"""
+  """MLP module, both network (policy and value) have conv_net,
+  maximize flexibility, creating any model needed"""
   layer_sizes: Sequence[int]
   activation: ActivationFn = linen.relu
   kernel_init: Initializer = jax.nn.initializers.lecun_uniform()
@@ -102,7 +103,7 @@ class MLP(linen.Module):
       modified_hidden_size = int(modified_hidden_size)
 
       hidden = linen.Dense(
-          modified_hidden_size,
+          hidden_size,
           name=f'hidden_{i}',
           kernel_init=self.kernel_init,
           use_bias=self.bias,
