@@ -49,7 +49,7 @@ class MLP(linen.Module):
 
     # two dimension matrix slicing
     vision_data = data[:,27:] #just vision
-    pro_data = data[:,:26] #just proprioception
+    pro_data = data[:,:27] #just proprioception
 
     dtype = jnp.float32
     vision_data = vision_data.astype(dtype) / 255.0
@@ -83,7 +83,7 @@ class MLP(linen.Module):
     vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data)
 
-    hidden = jnp.concatenate([pro_data, vision_out], axis=1)
+    hidden = jnp.concatenate([pro_data, vision_out.T], axis=1)
     for i, hidden_size in enumerate(self.layer_sizes):
       hidden = linen.Dense(
           hidden_size,
