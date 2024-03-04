@@ -56,7 +56,7 @@ class MLP(linen.Module):
     print(vision_data.shape)
 
 
-    vmap_size = -1 # automatically infered #vision_data.shape[0]
+    vmap_size = -1 # automatically infered size #vision_data.shape[0]
     vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered
 
     vision_data = linen.Conv(features=32,
