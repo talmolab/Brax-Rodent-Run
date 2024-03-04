@@ -94,8 +94,13 @@ class MLP(linen.Module):
 
     hidden = jnp.concatenate([pro_data, vision_out], axis=1)
     for i, hidden_size in enumerate(self.layer_sizes):
+      print(f'hidden_unit_size:{hidden_size}')
+      print(f'hidden_input_size:{hidden.shape}')
+      
+      # hidden size is a list[hidden_layer_size, parameter size (which is a NormalTanhDistribution)]
+
       hidden = linen.Dense(
-          hidden_size * (i+1), #[new_shape[0] if new_shape[0]!= 128 else 1][0],
+          hidden_size, #[new_shape[0] if new_shape[0]!= 128 else 1][0],
           name=f'hidden_{i}',
           kernel_init=self.kernel_init,
           use_bias=self.bias,
