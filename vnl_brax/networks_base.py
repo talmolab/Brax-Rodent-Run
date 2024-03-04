@@ -45,19 +45,15 @@ class MLP(linen.Module):
 
   @linen.compact
   def __call__(self, data: jnp.ndarray):
-    print(data.shape)
+    print(data.shape) # initial should all be zero
     vision_data = data[0][27:] #just vision
     pro_data = data[0][:26] #just proprioception
 
-
-
     dtype = jnp.float32
     vision_data = vision_data.astype(dtype) / 255.0
-    print(vision_data)
+    print(vision_data.shape)
 
-    vision_data = vision_data.reshape((230400, 240, 320, 3))
-
-
+    vision_data = vision_data.reshape((240, 320, 3)) # reshape back
 
     vision_data = linen.Conv(features=32,
                       kernel_size=(8, 8),
