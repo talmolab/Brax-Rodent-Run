@@ -95,7 +95,7 @@ class MLP(linen.Module):
     hidden = jnp.concatenate([pro_data, vision_out], axis=1)
     for i, hidden_size in enumerate(self.layer_sizes):
       hidden = linen.Dense(
-          hidden_size * [new_shape[0] if new_shape[0]!= 128 else 1][0],
+          hidden_size * i, #[new_shape[0] if new_shape[0]!= 128 else 1][0],
           name=f'hidden_{i}',
           kernel_init=self.kernel_init,
           use_bias=self.bias,
@@ -140,7 +140,7 @@ def make_policy_network(
   """Creates a policy network."""
   
   policy_module = MLP(
-      layer_sizes=list(hidden_layer_sizes) + [param_size], #[27+16], keep the same
+      layer_sizes=list(hidden_layer_sizes) + [param_size], #[27+16], keep the same hidden layer size is 28, param_size is dynamic
       activation=activation,
       kernel_init=jax.nn.initializers.lecun_uniform())
 
