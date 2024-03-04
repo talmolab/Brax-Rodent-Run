@@ -64,6 +64,9 @@ def generate_unroll(
 ) -> Tuple[State, Transition]:
   """Collect trajectories of given unroll_length."""
 
+  # generate unroll takes in state, swap it here
+  env_state.replace(obs=env_state.obs.full)
+
   @jax.jit
   def f(carry, unused_t):
     state, current_key = carry
@@ -104,12 +107,6 @@ class Evaluator:
                              key: PRNGKey) -> State:
       reset_keys = jax.random.split(key, num_eval_envs)
       eval_first_state = eval_env.reset(reset_keys)
-
-
-      # generate unroll takes in state, swap it here
-      eval_first_state.replace(obs=eval_first_state.obs.full)
-
-
       
       return generate_unroll(
           eval_env,
