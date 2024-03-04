@@ -97,7 +97,11 @@ class MLP(linen.Module):
     vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data) # this is (2560, 1)
 
-    vision_out = vision_out.reshape((pro_data.shape[0],pro_data.shape[1],-1))
+    out_new_shape = (-1,)
+    for i in range(len(vision_data.shape)-1):
+      out_new_shape = (vision_data.shape[i],) + out_new_shape
+
+    vision_out = vision_out.reshape(out_new_shape)
 
     hidden = jnp.concatenate([pro_data, vision_out], axis=-1)
 
