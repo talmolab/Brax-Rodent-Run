@@ -229,7 +229,7 @@ class Walker(MjxEnv):
     # image_jax = image_jax.flatten()
 
     fake_image = jax.numpy.array(np.random.rand(240, 320, 3))
-    image_jax = fake_image.flatten()
+    image_jax = fake_image.flatten() # fit into jp array
     #print(image_jax)
 
     # Proprioreceptive Data
