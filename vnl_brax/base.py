@@ -32,7 +32,6 @@ from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
 # customized import
-from vnl_brax.data import BraxData
 from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
 
@@ -242,23 +241,23 @@ class Walker(MjxEnv):
     proprioception = jp.concatenate([position, velocity])
     
     
-    
-    
-    buffer_proprioception = jax.numpy.array(np.random.rand(27,))
+    # buffer_proprioception = jax.numpy.array(np.random.rand(27,))
 
-    num = (230427-(27+16)) # image size - (proprioreception + activation parameter)
-    buffer_vision = jax.numpy.array(np.random.rand(num,))
+    # num = (230427-(27+16)) # image size - (proprioreception + activation parameter)
+    # buffer_vision = jax.numpy.array(np.random.rand(num,))
 
-    # for shape call in train.py of ppo
-    shape = jp.concatenate([proprioception,image_jax]).shape[0] # shape -1 is one number, give as shape tuple
+    # # for shape call in train.py of ppo
+    # shape = jp.concatenate([proprioception,image_jax]).shape[0] # shape -1 is one number, give as shape tuple
 
-    full = jp.concatenate([proprioception,image_jax])
+    # full = jp.concatenate([proprioception,image_jax])
   
-    return BraxData(
-      proprioception = proprioception,
-      vision = image_jax,
-      full=full,
-      buffer_proprioception = buffer_proprioception,
-      buffer_vision = buffer_vision,
-      shape = (128, shape) # this works, but there is a type check in jax
-    )
+    # return BraxData(
+    #   proprioception = proprioception,
+    #   vision = image_jax,
+    #   full=full,
+    #   buffer_proprioception = buffer_proprioception,
+    #   buffer_vision = buffer_vision,
+    #   shape = (128, shape) # this works, but there is a type check in jax
+    # )
+
+    return jp.concatenate([proprioception, image_jax])

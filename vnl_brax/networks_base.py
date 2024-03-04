@@ -44,7 +44,38 @@ class MLP(linen.Module):
 
   @linen.compact
   def __call__(self, data: jnp.ndarray):
-    hidden = data
+    vision_data = data[27:] #just vision
+    pro_data = data[:26] #just proprioception
+
+    dtype = jnp.float32
+    vision_data = vision_data.astype(dtype) / 255.0
+    vision_data = linen.Conv(features=32,
+                      kernel_size=(8, 8),
+                      strides=(4, 4),
+                      name='conv1',
+                      dtype=dtype,
+                      )(vision_data)
+    vision_data = linen.relu(vision_data)
+    vision_data = linen.Conv(features=64,
+                      kernel_size=(4, 4),
+                      strides=(2, 2),
+                      name='conv2',
+                      dtype=dtype,
+                      )(vision_data)
+    vision_data = linen.relu(vision_data)
+    vision_data = linen.Conv(features=64,
+                      kernel_size=(3, 3),
+                      strides=(1, 1),
+                      name='conv3',
+                      dtype=dtype,
+                      )(vision_data)
+    vision_data = linen.relu(vision_data)
+    vision_data = vision_data.reshape((vision_data.shape[0], -1))  # flatten
+    vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
+    vision_data = linen.relu(vision_data)
+    vision_out = linen.Dense(features=16, name='logits', dtype=dtype)(vision_data)
+
+    hidden = jnp.concatinate([pro_data, vision_out])
     for i, hidden_size in enumerate(self.layer_sizes):
       hidden = linen.Dense(
           hidden_size,
@@ -54,7 +85,9 @@ class MLP(linen.Module):
               hidden)
       if i != len(self.layer_sizes) - 1 or self.activate_final:
         hidden = self.activation(hidden)
+
     return hidden
+  
 
 
 class SNMLP(linen.Module):
@@ -89,7 +122,7 @@ def make_policy_network(
     activation: ActivationFn = linen.relu) -> FeedForwardNetwork:
   """Creates a policy network."""
   policy_module = MLP(
-      layer_sizes=list(hidden_layer_sizes) + [param_size],
+      layer_sizes=list(hidden_layer_sizes) + 27 + 16#[param_size],
       activation=activation,
       kernel_init=jax.nn.initializers.lecun_uniform())
 
