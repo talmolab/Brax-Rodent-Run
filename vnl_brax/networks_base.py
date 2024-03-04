@@ -46,6 +46,8 @@ class MLP(linen.Module):
   @linen.compact
   def __call__(self, data: jnp.ndarray):
     print(data.shape) # initial should all be zero
+
+    # two dimension matrix slicing
     vision_data = data[:,27:] #just vision
     pro_data = data[:,:26] #just proprioception
 
@@ -81,7 +83,7 @@ class MLP(linen.Module):
     vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data)
 
-    hidden = jnp.concatenate([pro_data, vision_out[0]])
+    hidden = jnp.concatenate([pro_data, vision_out], axis=1)
     for i, hidden_size in enumerate(self.layer_sizes):
       hidden = linen.Dense(
           hidden_size,
