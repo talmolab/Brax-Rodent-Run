@@ -122,7 +122,7 @@ def make_policy_network(
     activation: ActivationFn = linen.relu) -> FeedForwardNetwork:
   """Creates a policy network."""
   policy_module = MLP(
-      layer_sizes=list(hidden_layer_sizes) + 27 + 16#[param_size],
+      layer_sizes=list(hidden_layer_sizes) + 27 + 16, #[param_size],
       activation=activation,
       kernel_init=jax.nn.initializers.lecun_uniform())
 
