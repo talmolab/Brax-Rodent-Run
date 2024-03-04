@@ -65,7 +65,8 @@ def generate_unroll(
   """Collect trajectories of given unroll_length."""
 
   # generate unroll takes in state, swap it here
-  env_state.replace(obs=env_state.obs.full)
+  env_state = env_state.replace(obs=env_state.obs.full)
+  print(env_state.obs)
 
   @jax.jit
   def f(carry, unused_t):
