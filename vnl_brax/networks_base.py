@@ -89,8 +89,13 @@ class MLP(linen.Module):
                       )(vision_data)
     vision_data = linen.relu(vision_data)
     vision_data = vision_data.reshape((vision_data.shape[0], -1))  # flatten
-    vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
-    vision_data = linen.relu(vision_data)
+    print(f'After reshape dimension: {vision_data.shape}')
+
+
+    
+    #fully connected
+    #vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
+    #vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data)
 
     hidden = jnp.concatenate([pro_data, vision_out], axis=1)
@@ -99,7 +104,7 @@ class MLP(linen.Module):
       print(f'hidden_input_size:{hidden.shape}')
       
       # hidden size is a integer [hidden_layer_size, parameter size (which is a NormalTanhDistribution)]
-      modified_hidden_size = hidden_size / [new_shape[0] if new_shape[-2] < 128 else 1][0] # number before [-1]
+      modified_hidden_size = hidden_size / [new_shape[0] if new_shape[0] < 128 else 1][0] # number before [-1] or use [-2]?
       modified_hidden_size = int(modified_hidden_size)
       print(f'modified_size: {modified_hidden_size}')
 
