@@ -95,11 +95,11 @@ class MLP(linen.Module):
     hidden = jnp.concatenate([pro_data, vision_out], axis=1)
     for i, hidden_size in enumerate(self.layer_sizes):
       hidden = linen.Dense(
-          hidden_size,
+          hidden_size * new_shape[0],
           name=f'hidden_{i}',
           kernel_init=self.kernel_init,
-          use_bias=self.bias)(
-              hidden)
+          use_bias=self.bias,
+          )(hidden)
       if i != len(self.layer_sizes) - 1 or self.activate_final:
         hidden = self.activation(hidden)
 
