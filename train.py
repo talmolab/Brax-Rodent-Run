@@ -25,14 +25,14 @@ from brax import math
 from brax.base import Base, Motion, Transform
 from brax.envs.base import Env, MjxEnv, State
 from brax.mjx.base import State as MjxState
-#from brax.training.agents.ppo import train as ppo
+from brax.training.agents.ppo import train as ppo
 #from brax.training.agents.ppo import networks as ppo_networks
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
 from vnl_brax.base import Walker
 import vnl_brax.networks_vision as ppo_networks_vision
-import vnl_brax.train as ppo
+#import vnl_brax.train as ppo
 
 
 ''' Main Training Loop'''

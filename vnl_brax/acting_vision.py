@@ -63,7 +63,7 @@ def generate_unroll(
     extra_fields: Sequence[str] = ()
 ) -> Tuple[State, Transition]:
   """Collect trajectories of given unroll_length."""
-
+  
   # generate unroll takes in state, swap it here, but this wouldn't work for later passing
   original_obs = env_state.obs
   env_state = env_state.replace(obs=original_obs.full)
@@ -77,9 +77,11 @@ def generate_unroll(
         env, state, policy, current_key, extra_fields=extra_fields)
     return (nstate, next_key), transition
   
+  # this function calls to network.py file -> need BraxData while need d-array, problematic
   (final_state, _), data = jax.lax.scan(
       f, (env_state, key), (), length=unroll_length)
   
+
   final_state = final_state.replace(obs=original_obs)
   return final_state, data
 

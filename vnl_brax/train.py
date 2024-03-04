@@ -250,7 +250,7 @@ def train(
   # change back to prefered form!
   # new_obs = env_state.obs.full
   # env_state = env_state.replace(obs=new_obs)
-  # changed successfully, but only need to change once, later iterations use isinstance, change back in the start
+  # changed successfully -> but later iterations would hit problem
 
 
 
