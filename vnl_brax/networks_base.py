@@ -48,8 +48,8 @@ class MLP(linen.Module):
     print(data.shape) # initial should all be zero
 
     # two dimension matrix slicing
-    vision_data = data[:,27:] #just vision
-    pro_data = data[:,:27] #just proprioception
+    vision_data = data[...,27:] #just vision
+    pro_data = data[...,:27] #just proprioception
 
     dtype = jnp.float32
     vision_data = vision_data.astype(dtype) / 255.0
