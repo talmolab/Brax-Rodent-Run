@@ -28,7 +28,6 @@ def _re_vmap(v, new_axis_size=128):
 class PPONetworks:
   policy_network: networks.FeedForwardNetwork
   value_network: networks.FeedForwardNetwork
-  vision_network: networks.FeedForwardNetwork # maximize the utilization of ppo
   parametric_action_distribution: distribution.ParametricDistribution
 
 
@@ -74,7 +73,7 @@ def make_ppo_networks(
     action_size: int,
     preprocess_observations_fn: types.PreprocessObservationFn = types
     .identity_observation_preprocessor,
-    policy_hidden_layer_sizes: Sequence[int] = (32,) * 4,
+    #policy_hidden_layer_sizes: Sequence[int] = (32,) * 4,
     value_hidden_layer_sizes: Sequence[int] = (256,) * 5,
     activation: networks.ActivationFn = linen.swish) -> PPONetworks:
   
@@ -92,7 +91,7 @@ def make_ppo_networks(
       param_size=parametric_action_distribution.param_size,
       obs_size=observation_size,
       preprocess_observations_fn=preprocess_observations_fn,
-      hidden_layer_sizes=policy_hidden_layer_sizes,
+      #hidden_layer_sizes=policy_hidden_layer_sizes,
       activation=activation)
   
 

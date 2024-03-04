@@ -114,7 +114,7 @@ class SNMLP(linen.Module):
 
 
 def make_policy_network(
-    param_size: int,
+    #param_size: int,
     obs_size: int,
     preprocess_observations_fn: types.PreprocessObservationFn = types
     .identity_observation_preprocessor,
