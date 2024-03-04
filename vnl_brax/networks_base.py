@@ -81,7 +81,7 @@ class MLP(linen.Module):
     vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data)
 
-    hidden = jnp.concatenate([pro_data, vision_out])
+    hidden = jnp.concatenate([pro_data, vision_out[0]])
     for i, hidden_size in enumerate(self.layer_sizes):
       hidden = linen.Dense(
           hidden_size,
