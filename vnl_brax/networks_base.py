@@ -112,7 +112,7 @@ class MLP(linen.Module):
       print(f'hidden_input_size:{hidden.shape}')
       
       # hidden size is a integer [hidden_layer_size, parameter size (which is a NormalTanhDistribution)]
-      modified_hidden_size = hidden_size / [new_shape[0] if new_shape[0] < 128 else 1][0] # number before [-1] or use [-2]?
+      modified_hidden_size = hidden_size / [vision_out[0] if vision_out[0] < 128 else 1][0] # number before [-1] or use [-2]?
       modified_hidden_size = int(modified_hidden_size)
       print(f'modified_size: {modified_hidden_size}')
 
