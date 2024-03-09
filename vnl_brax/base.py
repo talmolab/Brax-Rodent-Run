@@ -214,10 +214,6 @@ class Walker(MjxEnv):
   def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
     """environment feedback of observing walker's proprioreceptive and vision data"""
 
-    # prioritize rendering check
-    # try mjx rendering
-
-
     # # Vision Data
     # # passed in data is a pipeline_state.data object, pipeline_state is the sate
     # renderer = mujoco.Renderer(model = self._model)
