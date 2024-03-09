@@ -46,7 +46,7 @@ class MLP(linen.Module):
 
   @linen.compact
   def __call__(self, data: jnp.ndarray):
-    print(data.shape) # initial should all be zero
+    #print(data.shape) # initial should all be zero
 
     # two dimension matrix slicing
     vision_data = data[...,27:] #just vision
@@ -54,20 +54,17 @@ class MLP(linen.Module):
 
     dtype = jnp.float32
     vision_data = vision_data.astype(dtype) / 255.0
-    print(vision_data.shape)
+    #print(vision_data.shape)
 
     # vmap_size = -1 # automatically infered size #vision_data.shape[0]
     # vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered
-
-    # new_shape = (240,320,3)
-    # for i in range(len(vision_data.shape)-1):
-    #   new_shape = (vision_da ta.shape[i],) + new_shape
 
     #handling dynamic new shape issues
     #avoid error in case of 1 d as well, add anything that is not the [-1] position, extract all dimensions except the last one
     new_shape_prefix = vision_data.shape[:-1]
     new_shape = new_shape_prefix + (240, 320, 3)
     vision_data = vision_data.reshape(new_shape)
+    print(f'Before into ConvNet + vmap shape: {vision_data.shape}')
 
     vision_data = linen.Conv(features=32,
                       kernel_size=(8, 8),
@@ -93,17 +90,12 @@ class MLP(linen.Module):
     
     # flatten preserving expected dimension of 76800, then fit automaticall
     # vision_data = vision_data.reshape((-1, 76800))
-    print(f'After reshape dimension: {vision_data.shape}')
 
     # fully connected layer
     vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
     vision_data = linen.relu(vision_data)
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data) # this is (2560, 1)
-
-    # out_new_shape = tuple()
-    # for i in range(len(pro_data.shape)-1):
-    #   out_new_shape = out_new_shape + (pro_data.shape[i],)
-    # out_new_shape = out_new_shape + (-1,)
+    print(f'This is out of CovNet {vision_out.shape}')
 
     # handling dynamic new shape issues
     out_new_shape_prefix = pro_data.shape[:-1]
