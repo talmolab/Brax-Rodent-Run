@@ -52,67 +52,69 @@ class MLP(linen.Module):
     vision_data = data[...,27:] #just vision
     pro_data = data[...,:27] #just proprioception
 
-    dtype = jnp.float32
-    vision_data = vision_data.astype(dtype) / 255.0
-    #print(vision_data.shape)
+    # dtype = jnp.float32
+    # vision_data = vision_data.astype(dtype) / 255.0
+    # #print(vision_data.shape)
 
-    # vmap_size = -1 # automatically infered size #vision_data.shape[0]
-    # vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered
+    # # vmap_size = -1 # automatically infered size #vision_data.shape[0]
+    # # vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered
 
-    #handling dynamic new shape issues
-    #avoid error in case of 1 d as well, add anything that is not the [-1] position, extract all dimensions except the last one
-    new_shape_prefix = vision_data.shape[:-1]
-    new_shape = new_shape_prefix + (240, 320, 3)
-    vision_data = vision_data.reshape(new_shape)
-    print(f'Before into ConvNet + vmap shape: {vision_data.shape}')
+    # #handling dynamic new shape issues
+    # #avoid error in case of 1 d as well, add anything that is not the [-1] position, extract all dimensions except the last one
+    # new_shape_prefix = vision_data.shape[:-1]
+    # new_shape = new_shape_prefix + (240, 320, 3)
+    # vision_data = vision_data.reshape(new_shape)
+    # print(f'Before into ConvNet + vmap shape: {vision_data.shape}')
 
-    vision_data = linen.Conv(features=32,
-                      kernel_size=(8, 8),
-                      strides=(4, 4),
-                      name='conv1',
-                      dtype=dtype,
-                      )(vision_data)
-    vision_data = linen.relu(vision_data)
-    vision_data = linen.Conv(features=64,
-                      kernel_size=(4, 4),
-                      strides=(2, 2),
-                      name='conv2',
-                      dtype=dtype,
-                      )(vision_data)
-    vision_data = linen.relu(vision_data)
-    vision_data = linen.Conv(features=64,
-                      kernel_size=(3, 3),
-                      strides=(1, 1),
-                      name='conv3',
-                      dtype=dtype,
-                      )(vision_data)
-    vision_data = linen.relu(vision_data)
+    # vision_data = linen.Conv(features=32,
+    #                   kernel_size=(8, 8),
+    #                   strides=(4, 4),
+    #                   name='conv1',
+    #                   dtype=dtype,
+    #                   )(vision_data)
+    # vision_data = linen.relu(vision_data)
+    # vision_data = linen.Conv(features=64,
+    #                   kernel_size=(4, 4),
+    #                   strides=(2, 2),
+    #                   name='conv2',
+    #                   dtype=dtype,
+    #                   )(vision_data)
+    # vision_data = linen.relu(vision_data)
+    # vision_data = linen.Conv(features=64,
+    #                   kernel_size=(3, 3),
+    #                   strides=(1, 1),
+    #                   name='conv3',
+    #                   dtype=dtype,
+    #                   )(vision_data)
+    # vision_data = linen.relu(vision_data)
     
-    # flatten preserving expected dimension of 76800, then fit automaticall
-    # vision_data = vision_data.reshape((-1, 76800))
+    # # flatten preserving expected dimension of 76800, then fit automaticall
+    # # vision_data = vision_data.reshape((-1, 76800))
 
-    # fully connected layer
-    vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
-    vision_data = linen.relu(vision_data)
-    vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data) # this is (2560, 1)
-    print(f'This is out of CovNet {vision_out.shape}')
+    # # fully connected layer
+    # vision_data = linen.Dense(features=512, name='hidden', dtype=dtype)(vision_data)
+    # vision_data = linen.relu(vision_data)
+    # vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data) # this is (2560, 1)
+    # print(f'This is out of CovNet {vision_out.shape}')
 
-    # handling dynamic new shape issues
-    out_new_shape_prefix = pro_data.shape[:-1]
-    out_new_shape = out_new_shape_prefix + (-1,)
-    vision_out = vision_out.reshape(out_new_shape)
+    # # handling dynamic new shape issues
+    # out_new_shape_prefix = pro_data.shape[:-1]
+    # out_new_shape = out_new_shape_prefix + (-1,)
+    # vision_out = vision_out.reshape(out_new_shape)
 
-    hidden = jnp.concatenate([pro_data, vision_out], axis=-1)
+    # hidden = jnp.concatenate([pro_data, vision_out], axis=-1)
+
+    hidden = pro_data
 
     for i, hidden_size in enumerate(self.layer_sizes):
-      print(f'hidden_unit_size:{hidden_size}')
-      print(f'hidden_input_size:{hidden.shape}')
+      # print(f'hidden_unit_size:{hidden_size}')
+      # print(f'hidden_input_size:{hidden.shape}')
       
       # hidden size is a integer [hidden_layer_size, parameter size (which is a NormalTanhDistribution)]
       # do we need to adjust this size?
       modified_hidden_size = hidden_size #/ [vision_out[0] if vision_out[0] < 128 else 1][0] # number before [-1] or use [-2]?
       modified_hidden_size = int(modified_hidden_size)
-      print(f'modified_size: {modified_hidden_size}')
+      # print(f'modified_size: {modified_hidden_size}')
 
       hidden = linen.Dense(
           modified_hidden_size,
@@ -122,6 +124,8 @@ class MLP(linen.Module):
           )(hidden)
       if i != len(self.layer_sizes) - 1 or self.activate_final:
         hidden = self.activation(hidden)
+      
+      print(f'this is out of full ppo network {hidden.shape}')
 
     return hidden
   
