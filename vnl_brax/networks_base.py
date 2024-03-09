@@ -61,9 +61,12 @@ class MLP(linen.Module):
     # vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered
 
     #handling dynamic new shape issues
-    new_shape = (240,320,3)
-    for i in range(len(vision_data.shape)-1): #avoid error in case of 1 d as well, add anything that is not the [-1] position
-      new_shape = (vision_data.shape[i],) + new_shape
+    # new_shape = (240,320,3)
+    # for i in range(len(vision_data.shape)-1): #avoid error in case of 1 d as well, add anything that is not the [-1] position
+    #   new_shape = (vision_da ta.shape[i],) + new_shape
+
+    new_shape_prefix = vision_data.shape[:-1]  # Extract all dimensions except the last one
+    new_shape = new_shape_prefix + (240, 320, 3)
     vision_data = vision_data.reshape(new_shape)
 
 
@@ -99,10 +102,16 @@ class MLP(linen.Module):
     vision_out = linen.Dense(features=1, name='logits', dtype=dtype)(vision_data) # this is (2560, 1)
 
     # handling dynamic new shape issues
-    out_new_shape = tuple()
-    for i in range(len(pro_data.shape)-1):
-      out_new_shape = out_new_shape + (pro_data.shape[i],)
-    out_new_shape = out_new_shape + (-1,)
+
+    # # jax.scan change
+    # out_new_shape = tuple()
+    # for i in range(len(pro_data.shape)-1):
+    #   out_new_shape = out_new_shape + (pro_data.shape[i],)
+    # out_new_shape = out_new_shape + (-1,)
+
+    out_new_shape_prefix = pro_data.shape[:-1]  # Extract all dimensions except the last one
+    out_new_shape = out_new_shape_prefix + (-1,)
+
     vision_out = vision_out.reshape(out_new_shape)
 
     hidden = jnp.concatenate([pro_data, vision_out], axis=-1)
@@ -112,6 +121,7 @@ class MLP(linen.Module):
       print(f'hidden_input_size:{hidden.shape}')
       
       # hidden size is a integer [hidden_layer_size, parameter size (which is a NormalTanhDistribution)]
+      # do we need to adjust this size?
       modified_hidden_size = hidden_size #/ [vision_out[0] if vision_out[0] < 128 else 1][0] # number before [-1] or use [-2]?
       modified_hidden_size = int(modified_hidden_size)
       print(f'modified_size: {modified_hidden_size}')
