@@ -234,21 +234,22 @@ class Walker(MjxEnv):
 
     # Vision Data
     # passed in data is a pipeline_state.data object, pipeline_state is the sate
-    # renderer = mujoco.Renderer(model = self._model)
+    renderer = mujoco.Renderer(model = self._model)
 
-    # # this here is the correct format, need qpos in calling
-    # # d = mjx.get_data(self._model, data)
-    # d = mujoco.MjData(self._model)
+    # this here is the correct format, need qpos in calling
+    # d = mjx.get_data(self._model, data)
+    d = mujoco.MjData(self._model)
 
-    # mujoco.mj_forward(self._model, d)
-    # renderer.update_scene(d, camera=3)
-    # image = renderer.render()
-    # image_jax = jax.numpy.array(image)
-    # image_jax = image_jax.flatten()
-    # # print(image)
-    # # print(data.qpos)
-    # s = jax.numpy.sum(image_jax) * 1e-12
-    s = 0
+    mujoco.mj_forward(self._model, d)
+    renderer.update_scene(d, camera=3)
+    image = renderer.render()
+    image_jax = jax.numpy.array(image)
+    image_jax = image_jax.flatten()
+    # print(image)
+    # print(data.qpos)
+    s = jax.numpy.sum(image_jax) * 1e-12
+    #s = 0
+    
     # Proprioreceptive Data
     position = data.qpos + s
     if self._exclude_current_positions_from_observation:

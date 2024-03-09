@@ -214,22 +214,23 @@ class Walker(MjxEnv):
   def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
     """environment feedback of observing walker's proprioreceptive and vision data"""
 
-    # # Vision Data Mujoco Version
-    # # passed in data is a pipeline_state.data object, pipeline_state is the sate
-    # renderer = mujoco.Renderer(model = self._model)
+    # Vision Data Mujoco Version
+    # passed in data is a pipeline_state.data object, pipeline_state is the sate
+    renderer = mujoco.Renderer(model = self._model)
 
-    # # this here is the correct format, need qpos in calling
-    # #d = mjx.get_data(self._model, data)
-    # d = mujoco.MjData(self._model)
+    # this here is the correct format, need qpos in calling
+    #d = mjx.get_data(self._model, data)
+    d = mujoco.MjData(self._model)
 
-    # mujoco.mj_forward(self._model, d)
-    # renderer.update_scene(d, camera=3) # can call via name too!
-    # image = renderer.render()
-    # image_jax = jax.numpy.array(image)
-    # image_jax = image_jax.flatten()
+    mujoco.mj_forward(self._model, d)
+    renderer.update_scene(d, camera=3) # can call via name too!
+    image = renderer.render()
+    image_jax = jax.numpy.array(image)
+    image_jax = image_jax.flatten()
 
     fake_image = jax.numpy.array(np.random.rand(64, 64, 3))
     image_jax = fake_image.flatten() # fit into jp array
+    image_jax_noise = jax.numpy.sum(image_jax) * 1e-12 # noise added
     #print(image_jax)
 
     # cam = mujoco.MjvCamera()
@@ -263,4 +264,4 @@ class Walker(MjxEnv):
     #   shape = (128, shape) # this works, but there is a type check in jax
     # )
 
-    return jp.concatenate([proprioception, image_jax])
+    return jp.concatenate([proprioception, image_jax_noise])
