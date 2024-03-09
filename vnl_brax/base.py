@@ -214,7 +214,7 @@ class Walker(MjxEnv):
   def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
     """environment feedback of observing walker's proprioreceptive and vision data"""
 
-    # # Vision Data
+    # # Vision Data Mujoco Version
     # # passed in data is a pipeline_state.data object, pipeline_state is the sate
     # renderer = mujoco.Renderer(model = self._model)
 
@@ -223,14 +223,17 @@ class Walker(MjxEnv):
     # d = mujoco.MjData(self._model)
 
     # mujoco.mj_forward(self._model, d)
-    # renderer.update_scene(d, camera=3)
+    # renderer.update_scene(d, camera=3) # can call via name too!
     # image = renderer.render()
     # image_jax = jax.numpy.array(image)
     # image_jax = image_jax.flatten()
 
-    fake_image = jax.numpy.array(np.random.rand(240, 320, 3))
+    fake_image = jax.numpy.array(np.random.rand(64, 64, 3))
     image_jax = fake_image.flatten() # fit into jp array
     #print(image_jax)
+
+    # cam = mujoco.MjvCamera()
+
 
     # Proprioreceptive Data
     position = data.qpos
