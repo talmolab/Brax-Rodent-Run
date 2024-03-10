@@ -232,7 +232,7 @@ class Walker(MjxEnv):
     # fake_image = jax.numpy.array(np.random.rand(64, 64, 3))
     # image_jax = fake_image.flatten() # fit into jp array
 
-    o_height, o_width, _ = image_jax.shape
+    o_height, o_width, _ = 240,230,3
     c_x,  c_y = o_width//2, o_height//2
     cropped_jax_image = image_jax[c_y-32:c_y+64, c_x-32:c_x+64, :]
 
