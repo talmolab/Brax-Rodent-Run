@@ -228,12 +228,28 @@ class Walker(MjxEnv):
     image_jax = jax.numpy.array(image)
     image_jax = image_jax.flatten()
 
-    fake_image = jax.numpy.array(np.random.rand(64, 64, 3))
-    image_jax = fake_image.flatten() # fit into jp array
+    print(f'image flattened {image_jax.shape}')
+
+    # fake_image = jax.numpy.array(np.random.rand(64, 64, 3))
+    # image_jax = fake_image.flatten() # fit into jp array
     image_jax_noise = jax.numpy.sum(image_jax) * 1e-12 # noise added
+
     #print(image_jax)
 
     # cam = mujoco.MjvCamera()
+
+    def crop_center(img, new_height, new_width):
+      # Get the dimensions of the original image
+      original_height, original_width, _ = img.shape
+      # Calculate the starting point of the crop
+      start_x = (original_width - new_width) // 2
+      start_y = (original_height - new_height) // 2
+      # Crop the image using array slicing
+      cropped_img = img[start_y:start_y+new_height, start_x:start_x+new_width]
+      return cropped_img
+
+    image_jax_noise = crop_center(image_jax, 64, 64)
+    print(f'image cropped {image_jax_noise.shape}')
 
 
     # Proprioreceptive Data

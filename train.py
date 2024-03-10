@@ -60,7 +60,7 @@ config = {
     "env_name": 'walker',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 10_000_00, #10_000_000,
+    "num_timesteps": 10_000_00,
     "num_evals": 1000,
     "eval_every": 10_000,
     "episode_length": 1000,
@@ -109,5 +109,5 @@ def policy_params_fn(num_steps, make_policy, params, model_path = './model_check
     
 make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
 
-model_path = './model_checkpoints/brax_ppo_task_finished'
+model_path = './model_checkpoints/brax_ppo_vision_task_finished'
 model.save_params(model_path, params)
