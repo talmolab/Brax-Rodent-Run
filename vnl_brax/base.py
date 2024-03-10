@@ -233,13 +233,13 @@ class Walker(MjxEnv):
     # image_jax = fake_image.flatten() # fit into jp array
 
     o_height, o_width, _ = 240,230,3
-    c_x,  c_y = o_width//2, o_height//2
+    c_x,  c_y = 160,120 #o_width//2, o_height//2
     cropped_jax_image = image_jax[c_y-32:c_y+64, c_x-32:c_x+64, :]
     print(f'image cropped {cropped_jax_image.shape}')
 
     image_jax = cropped_jax_image.flatten()
-    image_jax_noise = jax.numpy.sum(image_jax) * 1e-12 # noise added
-    print(f'image cropped {image_jax_noise.shape}')
+    #image_jax_noise = jax.numpy.sum(image_jax) * 1e-12 # noise added
+    print(f'image cropped flatened {image_jax.shape}')
 
     # Proprioreceptive Data
     position = data.qpos
@@ -269,4 +269,4 @@ class Walker(MjxEnv):
     #   shape = (128, shape) # this works, but there is a type check in jax
     # )
 
-    return jp.concatenate([proprioception, image_jax_noise])
+    return jp.concatenate([proprioception, image_jax])
