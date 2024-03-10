@@ -235,7 +235,7 @@ class Walker(MjxEnv):
     original_height, original_width, _ = image_jax.shape
     start_x = (original_width - 64) // 2
     start_y = (original_height - 64) // 2
-    cropped_jax_image = image_jax[start_x:start_x+64, start_y:start_y+64, :]
+    cropped_jax_image = image_jax[start_y:start_y+64, start_x:start_x+64, :]
 
     image_jax = cropped_jax_image.flatten()
     image_jax_noise = jax.numpy.sum(image_jax) * 1e-12 # noise added
