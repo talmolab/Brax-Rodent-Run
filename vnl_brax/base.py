@@ -232,10 +232,9 @@ class Walker(MjxEnv):
     # fake_image = jax.numpy.array(np.random.rand(64, 64, 3))
     # image_jax = fake_image.flatten() # fit into jp array
 
-    original_height, original_width, _ = image_jax.shape
-    start_x = (original_width - 64) // 2
-    start_y = (original_height - 64) // 2
-    cropped_jax_image = image_jax[start_y:start_y+64, start_x:start_x+64, :]
+    o_height, o_width, _ = image_jax.shape
+    c_x,  c_y = o_width//2, o_height//2
+    cropped_jax_image = image_jax[c_y-32:c_y+64, c_x-32:c_x+64, :]
 
     image_jax = cropped_jax_image.flatten()
     image_jax_noise = jax.numpy.sum(image_jax) * 1e-12 # noise added
