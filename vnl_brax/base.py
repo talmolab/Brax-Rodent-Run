@@ -26,7 +26,7 @@ from brax import base
 from brax import envs
 from brax import math
 from brax.base import Base, Motion, Transform
-from brax.envs.base import Env, MjxEnv, State
+from brax.envs.base import Env, PipelineEnv, State #MjxEnv, State
 from brax.mjx.base import State as MjxState
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
@@ -61,7 +61,7 @@ physics = mjcf_dm.Physics.from_mjcf_model(task.root_entity.mjcf_model)
 
 
 # MjxEnv is directly an API to the Mujoco mjx
-class Walker(MjxEnv):
+class Walker(PipelineEnv):
   '''
   This is greatly coustomizable of what reward you want to give: reward engineering
   '''
