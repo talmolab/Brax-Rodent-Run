@@ -23,8 +23,8 @@ from brax import base
 from brax import envs
 from brax import math
 from brax.base import Base, Motion, Transform
-# from brax.envs.base import Env, MjxEnv, State
-# from brax.mjx.base import State as MjxState
+from brax.envs.base import Env, PipelineEnv, State #MjxEnv, State
+from brax.mjx.base import State as MjxState
 from brax.training.agents.ppo import train as ppo
 #from brax.training.agents.ppo import networks as ppo_networks
 from brax.io import html, model

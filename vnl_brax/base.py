@@ -93,14 +93,18 @@ class Walker(PipelineEnv):
     mj_model.opt.iterations = 2
     mj_model.opt.ls_iterations = 4
 
+    sys = mjcf_brax.load_model(mj_model)
+
     # Defult framne to be 5, but can self define in kwargs
     physics_steps_per_control_step = 3
     
     kwargs['n_frames'] = kwargs.get(
         'n_frames', physics_steps_per_control_step)
+    kwargs['backend'] = 'mjx'
 
     # Parents inheritence from MjxEnv class
-    super().__init__(model=mj_model, **kwargs)
+    #super().__init__(model=mj_model, **kwargs)
+    super().__init__(sys, **kwargs)
 
     # Global vraiable for later calling them
     self._model = mj_model
