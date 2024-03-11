@@ -139,7 +139,7 @@ class Walker(PipelineEnv):
     data = self.pipeline_init(qpos, qvel)
 
     #Reset everything
-    obs = self._get_obs(data.data, jp.zeros(self.sys.nu)) #['proprioceptive']
+    obs = self._get_obs(data, jp.zeros(self.sys.nu)) #['proprioceptive']
     reward, done, zero = jp.zeros(3)
     metrics = {
         'forward_reward': zero,
