@@ -194,7 +194,7 @@ class Walker(PipelineEnv):
     ctrl_cost = self._ctrl_cost_weight * jp.sum(jp.square(action))
 
     #Feedback from env
-    obs = self._get_obs(data.data, action)
+    obs = self._get_obs(data, action)
     reward = forward_reward + distance_reward + healthy_reward - ctrl_cost
 
     print(obs)
