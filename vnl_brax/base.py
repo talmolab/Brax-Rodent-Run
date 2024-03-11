@@ -247,7 +247,7 @@ class Walker(MjxEnv):
     if self._exclude_current_positions_from_observation:
       position = position[2:]
 
-    proprioception = jp.concatenate([position, velocity, image_jax_noise])
+    proprioception = jp.concatenate([position, velocity])
     
     
     # buffer_proprioception = jax.numpy.array(np.random.rand(27,))
@@ -269,4 +269,4 @@ class Walker(MjxEnv):
     #   shape = (128, shape) # this works, but there is a type check in jax
     # )
 
-    return jp.concatenate([proprioception, image_jax])
+    return jp.concatenate([proprioception, image_jax_noise])
