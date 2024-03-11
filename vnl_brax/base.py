@@ -238,8 +238,8 @@ class Walker(MjxEnv):
     print(f'image cropped {cropped_jax_image.shape}')
 
     image_jax = cropped_jax_image.flatten()
-    #image_jax_noise = jax.numpy.sum(image_jax) * 1e-12 # noise added
-    print(f'image cropped flatened {image_jax.shape}')
+    image_jax_noise = image_jax * 1e-12 # noise added
+    print(f'image cropped flatened {image_jax_noise.shape}')
 
     # Proprioreceptive Data
     position = data.qpos
@@ -247,7 +247,7 @@ class Walker(MjxEnv):
     if self._exclude_current_positions_from_observation:
       position = position[2:]
 
-    proprioception = jp.concatenate([position, velocity])
+    proprioception = jp.concatenate([position, velocity, image_jax_noise])
     
     
     # buffer_proprioception = jax.numpy.array(np.random.rand(27,))

@@ -64,9 +64,9 @@ config = {
     "num_evals": 1000,
     "eval_every": 10_000,
     "episode_length": 1000,
-    "num_envs": 1,
-    "batch_size": 1,
-    "num_minibatches": 1,
+    "num_envs": 32,
+    "batch_size": 32,
+    "num_minibatches": 32,
     "num_updates_per_batch": 2,
     "unroll_length": 5,
     }
