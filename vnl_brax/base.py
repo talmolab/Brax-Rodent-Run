@@ -60,6 +60,7 @@ task.initialize_episode_mjcf(random_state)
 physics = mjcf_dm.Physics.from_mjcf_model(task.root_entity.mjcf_model)
 
 
+# There are quite some big update on Brax_mjx
 # MjxEnv is directly an API to the Mujoco mjx
 class Walker(PipelineEnv):
   '''
@@ -165,8 +166,8 @@ class Walker(PipelineEnv):
     data = self.pipeline_step(data0, action)
 
     #Running forward (Velocity) tracking base on center of mass movement
-    com_before = data0.data.subtree_com[3]
-    com_after = data.data.subtree_com[3]
+    com_before = data0.subtree_com[3]
+    com_after = data.subtree_com[3]
 
     #print(data.data)
     
