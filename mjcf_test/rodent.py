@@ -56,7 +56,7 @@ _UPRIGHT_QUAT = (1., 0., 0., 0.)
 _TORQUE_THRESHOLD = 60
 
 
-class Rat(legacy_base.Walker):
+class Rodent(legacy_base.Walker):
   """A position-controlled rat with control range scaled to [-1, 1]."""
 
   def _build(self,

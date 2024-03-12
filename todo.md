@@ -1,4 +1,4 @@
-# A List of TODO for Scott to Explore
+# A List of TODO to Explore
 
 1. Use MJCF and dm_control's [`rodent.py`](https://github.com/google-deepmind/dm_control/blob/main/dm_control/locomotion/walkers/rodent.py), for better reducing the observation space of the rodent. 
 
@@ -15,8 +15,11 @@
 
 
 
-## Debug the MJCF in brax and in dm_control
+## Adapt the MJCF in brax and in dm_control
+
+> TODO: We can adapt the `rodent.py`'s mjcf system to brax, to allow it to interact with the brax system.
 
 - The MJCF in brax is pretty bare-bone, and only support loading the xml output form the mjcf package
 - if we want full flexibility of quick access to joints and contact, we still need to import mjcf from dm_control, which introduce a whole new sets of dependencies.
-- TODO: We can adapt the `rodent.py`'s mjcf system to brax, to allow it to interact with the brax system.
+    - better logics for contact termination, terminate when the system is unhealthy
+    - simplified observation space other than the huge array of joint angles and positions

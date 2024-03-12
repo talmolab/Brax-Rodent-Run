@@ -149,7 +149,7 @@
   </asset>
   <worldbody>
     <geom name="floor" size="0 0 .1" type="plane" material="grid" condim="3"/>
-    <body name="torso" pos="0.03099526054578288 2.058524937651458e-07 0.06808957263119967">
+    <body name="torso" pos="0.03099526054578288 2.058524937651458e-07 0.0708957263119967">
       <freejoint name="root"/>
       <site name="tracking[torso]" class="tracking_site" />
       <light name="tracking_light" mode="trackcom" pos="0 0 3"/>
@@ -580,14 +580,8 @@
 
     <pair geom1="foot_L_collision" geom2="floor"/>
     <pair geom1="foot_R_collision" geom2="floor"/>
-<!--     <pair geom1="toe_L0_collision" geom2="floor"/>
-    <pair geom1="toe_L1_collision" geom2="floor"/>
-    <pair geom1="toe_L2_collision" geom2="floor"/>
-    <pair geom1="toe_R0_collision" geom2="floor"/>
-    <pair geom1="toe_R1_collision" geom2="floor"/>
-    <pair geom1="toe_R2_collision" geom2="floor"/> -->
-    <pair geom1="collision_torso" geom2="floor"/>
-
+    <pair geom1="hand_L_collision" geom2="floor"/>
+    <pair geom1="hand_R_collision" geom2="floor"/>
   </contact>
 
   <actuator>
