@@ -23,3 +23,7 @@
 - if we want full flexibility of quick access to joints and contact, we still need to import mjcf from dm_control, which introduce a whole new sets of dependencies.
     - better logics for contact termination, terminate when the system is unhealthy
     - simplified observation space other than the huge array of joint angles and positions
+
+**How-to:**
+- Insert the `dm_control.rodent()` (loaded by mjcf) to the brax training system. 
+    - _Challenges_: we need to bind the physics to `Mjx_model` in order to pass the simulation data to dm_control.
