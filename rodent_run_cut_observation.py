@@ -14,6 +14,8 @@ import numpy as np
 from typing import Any, Dict, Sequence, Tuple, Union
 import wandb
 
+from
+
 from brax import base
 from brax import envs
 from brax import math
@@ -160,9 +162,9 @@ class Rodent(MjxEnv):
         
         # external_contact_forces are excluded
         return jp.concatenate([
-            position[::3],
-            data.qvel[::3],
-            data.qfrc_actuator[::3],
+            position,
+            data.qvel,
+            data.qfrc_actuator,
         ])
 
 
@@ -187,11 +189,11 @@ config = {
     "env_name": env_name,
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 512,
+    "num_envs": 8,
     "num_timesteps": 1_000_000,
     "eval_every": 1_000,
     "episode_length": 500,
-    "batch_size": 256,
+    "batch_size": 8,
     "learning_rate": 6e-4,
     "terminate_when_unhealthy": True,
     "run_platform": "local",
