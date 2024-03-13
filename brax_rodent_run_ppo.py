@@ -9,7 +9,10 @@ import wandb
 from brax import envs
 from brax.envs.base import PipelineEnv, State
 from brax.training.agents.ppo import train as ppo
-from brax.io import mjcf, model
+from brax.io import model
+from brax.io import mjcf as mjcf_brax
+
+from dm_control import mjcf as mjcf_dm
 
 import mujoco
 from mujoco import mjx
@@ -17,8 +20,8 @@ import os
 
 import yaml
 from typing import Dict, Text
-import sys
-sys.path.insert(1, "./mjcf")
+
+from mjcf_vnl import rodent
 
 os.environ['XLA_FLAGS'] = (
     '--xla_gpu_enable_triton_softmax_fusion=true '
@@ -63,15 +66,18 @@ class Rodent(PipelineEnv):
       exclude_current_positions_from_observation=True,
       **kwargs,
   ):
-    params = load_params("params/params.yaml")
-    mj_model = mujoco.MjModel.from_xml_path(params["XML_PATH"])
+    # Load the rodent model via dm_control
+    dm_rodent = rodent.Rodent()
+    physics = mjcf_dm.Physics.from_mjcf_model(dm_rodent.mjcf_model)
+    # mj_model = mujoco.MjModel.from_xml_path(params["XML_PATH"])
+    mj_model = physics.model.ptr
     mj_model.opt.solver = mujoco.mjtSolver.mjSOL_CG
-    mj_model.opt.iterations = 6
-    mj_model.opt.ls_iterations = 6
+    mj_model.opt.iterations = 2
+    mj_model.opt.ls_iterations = 4
 
-    sys = mjcf.load_model(mj_model)
+    sys = mjcf_brax.load_model(mj_model)
 
-    physics_steps_per_control_step = 5
+    physics_steps_per_control_step = 3
     kwargs['n_frames'] = kwargs.get(
         'n_frames', physics_steps_per_control_step
     )
@@ -159,18 +165,10 @@ class Rodent(PipelineEnv):
   def _get_obs(
       self, data: mjx.Data, action: jp.ndarray
   ) -> jp.ndarray:
-    """Observes humanoid body position, velocities, and angles."""
-    position = data.qpos
-    if self._exclude_current_positions_from_observation:
-      position = position[2:]
+    """Observes rodent body position, velocities, and angles."""
 
     # external_contact_forces are excluded
     return jp.concatenate([
-        position,
-        data.qvel,
-        # data.cinert[1:].ravel(),
-        # data.cvel[1:].ravel(),
-        data.qfrc_actuator,
     ])
 
 
