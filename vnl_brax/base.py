@@ -87,12 +87,12 @@ class Walker(PipelineEnv):
     # but this pass in one doesn't, it uses the default mjCONE_PYRAMIDAL, but MjModel now uses the eliptic model, so reset is needed
 
     # solver is an optimization system
-    mj_model.opt.solver = mujoco.mjtSolver.mjSOL_CG
+    mj_model.opt.solver = mujoco.mjtSolver.mjSOL_NEWTON #.mjSOL_CG
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     #Iterations for solver
-    mj_model.opt.iterations = 2
-    mj_model.opt.ls_iterations = 4
+    mj_model.opt.iterations = 1 #2
+    mj_model.opt.ls_iterations = 1 #4
 
     sys = mjcf_brax.load_model(mj_model)
 
