@@ -23,6 +23,10 @@ import jax
 from jax import numpy as jp
 from mujoco import mjx
 
+# added import
+from dm_control import mjcf
+from dm_control.mjcf.physics import Physics
+
 
 def _reformat_contact(sys: System, data: State) -> State:
   """Reformats the mjx.Contact into a brax.base.Contact."""
