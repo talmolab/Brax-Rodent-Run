@@ -1,43 +1,33 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# ## Imports
-
-# In[1]:
-
-
-import numpy as np
-
-from datetime import datetime
 import functools
-from IPython.display import HTML
 import jax
 from jax import numpy as jp
 import numpy as np
-from typing import Any, Dict, Sequence, Tuple, Union
+from typing import Dict
 import wandb
 
-from brax import base
 from brax import envs
-from brax import math
-from brax.base import Base, Motion, Transform
-from brax.envs.base import Env, PipelineEnv, State
-from brax.mjx.base import State as MjxState
+from brax.envs.base import PipelineEnv, State
 from brax.training.agents.ppo import train as ppo
-from brax.training.agents.ppo import networks as ppo_networks
-from brax.io import html, mjcf, model
+from brax.io import mjcf, model
 
-from etils import epath
-from flax import struct
-from matplotlib import pyplot as plt
-import mediapy as media
-from ml_collections import config_dict
 import mujoco
 from mujoco import mjx
 import os
 
 import yaml
-from typing import List, Dict, Text
+from typing import Dict, Text
+import sys
+sys.path.insert(1, "./mjcf")
+
+os.environ['XLA_FLAGS'] = (
+    '--xla_gpu_enable_triton_softmax_fusion=true '
+    '--xla_gpu_triton_gemm_any=True '
+    '--xla_gpu_enable_async_collectives=true '
+    '--xla_gpu_enable_latency_hiding_scheduler=true '
+    '--xla_gpu_enable_highest_priority_async_stream=true '
+)
+
 
 
 # ## Load the model
@@ -59,9 +49,6 @@ def load_params(param_path: Text) -> Dict:
 
 params = load_params("params/params.yaml")
 
-#@title Humanoid Env
-
-#@title Humanoid Env
 
 class Rodent(PipelineEnv):
 
