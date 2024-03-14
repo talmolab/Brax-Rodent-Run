@@ -114,7 +114,7 @@ class Walker(PipelineEnv):
     self._healthy_reward = healthy_reward
     self._terminate_when_unhealthy = terminate_when_unhealthy
     self._healthy_z_range = healthy_z_range
-    self._distance_rewaed = distance_reward
+    self._distance_reward = distance_reward
     self._reset_noise_scale = reset_noise_scale
     self._exclude_current_positions_from_observation = (exclude_current_positions_from_observation)
 
@@ -176,8 +176,8 @@ class Walker(PipelineEnv):
 
     #Reaching the target location distance
     #distance = state.metrics['distance_from_origin']
-    #distance_reward = [self._distance_rewaed * distance if isinstance(distance, int) else 0]
-    distance_reward = self._distance_rewaed * velocity[0] * self.dt
+    #distance_reward = [self._distance_reward * distance if isinstance(distance, int) else 0]
+    distance_reward = self._distance_reward * velocity[0] * self.dt
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
