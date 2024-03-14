@@ -39,13 +39,22 @@ from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
 
 # Initilizing dm_control
-arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
-      gap_length=distributions.Uniform(.05, .2),
-      corridor_width=5, # walker width follows corridor width
-      corridor_length=40,
+# arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
+#       gap_length=distributions.Uniform(.05, .2),
+#       corridor_width=5, # walker width follows corridor width
+#       corridor_length=40,
+#       aesthetic='outdoor_natural',
+#       visible_side_planes=False)
+
+arena = Gap_Vnl(platform_length=distributions.Uniform(.8, 1.6),
+      gap_length=distributions.Uniform(.1, .45),
+      corridor_width=10, # walker width follows corridor width
+      corridor_length=50,
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 arena.regenerate(random_state=None)
+
+
 
 walker = ant.Ant(observable_options={'egocentric_camera': dict(enabled=True)})
 
