@@ -47,7 +47,7 @@ from vnl_brax.arena import Task_Vnl, Gap_Vnl
 #       visible_side_planes=False)
 
 arena = Gap_Vnl(platform_length=distributions.Uniform(.8, 1.6),
-      gap_length=distributions.Uniform(.1, .45),
+      gap_length=distributions.Uniform(.1, .35), # can't be too big
       corridor_width=10, # walker width follows corridor width
       corridor_length=50,
       aesthetic='outdoor_natural',
