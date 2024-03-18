@@ -175,8 +175,8 @@ class Walker(PipelineEnv):
     data = self.pipeline_step(data0, action)
 
     #Running forward (Velocity) tracking base on center of mass movement
-    com_before = data0.subtree_com[3]
-    com_after = data.subtree_com[3]
+    com_before = data0.subtree_com[1]
+    com_after = data.subtree_com[1]
 
     #print(data.data)
     
