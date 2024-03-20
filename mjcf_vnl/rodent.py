@@ -25,7 +25,7 @@ from dm_control.locomotion.walkers import legacy_base
 from dm_control.mujoco import wrapper as mj_wrapper
 import numpy as np
 
-_XML_PATH = os.path.join("..", "models", "rodent_optimized.xml")
+_XML_PATH = os.path.join("models", "rodent_optimized.xml")
 
 _RAT_MOCAP_JOINTS = [
     'vertebra_1_extend', 'vertebra_2_bend', 'vertebra_3_twist',

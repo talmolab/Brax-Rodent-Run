@@ -60,8 +60,8 @@ class Rodent(PipelineEnv):
       forward_reward_weight=1.25,
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
-      terminate_when_unhealthy=True,
-      healthy_z_range=(0.70, 0.0),
+      terminate_when_unhealthy=False,
+      healthy_z_range=(0.60, 0.0),
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,
@@ -72,8 +72,8 @@ class Rodent(PipelineEnv):
     # mj_model = mujoco.MjModel.from_xml_path(params["XML_PATH"])
     mj_model = physics.model.ptr
     mj_model.opt.solver = mujoco.mjtSolver.mjSOL_CG
-    mj_model.opt.iterations = 2
-    mj_model.opt.ls_iterations = 2
+    mj_model.opt.iterations = 6
+    mj_model.opt.ls_iterations = 6
 
     sys = mjcf_brax.load_model(mj_model)
 
@@ -172,33 +172,32 @@ class Rodent(PipelineEnv):
        data.qpos, data.qvel
     ])
 
-
-envs.register_environment('rodent', Rodent)
-
-# instantiate the environment
-env_name = 'rodent'
-env = envs.get_environment(env_name)
-
-# define the jit reset/step functions
-jit_reset = jax.jit(env.reset)
-jit_step = jax.jit(env.step)
-
 # Change config to conservative measure for debug purposes.
 # change eval func to make test the checkpoints
 config = {
-    "env_name": env_name,
+    "env_name": "rodent",
     "algo_name": "ppo",
     "task_name": "run",
     "num_envs": 256,
-    "num_timesteps": 10_000,
-    "eval_every": 1000,
+    "num_timesteps": 10_000_000,
+    "eval_every": 10_000,
     "episode_length": 500,
     "num_evals": 1000,
     "batch_size": 256,
     "learning_rate": 6e-4,
-    "terminate_when_unhealthy": True,
+    "terminate_when_unhealthy": False,
     "run_platform": "run_ai",
 }
+
+envs.register_environment('rodent', Rodent)
+
+# instantiate the environment
+env_name = config["env_name"]
+env = envs.get_environment(env_name, terminate_when_unhealthy=config["terminate_when_unhealthy"])
+
+# define the jit reset/step functions
+jit_reset = jax.jit(env.reset)
+jit_step = jax.jit(env.step)
 
 
 train_fn = functools.partial(
@@ -211,8 +210,9 @@ train_fn = functools.partial(
 
 
 run = wandb.init(
-    project="vnl",
-    config=config
+    project="vnl_debug",
+    config=config,
+    notes="Prolonged the Training Schedule"
 )
 
 
