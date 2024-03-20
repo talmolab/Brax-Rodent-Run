@@ -187,12 +187,11 @@ class Walker(PipelineEnv):
     def euclidean_distance(point1, point2):
       squared_diff = jp.square(point1 - point2)
       distance = jp.sqrt(jp.sum(squared_diff))
-
-      if point1[0] < point2[0]:
-        return - distance
       return distance
     
     distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
+    if jp.dot(com_before, com_after) < 0:
+      distance_reward = - distance_reward
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
