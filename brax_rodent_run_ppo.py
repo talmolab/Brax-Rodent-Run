@@ -73,7 +73,7 @@ class Rodent(PipelineEnv):
     mj_model = physics.model.ptr
     mj_model.opt.solver = mujoco.mjtSolver.mjSOL_CG
     mj_model.opt.iterations = 2
-    mj_model.opt.ls_iterations = 4
+    mj_model.opt.ls_iterations = 2
 
     sys = mjcf_brax.load_model(mj_model)
 
@@ -169,6 +169,7 @@ class Rodent(PipelineEnv):
 
     # external_contact_forces are excluded
     return jp.concatenate([
+       data.qpos, data.qvel
     ])
 
 
