@@ -190,9 +190,11 @@ class Walker(PipelineEnv):
       return distance
     
     distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
-    if jp.dot(com_before, com_after) < 0:
-      distance_reward = - distance_reward
-
+    distance_reward = jax.lax.cond(jp.dot(com_before, com_after) < 0, 
+                                   -distance_reward,
+                                   distance_reward,
+                                   None)
+    
     #Height being healthy
     min_z, max_z = self._healthy_z_range
     is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
