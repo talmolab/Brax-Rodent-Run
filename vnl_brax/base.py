@@ -46,8 +46,8 @@ from vnl_brax.arena import Task_Vnl, Gap_Vnl
 #       aesthetic='outdoor_natural',
 #       visible_side_planes=False)
 
-arena = Gap_Vnl(platform_length=distributions.Uniform(.8, 1.6),
-      gap_length=distributions.Uniform(.1, .35), # can't be too big
+arena = Gap_Vnl(platform_length=distributions.Uniform(1.2, 1.6),
+      gap_length=distributions.Uniform(.5, .7), # can't be too big
       corridor_width=10, # walker width follows corridor width
       corridor_length=50,
       aesthetic='outdoor_natural',
@@ -61,7 +61,7 @@ walker = ant.Ant(observable_options={'egocentric_camera': dict(enabled=True)})
 task = Task_Vnl(
     walker=walker,
     arena=arena,
-    walker_spawn_position=(3, 0, 0))
+    walker_spawn_position=(5, 0, 0))
 
 # Export from dm_control
 random_state = np.random.RandomState(12345)
@@ -80,7 +80,7 @@ class Walker(PipelineEnv):
       forward_reward_weight=5.0,
       ctrl_cost_weight=0.1,
       healthy_reward=0.5,
-      terminate_when_unhealthy=False,
+      terminate_when_unhealthy=True,
       healthy_z_range=(0.0, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
       distance_reward=5.0,
       reset_noise_scale=1e-2,
@@ -175,18 +175,24 @@ class Walker(PipelineEnv):
     data = self.pipeline_step(data0, action)
 
     #Running forward (Velocity) tracking base on center of mass movement
-    com_before = data0.subtree_com[1]
-    com_after = data.subtree_com[1]
+    com_before = data0.subtree_com[3]
+    com_after = data.subtree_com[3]
 
     #print(data.data)
     
     velocity = (com_after - com_before) / self.dt
     forward_reward = self._forward_reward_weight * velocity[0]
 
-    #Reaching the target location distance
-    #distance = state.metrics['distance_from_origin']
-    #distance_reward = [self._distance_reward * distance if isinstance(distance, int) else 0]
-    distance_reward = self._distance_reward * velocity[0] * self.dt
+    #Reaching the target location distance using eucledian distance and considering moving backwards
+    def euclidean_distance(point1, point2):
+      squared_diff = jp.square(point1 - point2)
+      distance = jp.sqrt(jp.sum(squared_diff))
+
+      if point1[0] < point2[0]:
+        return - distance
+      return distance
+    
+    distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
