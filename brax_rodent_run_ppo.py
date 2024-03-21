@@ -169,21 +169,22 @@ class Rodent(PipelineEnv):
 
     # external_contact_forces are excluded
     return jp.concatenate([
-       data.qpos, data.qvel
+        data.qpos, data.qvel, 
+        data.cinert[1:].ravel(),
+        data.cvel[1:].ravel(),
+        data.qfrc_actuator
     ])
-
 # Change config to conservative measure for debug purposes.
 # change eval func to make test the checkpoints
 config = {
     "env_name": "rodent",
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 256,
-    "num_timesteps": 10_000_000,
-    "eval_every": 10_000,
+    "num_envs": 1024,
+    "num_timesteps": 100_000_000,
+    "eval_every": 100_000,
     "episode_length": 500,
-    "num_evals": 1000,
-    "batch_size": 256,
+    "batch_size": 512,
     "learning_rate": 6e-4,
     "terminate_when_unhealthy": False,
     "run_platform": "run_ai",
@@ -212,7 +213,7 @@ train_fn = functools.partial(
 run = wandb.init(
     project="vnl_debug",
     config=config,
-    notes="Prolonged the Training Schedule"
+    notes="Expand the Observation space to 1260 dim (Full Obs), modify the config to be more aggressive"
 )
 
 
