@@ -169,22 +169,6 @@ class Walker(PipelineEnv):
     velocity = (com_after - com_before) / self.dt
     forward_reward = self._forward_reward_weight * velocity[0]
 
-    #Reaching the target location distance using eucledian distance and considering moving backwards
-    # def euclidean_distance(point1, point2):
-    #   squared_diff = jp.square(point1 - point2)
-    #   distance = jp.sqrt(jp.sum(squared_diff))
-    #   return distance
-    # distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
-    # def negate_distance_reward(_):
-    #   return -distance_reward
-    # def identity_distance_reward(_):
-    #   return distance_reward
-    # condition = jp.dot(com_before, com_after) < 0
-    # distance_reward = jax.lax.cond(condition, 
-    #                           negate_distance_reward, 
-    #                           identity_distance_reward, 
-    #                           None)
-
     train_reward = self._train_reward * self.dt # as more training, more rewards
 
     #Height being healthy
@@ -261,25 +245,5 @@ class Walker(PipelineEnv):
       position = position[2:]
 
     proprioception = jp.concatenate([position, velocity])
-    
-    
-    # buffer_proprioception = jax.numpy.array(np.random.rand(27,))
-
-    # num = (230427-(27+16)) # image size - (proprioreception + activation parameter)
-    # buffer_vision = jax.numpy.array(np.random.rand(num,))
-
-    # # for shape call in train.py of ppo
-    # shape = jp.concatenate([proprioception,image_jax]).shape[0] # shape -1 is one number, give as shape tuple
-
-    # full = jp.concatenate([proprioception,image_jax])
-  
-    # return BraxData(
-    #   proprioception = proprioception,
-    #   vision = image_jax,
-    #   full=full,
-    #   buffer_proprioception = buffer_proprioception,
-    #   buffer_vision = buffer_vision,
-    #   shape = (128, shape) # this works, but there is a type check in jax
-    # )
 
     return jp.concatenate([proprioception, image_jax_noise])
