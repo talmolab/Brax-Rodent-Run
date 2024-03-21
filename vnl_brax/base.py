@@ -46,7 +46,7 @@ from vnl_brax.arena import Task_Vnl, Gap_Vnl
 #       aesthetic='outdoor_natural',
 #       visible_side_planes=False)
 
-arena = Gap_Vnl(platform_length=distributions.Uniform(2.5, 3.0),
+arena = Gap_Vnl(platform_length=distributions.Uniform(2.0, 2.5),
       gap_length=distributions.Uniform(.5, .7), # can't be too big
       corridor_width=10, # walker width follows corridor width
       corridor_length=50,
@@ -76,7 +76,7 @@ class Walker(PipelineEnv):
   '''
   def __init__(
       self,
-      forward_reward_weight=15.0,
+      forward_reward_weight=5.0,
       ctrl_cost_weight=0.1,
       healthy_reward=0.5,
       terminate_when_unhealthy=True,
@@ -183,24 +183,26 @@ class Walker(PipelineEnv):
     forward_reward = self._forward_reward_weight * velocity[0]
 
     #Reaching the target location distance using eucledian distance and considering moving backwards
-    def euclidean_distance(point1, point2):
-      squared_diff = jp.square(point1 - point2)
-      distance = jp.sqrt(jp.sum(squared_diff))
-      return distance
+    # def euclidean_distance(point1, point2):
+    #   squared_diff = jp.square(point1 - point2)
+    #   distance = jp.sqrt(jp.sum(squared_diff))
+    #   return distance
     
-    distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
+    # distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
     
-    def negate_distance_reward(_):
-      return -distance_reward
+    # def negate_distance_reward(_):
+    #   return -distance_reward
 
-    def identity_distance_reward(_):
-      return distance_reward
+    # def identity_distance_reward(_):
+    #   return distance_reward
 
-    condition = jp.dot(com_before, com_after) < 0
-    distance_reward = jax.lax.cond(condition, 
-                              negate_distance_reward, 
-                              identity_distance_reward, 
-                              None)
+    # condition = jp.dot(com_before, com_after) < 0
+    # distance_reward = jax.lax.cond(condition, 
+    #                           negate_distance_reward, 
+    #                           identity_distance_reward, 
+    #                           None)
+
+    distance_reward = self._distance_rewaed * velocity[0] * self.dt
     
     #Height being healthy
     min_z, max_z = self._healthy_z_range
