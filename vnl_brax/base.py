@@ -46,14 +46,13 @@ from vnl_brax.arena import Task_Vnl, Gap_Vnl
 #       aesthetic='outdoor_natural',
 #       visible_side_planes=False)
 
-arena = Gap_Vnl(platform_length=distributions.Uniform(1.2, 1.6),
+arena = Gap_Vnl(platform_length=distributions.Uniform(2.5, 3.0),
       gap_length=distributions.Uniform(.5, .7), # can't be too big
       corridor_width=10, # walker width follows corridor width
       corridor_length=50,
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 arena.regenerate(random_state=None)
-
 
 
 walker = ant.Ant(observable_options={'egocentric_camera': dict(enabled=True)})
@@ -77,7 +76,7 @@ class Walker(PipelineEnv):
   '''
   def __init__(
       self,
-      forward_reward_weight=5.0,
+      forward_reward_weight=15.0,
       ctrl_cost_weight=0.1,
       healthy_reward=0.5,
       terminate_when_unhealthy=True,
