@@ -189,21 +189,20 @@ class Walker(PipelineEnv):
     #   return distance
     
     # distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
+    distance_reward = self._distance_reward * velocity[0] * self.dt # as more training, more rewards
     
-    # def negate_distance_reward(_):
-    #   return -distance_reward
+    def negate_distance_reward(_):
+      return -distance_reward
 
-    # def identity_distance_reward(_):
-    #   return distance_reward
+    def identity_distance_reward(_):
+      return distance_reward
 
-    # condition = jp.dot(com_before, com_after) < 0
-    # distance_reward = jax.lax.cond(condition, 
-    #                           negate_distance_reward, 
-    #                           identity_distance_reward, 
-    #                           None)
+    condition = jp.dot(com_before, com_after) < 0
+    distance_reward = jax.lax.cond(condition, 
+                              negate_distance_reward, 
+                              identity_distance_reward, 
+                              None)
 
-    distance_reward = self._distance_rewaed * velocity[0] * self.dt
-    
     #Height being healthy
     min_z, max_z = self._healthy_z_range
     is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
