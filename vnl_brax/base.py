@@ -34,39 +34,26 @@ from brax.io import mjcf as mjcf_brax
 # customized import
 from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
-
 ''' Calling dm_control + Brax Walker Class Adapted'''
 
-
-# Initilizing dm_control
-# arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
-#       gap_length=distributions.Uniform(.05, .2),
-#       corridor_width=5, # walker width follows corridor width
-#       corridor_length=40,
-#       aesthetic='outdoor_natural',
-#       visible_side_planes=False)
-
-arena = Gap_Vnl(platform_length=distributions.Uniform(2.0, 2.5),
-      gap_length=distributions.Uniform(.5, .7), # can't be too big
-      corridor_width=10, # walker width follows corridor width
-      corridor_length=50,
+arena = Gap_Vnl(platform_length=distributions.Uniform(.3, 2.5),
+      gap_length=distributions.Uniform(.3, .5), # can't be too big, or else can't jump
+      corridor_width=10,
+      corridor_length=100,
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 arena.regenerate(random_state=None)
-
-
 walker = ant.Ant(observable_options={'egocentric_camera': dict(enabled=True)})
 
 task = Task_Vnl(
     walker=walker,
     arena=arena,
-    walker_spawn_position=(5, 0, 0))
+    walker_spawn_position=(1, 0, 0))
 
 # Export from dm_control
 random_state = np.random.RandomState(12345)
 task.initialize_episode_mjcf(random_state)
 physics = mjcf_dm.Physics.from_mjcf_model(task.root_entity.mjcf_model)
-
 
 # There are quite some big update on Brax_mjx
 # MjxEnv is directly an API to the Mujoco mjx
@@ -79,9 +66,9 @@ class Walker(PipelineEnv):
       forward_reward_weight=5.0,
       ctrl_cost_weight=0.1,
       healthy_reward=0.5,
-      terminate_when_unhealthy=True,
+      terminate_when_unhealthy=True, # should be false in rendering
       healthy_z_range=(0.0, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
-      distance_reward=5.0,
+      train_reward=5.0,
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,):
@@ -122,7 +109,7 @@ class Walker(PipelineEnv):
     self._healthy_reward = healthy_reward
     self._terminate_when_unhealthy = terminate_when_unhealthy
     self._healthy_z_range = healthy_z_range
-    self._distance_reward = distance_reward
+    self._train_reward = train_reward
     self._reset_noise_scale = reset_noise_scale
     self._exclude_current_positions_from_observation = (exclude_current_positions_from_observation)
 
@@ -157,7 +144,7 @@ class Walker(PipelineEnv):
         'reward_alive': zero,
         'x_position': zero,
         'y_position': zero,
-        'distance_reward': zero,
+        'train_reward': zero,
         'distance_from_origin': zero,
         'x_velocity': zero,
         'y_velocity': zero,
@@ -187,21 +174,18 @@ class Walker(PipelineEnv):
     #   squared_diff = jp.square(point1 - point2)
     #   distance = jp.sqrt(jp.sum(squared_diff))
     #   return distance
-    
     # distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
-    distance_reward = self._distance_reward * velocity[0] * self.dt # as more training, more rewards
-    
     # def negate_distance_reward(_):
     #   return -distance_reward
-
     # def identity_distance_reward(_):
     #   return distance_reward
-
     # condition = jp.dot(com_before, com_after) < 0
     # distance_reward = jax.lax.cond(condition, 
     #                           negate_distance_reward, 
     #                           identity_distance_reward, 
     #                           None)
+
+    train_reward = self._train_reward * self.dt # as more training, more rewards
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
@@ -219,9 +203,9 @@ class Walker(PipelineEnv):
 
     #Feedback from env
     obs = self._get_obs(data, action)
-    reward = forward_reward + distance_reward + healthy_reward - ctrl_cost
+    reward = forward_reward + train_reward + healthy_reward - ctrl_cost
 
-    print(obs)
+    #print(obs)
 
     #Termination State
     done = 1.0 - is_healthy if self._terminate_when_unhealthy else 0.0
@@ -233,7 +217,7 @@ class Walker(PipelineEnv):
         reward_alive=healthy_reward,
         x_position=com_after[0],
         y_position=com_after[1],
-        distance_reward=distance_reward,
+        train_reward=train_reward,
         distance_from_origin=jp.linalg.norm(com_after),
         x_velocity=velocity[0],
         y_velocity=velocity[1],
