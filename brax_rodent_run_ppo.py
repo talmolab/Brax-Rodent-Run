@@ -60,8 +60,8 @@ class Rodent(PipelineEnv):
       forward_reward_weight=1.25,
       ctrl_cost_weight=0.1,
       healthy_reward=5.0,
-      terminate_when_unhealthy=False,
-      healthy_z_range=(0.60, 0.0),
+      terminate_when_unhealthy=True,
+      healthy_z_range=(0.1, 0.0),
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,
@@ -77,7 +77,7 @@ class Rodent(PipelineEnv):
 
     sys = mjcf_brax.load_model(mj_model)
 
-    physics_steps_per_control_step = 3
+    physics_steps_per_control_step = 2
     kwargs['n_frames'] = kwargs.get(
         'n_frames', physics_steps_per_control_step
     )
@@ -135,7 +135,7 @@ class Rodent(PipelineEnv):
     forward_reward = self._forward_reward_weight * velocity[0]
 
     min_z, max_z = self._healthy_z_range
-    is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
+    is_healthy = jp.where(data.q[3] < min_z, 0.0, 1.0)
     if self._terminate_when_unhealthy:
       healthy_reward = self._healthy_reward
     else:
@@ -184,9 +184,9 @@ config = {
     "num_timesteps": 1_000_000_000,
     "eval_every": 1_000_000,
     "episode_length": 500,
-    "batch_size": 1024,
+    "batch_size": 2048,
     "learning_rate": 6e-4,
-    "terminate_when_unhealthy": False,
+    "terminate_when_unhealthy": True,
     "run_platform": "run_ai",
 }
 
@@ -213,7 +213,7 @@ train_fn = functools.partial(
 run = wandb.init(
     project="vnl_debug",
     config=config,
-    notes="Expand the Observation space to 1260 dim (Full Obs), modify the config to be more aggressive"
+    notes="4096 batch size and parallel. Added proper unhealthy termination."
 )
 
 
