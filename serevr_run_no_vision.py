@@ -98,7 +98,7 @@ class Walker(MjxEnv):
     # but this pass in one doesn't, it uses the default mjCONE_PYRAMIDAL, but MjModel now uses the eliptic model, so reset is needed
 
     # solver is an optimization system
-    mj_model.opt.solver = mujoco.mjtSolver.mjSOL_CG
+    mj_model.opt.solver = mujoco.mjtSolver.mjSOL_NEWTON
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     #Iterations for solver
@@ -240,10 +240,10 @@ class Walker(MjxEnv):
 
 # -------------------------------------------------------------------------------------------------------------------------------------- 
 # Initilizing dm_control
-arena = Gap_Vnl(platform_length=distributions.Uniform(.4, .8),
-      gap_length=distributions.Uniform(.05, .2),
-      corridor_width=5, # walker width follows corridor width
-      corridor_length=40,
+arena = Gap_Vnl(platform_length=distributions.Uniform(.8, 1.6),
+      gap_length=distributions.Uniform(.1, .4),
+      corridor_width=10, # walker width follows corridor width
+      corridor_length=50,
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 
@@ -275,9 +275,9 @@ config = {
     "env_name": 'walker',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 10_000_000,
+    "num_timesteps": 200_000_000,
     "num_evals": 1000,
-    "eval_every": 10_000,
+    "eval_every": 200_000,
     "episode_length": 1000,
     "num_envs": 2048,
     "batch_size": 512,
@@ -312,5 +312,5 @@ def policy_params_fn(num_steps, make_policy, params, model_path = './model_check
     
 make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
 
-model_path = './model_checkpoints/brax_ppo_task_finished'
+model_path = './model_checkpoints/brax_no_vision_finished'
 model.save_params(model_path, params)
