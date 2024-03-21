@@ -64,9 +64,10 @@ class Rodent(legacy_base.Walker):
              name='walker',
              torque_actuators=False,
              foot_mods=False,
-             initializer=None):
+             initializer=None,
+             xml_path=_XML_PATH):
     self.params = params
-    self._mjcf_root = mjcf.from_path(_XML_PATH)
+    self._mjcf_root = mjcf.from_path(xml_path)
     if name:
       self._mjcf_root.model = name
 
