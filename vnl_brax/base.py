@@ -99,8 +99,8 @@ class Walker(PipelineEnv):
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     #Iterations for solver
-    mj_model.opt.iterations = 1 #2
-    mj_model.opt.ls_iterations = 1 #4
+    mj_model.opt.iterations = 2
+    mj_model.opt.ls_iterations = 4
 
     sys = mjcf_brax.load_model(mj_model)
 
@@ -191,17 +191,17 @@ class Walker(PipelineEnv):
     # distance_reward = self._distance_reward * euclidean_distance(com_before, com_after)
     distance_reward = self._distance_reward * velocity[0] * self.dt # as more training, more rewards
     
-    def negate_distance_reward(_):
-      return -distance_reward
+    # def negate_distance_reward(_):
+    #   return -distance_reward
 
-    def identity_distance_reward(_):
-      return distance_reward
+    # def identity_distance_reward(_):
+    #   return distance_reward
 
-    condition = jp.dot(com_before, com_after) < 0
-    distance_reward = jax.lax.cond(condition, 
-                              negate_distance_reward, 
-                              identity_distance_reward, 
-                              None)
+    # condition = jp.dot(com_before, com_after) < 0
+    # distance_reward = jax.lax.cond(condition, 
+    #                           negate_distance_reward, 
+    #                           identity_distance_reward, 
+    #                           None)
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
