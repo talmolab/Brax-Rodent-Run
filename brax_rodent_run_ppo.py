@@ -57,9 +57,9 @@ class Rodent(PipelineEnv):
 
   def __init__(
       self,
-      forward_reward_weight=1.25,
+      forward_reward_weight=10,
       ctrl_cost_weight=0.1,
-      healthy_reward=5.0,
+      healthy_reward=1.0,
       terminate_when_unhealthy=True,
       healthy_z_range=(0.1, 0.0),
       reset_noise_scale=1e-2,
@@ -77,7 +77,8 @@ class Rodent(PipelineEnv):
 
     sys = mjcf_brax.load_model(mj_model)
 
-    physics_steps_per_control_step = 2
+    physics_steps_per_control_step = 5
+    
     kwargs['n_frames'] = kwargs.get(
         'n_frames', physics_steps_per_control_step
     )
@@ -181,11 +182,11 @@ config = {
     "algo_name": "ppo",
     "task_name": "run",
     "num_envs": 2048,
-    "num_timesteps": 1_000_000_000,
+    "num_timesteps": 10_000_000_000,
     "eval_every": 1_000_000,
     "episode_length": 500,
     "batch_size": 2048,
-    "learning_rate": 6e-4,
+    "learning_rate": 5e-5,
     "terminate_when_unhealthy": True,
     "run_platform": "run_ai",
 }
@@ -203,9 +204,9 @@ jit_step = jax.jit(env.step)
 
 train_fn = functools.partial(
     ppo.train, num_timesteps=config["num_timesteps"], num_evals=int(config["num_timesteps"]/config["eval_every"]),
-    reward_scaling=1, episode_length=config["episode_length"], normalize_observations=True, action_repeat=1,
-    unroll_length=10, num_minibatches=32, num_updates_per_batch=8,
-    discounting=0.95, learning_rate=config["learning_rate"], entropy_cost=1e-3, num_envs=config["num_envs"],
+    reward_scaling=1, episode_length=config["episode_length"], normalize_observations=True, action_repeat=5,
+    unroll_length=10, num_minibatches=64, num_updates_per_batch=8,
+    discounting=0.99, learning_rate=config["learning_rate"], entropy_cost=1e-3, num_envs=config["num_envs"],
     batch_size=config["batch_size"], seed=0
 )
 
@@ -213,11 +214,11 @@ train_fn = functools.partial(
 run = wandb.init(
     project="vnl_debug",
     config=config,
-    notes="4096 batch size and parallel. Added proper unhealthy termination."
+    notes="4096 batch size and parallel. Added proper unhealthy termination. scale up the forward reward"
 )
 
 
-wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{config['run_platform']}_brax"
+wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{config['run_platform']}_brax_dist_v1"
 
 
 def wandb_progress(num_steps, metrics):
