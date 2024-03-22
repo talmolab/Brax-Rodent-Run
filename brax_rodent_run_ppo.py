@@ -61,7 +61,7 @@ class Rodent(PipelineEnv):
       ctrl_cost_weight=0.1,
       healthy_reward=1.0,
       terminate_when_unhealthy=True,
-      healthy_z_range=(0.1, 0.0),
+      healthy_z_range=(0.5, 0.0),
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       **kwargs,
@@ -184,7 +184,7 @@ config = {
     "num_envs": 2048,
     "num_timesteps": 10_000_000_000,
     "eval_every": 1_000_000,
-    "episode_length": 500,
+    "episode_length": 1000,
     "batch_size": 2048,
     "learning_rate": 5e-5,
     "terminate_when_unhealthy": True,
@@ -214,11 +214,11 @@ train_fn = functools.partial(
 run = wandb.init(
     project="vnl_debug",
     config=config,
-    notes="4096 batch size and parallel. Added proper unhealthy termination. scale up the forward reward"
+    notes="2048 batch size and parallel. Added **proper** unhealthy termination. scale up the forward reward"
 )
 
 
-wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{config['run_platform']}_brax_dist_v1"
+wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{config['run_platform']}_brax_dist_v2"
 
 
 def wandb_progress(num_steps, metrics):
