@@ -35,8 +35,8 @@ from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
 ''' Calling dm_control + Brax Walker Class Adapted'''
 
-arena = Gap_Vnl(platform_length=distributions.Uniform(.3, 2.5),
-      gap_length=distributions.Uniform(.3, .5), # can't be too big, or else can't jump
+arena = Gap_Vnl(platform_length=distributions.Uniform(1.5, 2.0),
+      gap_length=distributions.Uniform(.1, .35), # can't be too big, or else can't jump
       corridor_width=10,
       corridor_length=100,
       aesthetic='outdoor_natural',
@@ -65,7 +65,7 @@ class Walker(PipelineEnv):
       forward_reward_weight=5.0,
       ctrl_cost_weight=0.1,
       healthy_reward=0.5,
-      terminate_when_unhealthy=True, # should be false in rendering
+      terminate_when_unhealthy=False, # should be false in rendering
       healthy_z_range=(0.0, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
       train_reward=5.0,
       reset_noise_scale=1e-2,
@@ -168,7 +168,7 @@ class Walker(PipelineEnv):
     velocity = (com_after - com_before) / self.dt
     forward_reward = self._forward_reward_weight * velocity[0]
 
-    train_reward = self._train_reward * self.dt # as more training, more rewards
+    train_reward = self._train_reward * velocity[0] * self.dt # as more training, more rewards
 
     #Height being healthy
     min_z, max_z = self._healthy_z_range
