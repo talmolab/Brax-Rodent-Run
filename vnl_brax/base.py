@@ -5,11 +5,10 @@ from mujoco import mjx
 # dm_control needed
 from dm_control import mjcf as mjcf_dm
 from dm_control import composer
-from dm_control.locomotion.examples import basic_rodent_2020
 from dm_control.composer.variation import distributions
 from dm_control.locomotion.arenas import corridors as corr_arenas
 from dm_control.locomotion.tasks import corridors as corr_tasks
-from dm_control.locomotion.walkers import rodent, ant
+from dm_control.locomotion.walkers import ant
 # from dm_control import viewer
 from dm_control import mujoco as mujoco_dm
 
