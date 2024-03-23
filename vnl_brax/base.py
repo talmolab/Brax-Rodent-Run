@@ -85,8 +85,8 @@ class Walker(PipelineEnv):
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     #Iterations for solver
-    mj_model.opt.iterations = 2
-    mj_model.opt.ls_iterations = 4
+    mj_model.opt.iterations = 3
+    mj_model.opt.ls_iterations = 3
 
     sys = mjcf_brax.load_model(mj_model)
 
