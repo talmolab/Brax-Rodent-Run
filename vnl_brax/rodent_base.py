@@ -157,6 +157,10 @@ class Rat(legacy_base.Walker):
                  if actuator.joint is not None)
 
   @composer.cached_property
+  def observable_tendons(self):
+    return self._mjcf_root.find_all('tendon')
+
+  @composer.cached_property
   def mocap_joints(self):
     return tuple(
         self._mjcf_root.find('joint', name) for name in _RAT_MOCAP_JOINTS)
@@ -231,6 +235,15 @@ class Rat(legacy_base.Walker):
       act_joint_range.append(act_range)
     return act_joint_range
 
+  def pose_to_actuation(self, pose):
+    # holds for joint actuators, find desired torque = 0
+    # u_ref = [2 q_ref - (r_low + r_up) ]/(r_up - r_low)
+    r_lower = np.array([ajr[0] for ajr in self.joint_actuators_range])  #  This lint is mistaken; pylint: disable=not-an-iterable
+    r_upper = np.array([ajr[1] for ajr in self.joint_actuators_range])  #  This lint is mistaken; pylint: disable=not-an-iterable
+    num_tendon_actuators = len(self.actuators) - len(self.joint_actuators)
+    tendon_actions = np.zeros(num_tendon_actuators)
+    return np.hstack([tendon_actions, (2*pose[self.joint_actuator_order]-
+                                       (r_lower+r_upper))/(r_upper-r_lower)])
 
   @composer.cached_property
   def joint_actuator_order(self):
@@ -263,6 +276,14 @@ class RodentObservables(legacy_base.WalkerObservables):
         )
 
   @composer.observable
+  def tendons_pos(self):
+    return observable.MJCFFeature('length', self._entity.observable_tendons)
+
+  @composer.observable
+  def tendons_vel(self):
+    return observable.MJCFFeature('velocity', self._entity.observable_tendons)
+
+  @composer.observable
   def actuator_activation(self):
     """Observe the actuator activation."""
     model = self._entity.mjcf_model
@@ -288,6 +309,7 @@ class RodentObservables(legacy_base.WalkerObservables):
     """Return proprioceptive information."""
     return [
         self.joints_pos, self.joints_vel,
+        self.tendons_pos, self.tendons_vel,
         self.actuator_activation,
         self.body_height, self.end_effectors_pos, self.appendages_pos,
         self.world_zaxis
