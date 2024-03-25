@@ -64,6 +64,11 @@ train_fn = functools.partial(
     batch_size=config["batch_size"], seed=0
 )
 
+import uuid
+
+# Generates a completely random UUID (version 4)
+run_id = uuid.uuid4()
+model_path = f"./model_checkpoints/{run_id}"
 
 run = wandb.init(
     project="vnl_debug",
@@ -73,7 +78,7 @@ run = wandb.init(
 )
 
 
-wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{config['run_platform']}"
+wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{run_id}"
 
 
 def wandb_progress(num_steps, metrics):
@@ -81,13 +86,13 @@ def wandb_progress(num_steps, metrics):
     wandb.log(metrics)
     print(metrics)
     
-def policy_params_fn(num_steps, make_policy, params, model_path = './model_checkpoints'):
+def policy_params_fn(num_steps, make_policy, params, model_path=model_path):
     os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
     
 
 make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
 
-
-model_path = './model_checkpoints/brax_ppo_rodent_run_finished'
-model.save_params(model_path, params)
+final_save_path = f"{model_path}/brax_ppo_rodent_run_finished"
+model.save_params(final_save_path, params)
+print(f"Run finished. Model saved to {final_save_path}")
