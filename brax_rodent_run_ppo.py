@@ -13,6 +13,13 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 
 import os
+from absl import app
+from absl import flags
+
+FLAGS = flags.FLAGS
+
+n_gpus = jax.device_count(backend="gpu")
+print(f"Using {n_gpus} GPUs")
 
 os.environ['XLA_FLAGS'] = (
     '--xla_gpu_enable_triton_softmax_fusion=true '
@@ -21,8 +28,11 @@ os.environ['XLA_FLAGS'] = (
     '--xla_gpu_enable_latency_hiding_scheduler=true '
     '--xla_gpu_enable_highest_priority_async_stream=true '
 )
-n_gpus = jax.device_count(backend="gpu")
-print(f"Using {n_gpus} GPUs")
+
+flags.DEFINE_enum('solver', 'cg', ['cg', 'newton'], 'constraint solver')
+flags.DEFINE_integer('iterations', 4, 'number of solver iterations')
+flags.DEFINE_integer('ls_iterations', 4, 'number of linesearch iterations')
+flags.DEFINE_boolean('vision', False, 'render vision in obs')
 
 config = {
     "env_name": "rodent",
@@ -37,9 +47,9 @@ config = {
     "terminate_when_unhealthy": True,
     "run_platform": "Harvard",
     "solver": "cg",
-    "iterations": 4,
-    "ls_iterations": 4,
-    "vision": False
+    "iterations": 6,
+    "ls_iterations": 3,
+    "vision": True
 }
 
 envs.register_environment('rodent', Rodent)

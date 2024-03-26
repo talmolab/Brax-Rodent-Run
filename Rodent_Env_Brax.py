@@ -9,6 +9,8 @@ from dm_control import mjcf as mjcf_dm
 import mujoco
 from mujoco import mjx
 
+import numpy as np
+
 from mjcf_vnl import rodent
 
 _XML_PATH = "./models/rodent_optimized.xml"
@@ -146,14 +148,21 @@ class Rodent(PipelineEnv):
     """Observes rodent body position, velocities, and angles."""
     # Optional rodent rendering for benchmarking purposes (becomes tiny noise to qpos)
     if self._vision:
-      renderer = mujoco.Renderer(self.sys.mj_model, height=64, width=64)
-      camera = "egocentric"
-      mujoco.mj_forward(self.sys.mj_model, data)
-      img = renderer.update_scene(data, camera=camera)
+      def callback(data):
+        renderer = mujoco.Renderer(self.sys.mj_model, height=64, width=64)
+        camera = "egocentric"
+        d = mujoco.MjData(self.sys.mj_model)
+        d.qpos, d.qvel = data.qpos, data.qvel
+        mujoco.mj_forward(self.sys.mj_model, d)
+        renderer.update_scene(d, camera=camera)
+        return renderer.render()
 
+      img = jax.pure_callback(callback, 
+                              np.zeros((64,64,3), dtype=np.uint8), 
+                              data)
       img = jax.numpy.array(img).flatten()
       s = jax.numpy.sum(img) * 1e-12
-    
+      
     else:
       s = 0
       
