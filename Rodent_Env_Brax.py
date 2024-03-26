@@ -21,12 +21,13 @@ class Rodent(PipelineEnv):
       ctrl_cost_weight=0.1,
       healthy_reward=1.0,
       terminate_when_unhealthy=True,
-      healthy_z_range=(0.5, 0.0),
+      healthy_z_range=(0.01, 0.5),
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       solver="cg",
       iterations: int = 6,
       ls_iterations: int = 6,
+      vision = False,
       **kwargs,
   ):
     # Load the rodent model via dm_control
@@ -69,7 +70,8 @@ class Rodent(PipelineEnv):
     self._exclude_current_positions_from_observation = (
         exclude_current_positions_from_observation
     )
-
+    self._vision = vision
+    
   def reset(self, rng: jp.ndarray) -> State:
     """Resets the environment to an initial state."""
     rng, rng1, rng2 = jax.random.split(rng, 3)
@@ -110,7 +112,8 @@ class Rodent(PipelineEnv):
     forward_reward = self._forward_reward_weight * velocity[0]
 
     min_z, max_z = self._healthy_z_range
-    is_healthy = jp.where(data.q[3] < min_z, 0.0, 1.0)
+    is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
+    is_healthy = jp.where(data.q[2] > max_z, 0.0, is_healthy)
     if self._terminate_when_unhealthy:
       healthy_reward = self._healthy_reward
     else:
@@ -141,10 +144,22 @@ class Rodent(PipelineEnv):
       self, data: mjx.Data, action: jp.ndarray
   ) -> jp.ndarray:
     """Observes rodent body position, velocities, and angles."""
+    # Optional rodent rendering for benchmarking purposes (becomes tiny noise to qpos)
+    if self._vision:
+      renderer = mujoco.Renderer(self.sys.mj_model, height=64, width=64)
+      camera = "egocentric"
+      mujoco.mj_forward(self.sys.mj_model, data)
+      img = renderer.update_scene(data, camera=camera)
 
+      img = jax.numpy.array(img).flatten()
+      s = jax.numpy.sum(img) * 1e-12
+    
+    else:
+      s = 0
+      
     # external_contact_forces are excluded
     return jp.concatenate([
-        data.qpos, data.qvel, 
+        data.qpos + s, data.qvel, 
         data.cinert[1:].ravel(),
         data.cvel[1:].ravel(),
         data.qfrc_actuator

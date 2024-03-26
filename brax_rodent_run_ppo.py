@@ -39,6 +39,7 @@ config = {
     "solver": "cg",
     "iterations": 4,
     "ls_iterations": 4,
+    "vision": False
 }
 
 envs.register_environment('rodent', Rodent)
@@ -49,7 +50,8 @@ env = envs.get_environment(env_name,
                            terminate_when_unhealthy=config["terminate_when_unhealthy"],
                            solver=config['solver'],
                            iterations=config['iterations'],
-                           ls_iterations=config['ls_iterations'])
+                           ls_iterations=config['ls_iterations'],
+                           vision=config['vision'])
 
 # define the jit reset/step functions
 jit_reset = jax.jit(env.reset)
