@@ -11,7 +11,7 @@ from mujoco import mjx
 
 import numpy as np
 
-from mjcf_vnl import rodent
+import os
 
 _XML_PATH = "./models/rodent_optimized.xml"
 
@@ -36,7 +36,7 @@ class Rodent(PipelineEnv):
     # dm_rodent = rodent.Rodent()
     # physics = mjcf_dm.Physics.from_mjcf_model(dm_rodent.mjcf_model)
     # mj_model = physics.model.ptr
-
+    os.environ["MUJOCO_GL"] = "egl"
     mj_model = mujoco.MjModel.from_xml_path(_XML_PATH)
     mj_model.opt.solver = {
       'cg': mujoco.mjtSolver.mjSOL_CG,
@@ -149,13 +149,7 @@ class Rodent(PipelineEnv):
     # Optional rodent rendering for benchmarking purposes (becomes tiny noise to qpos)
     if self._vision:
       def callback(data):
-        renderer = mujoco.Renderer(self.sys.mj_model, height=64, width=64)
-        camera = "egocentric"
-        d = mujoco.MjData(self.sys.mj_model)
-        d.qpos, d.qvel = data.qpos, data.qvel
-        mujoco.mj_forward(self.sys.mj_model, d)
-        renderer.update_scene(d, camera=camera)
-        return renderer.render()
+        return self.render(data, height=64, width=64, camera="egocentric")
 
       img = jax.pure_callback(callback, 
                               np.zeros((64,64,3), dtype=np.uint8), 

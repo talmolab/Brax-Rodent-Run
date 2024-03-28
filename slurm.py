@@ -8,7 +8,7 @@ def submit():
     """Submit job to cluster.
     """
     script = f"""#!/bin/bash
-#SBATCH -p olveczkygpu,gpu,gpu_requeue # olveczky,cox,shared,serial_requeue # olveczkygpu,gpu_requeue
+#SBATCH -p olveczkygpu,gpu,gpu_requeue,serial_requeue # olveczky,cox,shared,serial_requeue # olveczkygpu,gpu_requeue
 #SBATCH --mem=64000 
 #SBATCH -c 16
 #SBATCH -N 1 
@@ -20,7 +20,7 @@ def submit():
 # # SBATCH -e /slurm/error
 source ~/.bashrc
 module load Mambaforge/22.11.1-fasrc01
-source activate stac-mjx
+source activate rl
 module load cuda/12.2.0-fasrc01
 nvidia-smi
 python3 brax_rodent_run_ppo.py
