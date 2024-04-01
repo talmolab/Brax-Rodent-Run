@@ -30,10 +30,11 @@ from brax.mjx.base import State as MjxState
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
-import vnl_brax.rodent_base as rodent_base
-
 # customized import
 from vnl_brax.arena import Task_Vnl, Gap_Vnl
+import vnl_brax.rodent_base as rodent_base
+
+
 
 ''' Calling dm_control + Brax Walker Class Adapted'''
 
@@ -72,6 +73,7 @@ class Walker(PipelineEnv):
       train_reward=5.0,
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
+      vision = True,
       **kwargs,):
     '''
     Defining initilization of the agent
@@ -113,6 +115,7 @@ class Walker(PipelineEnv):
     self._train_reward = train_reward
     self._reset_noise_scale = reset_noise_scale
     self._exclude_current_positions_from_observation = (exclude_current_positions_from_observation)
+    self._vision = vision
 
   def reset(self, rng: jp.ndarray) -> State:
     """Resets the environment to an initial state."""
@@ -210,8 +213,9 @@ class Walker(PipelineEnv):
     return state.replace(pipeline_state=data, obs=obs, reward=reward, done=done)
 
   def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
-    """environment feedback of observing walker's proprioreceptive and vision data"""
-    # Adapted callback function from Charles (Rodent rendering for wrapping up)
+    """environment feedback of observing walker's proprioreceptive and vision data
+    Adapted callback function from Charles (Rodent rendering for wrapping up)"""
+
     if self._vision:
       def callback(data):
         return self.render(data, height=64, width=64, camera="egocentric")
