@@ -217,6 +217,9 @@ class Walker(PipelineEnv):
     """environment feedback of observing walker's proprioreceptive and vision data
     Adapted callback function from Charles (Rodent rendering for wrapping up)"""
 
+    fake_img = np.zeros((64,64,3), dtype=np.uint8)
+    image_jax_noise =  jax.numpy.array(fake_img).flatten()
+
     if self._vision:
       if (self.time_since_render % 10 == 0) | (self.time_since_render==1):
         def callback(data):
@@ -228,10 +231,6 @@ class Walker(PipelineEnv):
         img = jax.numpy.array(img).flatten() # 12288 here
         image_jax_noise = img * 1e-12
         #print(f'img shape is {image_jax_noise.shape}')
-      else:
-        image_jax_noise =  jax.numpy.array(np.zeros((64,64,3), dtype=np.uint8)).flatten()
-    else:
-      image_jax_noise =  jax.numpy.array(np.zeros((64,64,3), dtype=np.uint8)).flatten()
       
     # Proprioreceptive Data
     position = data.qpos
