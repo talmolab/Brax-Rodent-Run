@@ -57,15 +57,15 @@ state = jit_reset(jax.random.PRNGKey(0))
 
 # Training configuration
 config = {
-    "env_name": 'walker',
+    "env_name": 'rodent',
     "algo_name": "ppo",
     "task_name": "gap",
-    "num_timesteps": 10_000_000,
+    "num_timesteps": 10_000_0,
     "num_evals": 1000,
     "eval_every": 10_000,
     "episode_length": 1000,
-    "num_envs": 1024,
-    "batch_size": 512,
+    "num_envs": 1,
+    "batch_size": 32,
     "num_minibatches": 32,
     "num_updates_per_batch": 2,
     "unroll_length": 5,
@@ -92,7 +92,7 @@ train_fn = functools.partial(
     )
 
 run = wandb.init(
-    project="vnl_task",
+    project="vnl_rodent",
     config=config
 )
 
@@ -109,5 +109,5 @@ def policy_params_fn(num_steps, make_policy, params, model_path = './model_check
     
 make_inference_fn, params, _ = train_fn(environment=env, progress_fn=wandb_progress, policy_params_fn=policy_params_fn)
 
-model_path = './model_checkpoints/brax_vision_1.0'
+model_path = './model_checkpoints/brax_rodent'
 model.save_params(model_path, params)

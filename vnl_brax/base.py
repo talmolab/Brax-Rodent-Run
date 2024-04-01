@@ -224,6 +224,7 @@ class Walker(PipelineEnv):
                               data)
       img = jax.numpy.array(img).flatten()
       image_jax_noise = img * 1e-12
+      print(f'img shape is {image_jax_noise.shape}')
       
     else:
       image_jax_noise = img * 0
