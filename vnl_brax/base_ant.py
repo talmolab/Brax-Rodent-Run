@@ -209,20 +209,34 @@ class Walker(PipelineEnv):
 
   def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
     """environment feedback of observing walker's proprioreceptive and vision data"""
-    # Adapted callback function from Charles (Rodent rendering for wrapping up)
-    if self._vision:
-      def callback(data):
-        return self.render(data, height=64, width=64, camera="egocentric")
 
-      img = jax.pure_callback(callback, 
-                              np.zeros((64,64,3), dtype=np.uint8), 
-                              data)
-      img = jax.numpy.array(img).flatten()
-      image_jax_noise = img * 1e-12
-      
-    else:
-      image_jax_noise = img * 0
-      
+    # Vision Data Mujoco Version
+    # passed in data is a pipeline_state.data object, pipeline_state is the sate
+    renderer = mujoco.Renderer(model = self._model)
+
+    # this here is the correct format, need qpos in calling
+    #d = mjx.get_data(self._model, data)
+    d = mujoco.MjData(self._model)
+
+    mujoco.mj_forward(self._model, d)
+    renderer.update_scene(d, camera=3) # can call via name too!
+    image = renderer.render()
+    image_jax = jax.numpy.array(image)
+    print(f'image out of mujoco is {image_jax.shape}')
+    # cam = mujoco.MjvCamera()
+
+    # fake_image = jax.numpy.array(np.random.rand(64, 64, 3))
+    # image_jax = fake_image.flatten() # fit into jp array
+
+    o_height, o_width, _ = 240,320,3
+    c_x,  c_y = o_width//2, o_height//2
+    cropped_jax_image = image_jax[c_y-32:c_y+32, c_x-32:c_x+32, :]
+    print(f'image cropped {cropped_jax_image.shape}')
+
+    image_jax = cropped_jax_image.flatten()
+    image_jax_noise = image_jax * 1e-12 # noise added
+    print(f'image cropped flatened {image_jax_noise.shape}')
+
     # Proprioreceptive Data
     position = data.qpos
     velocity = data.qvel

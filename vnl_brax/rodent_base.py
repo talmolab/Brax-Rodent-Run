@@ -26,7 +26,7 @@ from dm_control.mujoco import wrapper as mj_wrapper
 import numpy as np
 
 _XML_PATH = os.path.join(os.path.dirname(__file__),
-                         'assets/rodent_stac_optimized_dm_adapt.xml')
+                         'assets/rodent_optimized_dm.xml')
 
 _RAT_MOCAP_JOINTS = [
     'vertebra_1_extend', 'vertebra_2_bend', 'vertebra_3_twist',
