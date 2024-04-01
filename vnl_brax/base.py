@@ -30,6 +30,8 @@ from brax.mjx.base import State as MjxState
 from brax.io import html, model
 from brax.io import mjcf as mjcf_brax
 
+import vnl_brax.rodent_base as rodent_base
+
 # customized import
 from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
@@ -42,7 +44,7 @@ arena = Gap_Vnl(platform_length=distributions.Uniform(1.5, 2.0),
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 arena.regenerate(random_state=None)
-walker = ant.Ant(observable_options={'egocentric_camera': dict(enabled=True)})
+walker = rodent_base.Rat(observable_options={'egocentric_camera': dict(enabled=True)})
 
 task = Task_Vnl(
     walker=walker,
