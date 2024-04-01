@@ -218,7 +218,7 @@ class Walker(PipelineEnv):
     Adapted callback function from Charles (Rodent rendering for wrapping up)"""
 
     if self._vision:
-      if self.time_since_render % 10 == 0:
+      if (self.time_since_render % 10 == 0) | (self.time_since_render==1):
         def callback(data):
           return self.render(data, height=64, width=64, camera=3)
 
@@ -228,8 +228,10 @@ class Walker(PipelineEnv):
         img = jax.numpy.array(img).flatten() # 12288 here
         image_jax_noise = img * 1e-12
         #print(f'img shape is {image_jax_noise.shape}')
+      else:
+        image_jax_noise =  jax.numpy.array(np.zeros((64,64,3), dtype=np.uint8)).flatten()
     else:
-      image_jax_noise = img * 0
+      image_jax_noise =  jax.numpy.array(np.zeros((64,64,3), dtype=np.uint8)).flatten()
       
     # Proprioreceptive Data
     position = data.qpos
