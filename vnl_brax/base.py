@@ -73,6 +73,7 @@ class Walker(PipelineEnv):
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       vision = True,
+      time_since_render = 0,
       **kwargs,):
     '''
     Defining initilization of the agent
@@ -115,6 +116,7 @@ class Walker(PipelineEnv):
     self._reset_noise_scale = reset_noise_scale
     self._exclude_current_positions_from_observation = (exclude_current_positions_from_observation)
     self._vision = vision
+    self.time_since_render = time_since_render
 
   def reset(self, rng: jp.ndarray) -> State:
     """Resets the environment to an initial state."""
@@ -216,16 +218,16 @@ class Walker(PipelineEnv):
     Adapted callback function from Charles (Rodent rendering for wrapping up)"""
 
     if self._vision:
-      def callback(data):
-        return self.render(data, height=64, width=64, camera=3)
+      if self.time_since_render % 10 == 0:
+        def callback(data):
+          return self.render(data, height=64, width=64, camera=3)
 
-      img = jax.pure_callback(callback, 
-                              np.zeros((64,64,3), dtype=np.uint8), 
-                              data)
-      img = jax.numpy.array(img).flatten() # 12288 here
-      image_jax_noise = img * 1e-12
-      print(f'img shape is {image_jax_noise.shape}')
-      
+        img = jax.pure_callback(callback, 
+                                np.zeros((64,64,3), dtype=np.uint8), 
+                                data)
+        img = jax.numpy.array(img).flatten() # 12288 here
+        image_jax_noise = img * 1e-12
+        #print(f'img shape is {image_jax_noise.shape}')
     else:
       image_jax_noise = img * 0
       
@@ -236,5 +238,7 @@ class Walker(PipelineEnv):
       position = position[2:]
 
     proprioception = jp.concatenate([position, velocity])
+
+    self.time_since_render += 1
 
     return jp.concatenate([proprioception, image_jax_noise])

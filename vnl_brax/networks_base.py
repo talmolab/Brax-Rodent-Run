@@ -49,7 +49,7 @@ class MLP(linen.Module):
     #print(data.shape) # initial should all be zero
 
     # two dimension matrix slicing
-    vision_data = data[...,data.shape[-1]-12288:] #just vision, ant have 27, rodent have 118
+    vision_data = data[...,data.shape[-1]-12288:] #just vision, ant have 27, rodent have more, change automatically with getting image of 12288
     pro_data = data[...,:data.shape[-1]-12288] #just proprioception
 
     dtype = jnp.float32
