@@ -46,7 +46,7 @@ class MLP(linen.Module):
 
   @linen.compact
   def __call__(self, data: jnp.ndarray):
-    #print(data.shape) # initial should all be zero
+    print(data.shape) # initial should all be zero
 
     # two dimension matrix slicing
     vision_data = data[...,27:] #just vision
@@ -54,7 +54,7 @@ class MLP(linen.Module):
 
     dtype = jnp.float32
     vision_data = vision_data.astype(dtype) / 255.0
-    #print(vision_data.shape)
+    print(vision_data.shape)
 
     # vmap_size = -1 # automatically infered size #vision_data.shape[0]
     # vision_data = vision_data.reshape((vmap_size, 240, 320, 3)) # reshape back to 3d image with vmap considered

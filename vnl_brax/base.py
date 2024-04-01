@@ -222,7 +222,7 @@ class Walker(PipelineEnv):
       img = jax.pure_callback(callback, 
                               np.zeros((64,64,3), dtype=np.uint8), 
                               data)
-      img = jax.numpy.array(img).flatten()
+      img = jax.numpy.array(img).flatten() # 12288 here
       image_jax_noise = img * 1e-12
       print(f'img shape is {image_jax_noise.shape}')
       
