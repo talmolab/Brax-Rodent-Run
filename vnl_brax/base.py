@@ -35,7 +35,6 @@ from vnl_brax.arena import Task_Vnl, Gap_Vnl
 import vnl_brax.rodent_base as rodent_base
 
 
-
 ''' Calling dm_control + Brax Walker Class Adapted'''
 
 arena = Gap_Vnl(platform_length=distributions.Uniform(1.5, 2.0),
@@ -218,7 +217,7 @@ class Walker(PipelineEnv):
 
     if self._vision:
       def callback(data):
-        return self.render(data, height=64, width=64, camera="egocentric")
+        return self.render(data, height=64, width=64, camera=3)
 
       img = jax.pure_callback(callback, 
                               np.zeros((64,64,3), dtype=np.uint8), 
