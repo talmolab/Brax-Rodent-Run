@@ -217,11 +217,12 @@ class Walker(PipelineEnv):
     """environment feedback of observing walker's proprioreceptive and vision data
     Adapted callback function from Charles (Rodent rendering for wrapping up)"""
 
-    fake_img = np.zeros((64,64,3), dtype=np.uint8)
-    image_jax_noise =  jax.numpy.array(fake_img).flatten()
+    fake_img = np.random.rand(64, 64, 3)
+    fake_img =  jax.numpy.array(fake_img).flatten()
+    image_jax_noise = fake_img * 1e-12
 
     if self._vision:
-      if (self.time_since_render % 10 == 0) | (self.time_since_render==1):
+      if (self.time_since_render % 10 == 0):
         def callback(data):
           return self.render(data, height=64, width=64, camera=3)
 
