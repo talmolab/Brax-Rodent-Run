@@ -72,8 +72,11 @@ class Walker(PipelineEnv):
       train_reward=5.0,
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
-      vision = True,
-      time_since_render = 0,
+      solver="cg",
+      iterations: int = 6,
+      ls_iterations: int = 6,
+      vision=False,
+      time_since_render: int = 0,
       **kwargs,):
     '''
     Defining initilization of the agent
@@ -85,12 +88,15 @@ class Walker(PipelineEnv):
     # but this pass in one doesn't, it uses the default mjCONE_PYRAMIDAL, but MjModel now uses the eliptic model, so reset is needed
 
     # solver is an optimization system
-    mj_model.opt.solver = mujoco.mjSOL_CG #.mjtSolver.mjSOL_NEWTON
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
+    mj_model.opt.solver = {
+      'cg': mujoco.mjtSolver.mjSOL_CG,
+      'newton': mujoco.mjtSolver.mjSOL_NEWTON,
+    }[solver.lower()]
 
     #Iterations for solver
-    mj_model.opt.iterations = 6
-    mj_model.opt.ls_iterations = 3
+    mj_model.opt.iterations = iterations
+    mj_model.opt.ls_iterations = ls_iterations
 
     sys = mjcf_brax.load_model(mj_model)
 

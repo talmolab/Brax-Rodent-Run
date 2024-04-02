@@ -48,13 +48,6 @@ os.environ['XLA_FLAGS'] = (
     '--xla_gpu_enable_highest_priority_async_stream=true '
 )
 
-# Brax environment initilization
-envs.register_environment('walker', Walker)
-env = envs.get_environment(env_name='walker')
-jit_reset = jax.jit(env.reset)
-jit_step = jax.jit(env.step)
-state = jit_reset(jax.random.PRNGKey(0))
-
 # Training configuration
 config = {
     "env_name": 'rodent',
@@ -69,7 +62,25 @@ config = {
     "num_minibatches": 32,
     "num_updates_per_batch": 2,
     "unroll_length": 5,
+    "terminate_when_unhealthy": True,
+    "solver": "cg",
+    "iterations": 6,
+    "ls_iterations": 3,
+    "vision": True
     }
+
+# Brax environment initilization
+envs.register_environment('walker', Walker)
+env = envs.get_environment(env_name='walker', 
+                           terminate_when_unhealthy=config["terminate_when_unhealthy"],
+                           solver=config['solver'],
+                           iterations=config['iterations'],
+                           ls_iterations=config['ls_iterations'],
+                           vision=config['vision'])
+
+jit_reset = jax.jit(env.reset)
+jit_step = jax.jit(env.step)
+state = jit_reset(jax.random.PRNGKey(0))
 
 train_fn = functools.partial(
     ppo.train,
