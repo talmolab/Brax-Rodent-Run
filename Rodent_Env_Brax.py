@@ -13,6 +13,7 @@ import numpy as np
 
 import os
 
+# _XML_PATH = "./models/rodent_opt_lesscon.xml"
 _XML_PATH = "./models/rodent_optimized.xml"
 
 class Rodent(PipelineEnv):
@@ -36,7 +37,7 @@ class Rodent(PipelineEnv):
     # dm_rodent = rodent.Rodent()
     # physics = mjcf_dm.Physics.from_mjcf_model(dm_rodent.mjcf_model)
     # mj_model = physics.model.ptr
-    os.environ["MUJOCO_GL"] = "egl"
+    os.environ["MUJOCO_GL"] = "osmesa"
     mj_model = mujoco.MjModel.from_xml_path(_XML_PATH)
     mj_model.opt.solver = {
       'cg': mujoco.mjtSolver.mjSOL_CG,
