@@ -37,10 +37,10 @@ import vnl_brax.rodent_base as rodent_base
 
 ''' Calling dm_control + Brax Walker Class Adapted'''
 
-arena = Gap_Vnl(platform_length=distributions.Uniform(1.5, 2.0),
-      gap_length=distributions.Uniform(.1, .35), # can't be too big, or else can't jump
-      corridor_width=10,
-      corridor_length=100,
+arena = Gap_Vnl(platform_length=distributions.Uniform(0.3, 0.8),
+      gap_length=distributions.Uniform(.05, .1),
+      corridor_width=2,
+      corridor_length=5,
       aesthetic='outdoor_natural',
       visible_side_planes=False)
 arena.regenerate(random_state=None)
@@ -52,7 +52,7 @@ task = Task_Vnl(
     walker_spawn_position=(1, 0, 0))
 
 # Export from dm_control
-random_state = np.random.RandomState(12345)
+random_state = np.random.RandomState(100)
 task.initialize_episode_mjcf(random_state)
 physics = mjcf_dm.Physics.from_mjcf_model(task.root_entity.mjcf_model)
 
@@ -64,11 +64,11 @@ class Walker(PipelineEnv):
   '''
   def __init__(
       self,
-      forward_reward_weight=5.0,
+      forward_reward_weight=1.0,
       ctrl_cost_weight=0.1,
-      healthy_reward=0.5,
-      terminate_when_unhealthy=False, # should be false in rendering
-      healthy_z_range=(0.0, 1.0), # healthy reward takes care of not falling, this is the contact_termination in dm_control
+      healthy_reward=1.0,
+      terminate_when_unhealthy=True,
+      healthy_z_range=(0.01, 0.5), # healthy reward takes care of not falling, this is the contact_termination in dm_control
       train_reward=5.0,
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
@@ -82,13 +82,10 @@ class Walker(PipelineEnv):
     Defining initilization of the agent
     '''
 
-    # mj_model = physics.model.ptr
+    mj_model = physics.model.ptr
     # this is directly a mj_model already of type mujoco_py.MjModel (This is already a MJModel, same as previously in brax)
     # the original xml load is directly creaing an new MjModel instance, which carries the configuration of everything, including mjtCone
     # but this pass in one doesn't, it uses the default mjCONE_PYRAMIDAL, but MjModel now uses the eliptic model, so reset is needed
-
-    _XML_PATH = "./assets/rodent_optimized.xml"
-    mj_model = mujoco.MjModel.from_xml_path(_XML_PATH)
 
     # solver is an optimization system
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
