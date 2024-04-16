@@ -82,10 +82,13 @@ class Walker(PipelineEnv):
     Defining initilization of the agent
     '''
 
-    mj_model = physics.model.ptr
+    # mj_model = physics.model.ptr
     # this is directly a mj_model already of type mujoco_py.MjModel (This is already a MJModel, same as previously in brax)
     # the original xml load is directly creaing an new MjModel instance, which carries the configuration of everything, including mjtCone
     # but this pass in one doesn't, it uses the default mjCONE_PYRAMIDAL, but MjModel now uses the eliptic model, so reset is needed
+
+    _XML_PATH = "./assets/rodent_optimized.xml"
+    mj_model = mujoco.MjModel.from_xml_path(_XML_PATH)
 
     # solver is an optimization system
     mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
@@ -250,3 +253,24 @@ class Walker(PipelineEnv):
     self.time_since_render += 1
 
     return jp.concatenate([proprioception, image_jax_noise])
+  
+    # if self._vision:
+    #     def callback(data):
+    #       return self.render(data, height=64, width=64, camera="egocentric")
+
+    #     img = jax.pure_callback(callback, 
+    #                             np.zeros((64,64,3), dtype=np.uint8), 
+    #                             data)
+    #     img = jax.numpy.array(img).flatten()
+    #     s = jax.numpy.sum(img) * 1e-12
+      
+    # else:
+    #   s = 0
+      
+    # # external_contact_forces are excluded
+    # return jp.concatenate([
+    #     data.qpos + s, data.qvel, 
+    #     data.cinert[1:].ravel(),
+    #     data.cvel[1:].ravel(),
+    #     data.qfrc_actuator
+    # ])
