@@ -28,8 +28,8 @@ class Rodent(PipelineEnv):
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       solver="cg",
-      iterations: int = 6,
-      ls_iterations: int = 6,
+      iterations: int = 5,
+      ls_iterations: int = 5,
       vision = False,
       **kwargs,
   ):
@@ -116,7 +116,6 @@ class Rodent(PipelineEnv):
 
     min_z, max_z = self._healthy_z_range
     is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
-    is_healthy = jp.where(data.q[2] > max_z, 0.0, is_healthy)
     if self._terminate_when_unhealthy:
       healthy_reward = self._healthy_reward
     else:
@@ -168,3 +167,4 @@ class Rodent(PipelineEnv):
         data.cvel[1:].ravel(),
         data.qfrc_actuator
     ])
+  
