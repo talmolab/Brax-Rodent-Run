@@ -13,7 +13,7 @@ import numpy as np
 
 import os
 
-# _XML_PATH = "./models/rodent_0.xml"
+
 _XML_PATH = "./models/rodent_optimized.xml"
 
 class Rodent(PipelineEnv):
@@ -115,7 +115,7 @@ class Rodent(PipelineEnv):
     forward_reward = self._forward_reward_weight * velocity[0]
 
     min_z, max_z = self._healthy_z_range
-    is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
+    is_healthy = jp.where(data.q[3] < min_z, 0.0, 1.0)
     if self._terminate_when_unhealthy:
       healthy_reward = self._healthy_reward
     else:

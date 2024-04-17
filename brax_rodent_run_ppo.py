@@ -42,7 +42,7 @@ config = {
     "num_timesteps": 500_000_000,
     "eval_every": 1_000_000,
     "episode_length": 1000,
-    "batch_size": 2048*n_gpus,
+    "batch_size": 1024*n_gpus,
     "learning_rate": 5e-5,
     "terminate_when_unhealthy": True,
     "run_platform": "RunAI",
