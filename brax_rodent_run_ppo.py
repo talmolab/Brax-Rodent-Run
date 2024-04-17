@@ -36,6 +36,7 @@ flags.DEFINE_boolean('vision', False, 'render vision in obs')
 
 config = {
     "env_name": "rodent",
+    "task": "gap",
     "algo_name": "ppo",
     "task_name": "run",
     "num_envs": 2048*n_gpus,

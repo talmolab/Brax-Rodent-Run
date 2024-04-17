@@ -9,11 +9,12 @@ import os
 from dm_control import mjcf as mjcf_dm
 from dm_control import composer
 from dm_control.composer.variation import distributions
+from .rodent import Rodent
 
 # customized import
 from vnl_brax.arena import Task_Vnl, Gap_Vnl
 
-_XML_PATH = "./../models/rodent_optimized.xml"
+
 
 # instantiate arena
 arena = Gap_Vnl(platform_length=distributions.Uniform(1.5, 2.0),
@@ -24,7 +25,7 @@ arena = Gap_Vnl(platform_length=distributions.Uniform(1.5, 2.0),
       visible_side_planes=False)
 arena.regenerate(random_state=None)
 
-
+walker = Rodent()
 
 task = Task_Vnl(
     walker=walker,
@@ -54,12 +55,9 @@ class Rodent(PipelineEnv):
       vision = False,
       **kwargs,
   ):
-    # Load the rodent model via dm_control
-    # dm_rodent = rodent.Rodent()
-    # physics = mjcf_dm.Physics.from_mjcf_model(dm_rodent.mjcf_model)
-    # mj_model = physics.model.ptr
+    
     os.environ["MUJOCO_GL"] = "osmesa"
-    mj_model = mujoco.MjModel.from_xml_path(_XML_PATH)
+    mj_model = physics.model.ptr
     mj_model.opt.solver = {
       'cg': mujoco.mjtSolver.mjSOL_CG,
       'newton': mujoco.mjtSolver.mjSOL_NEWTON,
@@ -73,11 +71,13 @@ class Rodent(PipelineEnv):
       'sparse': 1,
       'auto': 2,
     }["dense"]
+    
+    # this is necessary for mujoco MJX
+    mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL # Read documentation
 
     sys = mjcf_brax.load_model(mj_model)
 
-    physics_steps_per_control_step = 5
-    
+    physics_steps_per_control_step = 5    
     kwargs['n_frames'] = kwargs.get(
         'n_frames', physics_steps_per_control_step
     )
