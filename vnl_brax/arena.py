@@ -25,6 +25,9 @@ class Gap_Vnl(corr_arenas.GapsCorridor):
     def regenerate(self, random_state):
         super().regenerate(random_state)
 
+    def camera(self):
+        return self._camera
+
 # Task now just serve as a wrapper
 class Task_Vnl(corr_tasks.RunThroughCorridor):
     def __init__(self,
