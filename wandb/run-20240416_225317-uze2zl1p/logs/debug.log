@@ -1,0 +1,28 @@
+2024-04-16 22:53:17,548 INFO    MainThread:2495455 [wandb_setup.py:_flush():76] Current SDK version is 0.16.4
+2024-04-16 22:53:17,548 INFO    MainThread:2495455 [wandb_setup.py:_flush():76] Configure stats pid to 2495455
+2024-04-16 22:53:17,548 INFO    MainThread:2495455 [wandb_setup.py:_flush():76] Loading settings from /home/jovyan/.config/wandb/settings
+2024-04-16 22:53:17,548 INFO    MainThread:2495455 [wandb_setup.py:_flush():76] Loading settings from /home/jovyan/Brax-Rodent-Run/wandb/settings
+2024-04-16 22:53:17,548 INFO    MainThread:2495455 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-04-16 22:53:17,548 INFO    MainThread:2495455 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-04-16 22:53:17,548 INFO    MainThread:2495455 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program_abspath': '/home/jovyan/Brax-Rodent-Run/train.py', 'program': '/home/jovyan/Brax-Rodent-Run/train.py'}
+2024-04-16 22:53:17,549 INFO    MainThread:2495455 [wandb_init.py:_log_setup():526] Logging user logs to /home/jovyan/Brax-Rodent-Run/wandb/run-20240416_225317-uze2zl1p/logs/debug.log
+2024-04-16 22:53:17,549 INFO    MainThread:2495455 [wandb_init.py:_log_setup():527] Logging internal logs to /home/jovyan/Brax-Rodent-Run/wandb/run-20240416_225317-uze2zl1p/logs/debug-internal.log
+2024-04-16 22:53:17,549 INFO    MainThread:2495455 [wandb_init.py:init():566] calling init triggers
+2024-04-16 22:53:17,549 INFO    MainThread:2495455 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'env_name': 'rodent', 'algo_name': 'ppo', 'task_name': 'gap', 'num_timesteps': 100000, 'num_evals': 1000, 'eval_every': 10000, 'episode_length': 1000, 'num_envs': 1, 'batch_size': 32, 'num_minibatches': 32, 'num_updates_per_batch': 2, 'unroll_length': 5, 'terminate_when_unhealthy': True, 'solver': 'cg', 'iterations': 6, 'ls_iterations': 3, 'vision': True}
+2024-04-16 22:53:17,549 INFO    MainThread:2495455 [wandb_init.py:init():616] starting backend
+2024-04-16 22:53:17,549 INFO    MainThread:2495455 [wandb_init.py:init():620] setting up manager
+2024-04-16 22:53:17,550 INFO    MainThread:2495455 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-04-16 22:53:17,551 INFO    MainThread:2495455 [wandb_init.py:init():628] backend started and connected
+2024-04-16 22:53:17,553 INFO    MainThread:2495455 [wandb_init.py:init():720] updated telemetry
+2024-04-16 22:53:17,557 INFO    MainThread:2495455 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-04-16 22:53:17,798 INFO    MainThread:2495455 [wandb_run.py:_on_init():2262] communicating current version
+2024-04-16 22:53:17,850 INFO    MainThread:2495455 [wandb_run.py:_on_init():2271] got version response upgrade_message: "wandb version 0.16.6 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-04-16 22:53:17,850 INFO    MainThread:2495455 [wandb_init.py:init():804] starting run threads in backend
+2024-04-16 22:53:23,730 INFO    MainThread:2495455 [wandb_run.py:_console_start():2241] atexit reg
+2024-04-16 22:53:23,731 INFO    MainThread:2495455 [wandb_run.py:_redirect():2096] redirect: wrap_raw
+2024-04-16 22:53:23,731 INFO    MainThread:2495455 [wandb_run.py:_redirect():2161] Wrapping output streams.
+2024-04-16 22:53:23,731 INFO    MainThread:2495455 [wandb_run.py:_redirect():2186] Redirects installed.
+2024-04-16 22:53:23,732 INFO    MainThread:2495455 [wandb_init.py:init():847] run started, returning control to user process
+2024-04-17 15:52:23,714 WARNING MsgRouterThr:2495455 [router.py:message_loop():77] message_loop has been closed
