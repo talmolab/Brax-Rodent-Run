@@ -39,18 +39,18 @@ config = {
     "task": "gap",
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 2048*n_gpus,
+    "num_envs": 1024*n_gpus,
     "num_timesteps": 500_000_000,
     "eval_every": 1_000_000,
     "episode_length": 1000,
-    "batch_size": 1024*n_gpus,
+    "batch_size": 512*n_gpus,
     "learning_rate": 5e-5,
     "terminate_when_unhealthy": True,
     "run_platform": "RunAI",
     "solver": "cg",
     "iterations": 6,
     "ls_iterations": 3,
-    "vision": False
+    "vision": True
 }
 
 envs.register_environment('rodent', Rodent)
@@ -91,7 +91,7 @@ run = wandb.init(
 )
 
 
-wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{run_id}"
+wandb.run.name = f"{config['env_name']}_{config['task_name']}_{config['algo_name']}_{config['task']}_{run_id}"
 
 
 def wandb_progress(num_steps, metrics):
