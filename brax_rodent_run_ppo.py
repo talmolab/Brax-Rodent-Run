@@ -38,12 +38,12 @@ config = {
     "env_name": "rodent",
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 2048 * n_gpus,
+    "num_envs": 1024 * n_gpus,
     "num_timesteps": 500_000_000,
     "eval_every": 5_000_000,
     "episode_length": 1000,
-    "batch_size": 2048 * n_gpus,
-    "learning_rate": 1e-4,
+    "batch_size": 1024 * n_gpus,
+    "learning_rate": 5e-5,
     "terminate_when_unhealthy": True,
     "run_platform": "Harvard",
     "solver": "cg",
@@ -65,9 +65,9 @@ env = envs.get_environment(
     vision=config["vision"],
 )
 
-# define the jit reset/step functions
-jit_reset = jax.jit(env.reset)
-jit_step = jax.jit(env.step)
+# # define the jit reset/step functions
+# jit_reset = jax.jit(env.reset)
+# jit_step = jax.jit(env.step)
 
 
 train_fn = functools.partial(
@@ -109,7 +109,7 @@ def wandb_progress(num_steps, metrics):
 
 
 def policy_params_fn(num_steps, make_policy, params, model_path=model_path):
-    policy_params_key = jax.random.PRNGKey(0)
+    # policy_params_key = jax.random.PRNGKey(0)
     os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
     # jit_inference_fn = jax.jit(make_policy(params, deterministic=True))
