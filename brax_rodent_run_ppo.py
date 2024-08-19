@@ -16,6 +16,8 @@ import os
 from absl import app
 from absl import flags
 
+os.environ['XLA_PYTHON_CLIENT_MEM_FRACTION'] = '0.90'
+
 FLAGS = flags.FLAGS
 
 n_gpus = jax.device_count(backend="gpu")
@@ -24,9 +26,6 @@ print(f"Using {n_gpus} GPUs")
 os.environ['XLA_FLAGS'] = (
     '--xla_gpu_enable_triton_softmax_fusion=true '
     '--xla_gpu_triton_gemm_any=True '
-    '--xla_gpu_enable_async_collectives=true '
-    '--xla_gpu_enable_latency_hiding_scheduler=true '
-    '--xla_gpu_enable_highest_priority_async_stream=true '
 )
 
 flags.DEFINE_enum('solver', 'cg', ['cg', 'newton'], 'constraint solver')
@@ -38,17 +37,17 @@ config = {
     "env_name": "rodent",
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 4096*n_gpus,
+    "num_envs": 1024*n_gpus,
     "num_timesteps": 500_000_000,
     "eval_every": 5_000_000,
     "episode_length": 1000,
-    "batch_size": 4096*n_gpus,
+    "batch_size": 1024*n_gpus,
     "learning_rate": 5e-5,
     "terminate_when_unhealthy": True,
     "run_platform": "Harvard",
     "solver": "cg",
     "iterations": 6,
-    "ls_iterations": 3,
+    "ls_iterations": 6,
     "vision": False
 }
 

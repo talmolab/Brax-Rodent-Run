@@ -13,8 +13,7 @@ import numpy as np
 
 import os
 
-# _XML_PATH = "./models/rodent_opt_lesscon.xml"
-_XML_PATH = "./models/rodent_optimized.xml"
+_XML_PATH = "./models/rodent_no_skin.xml"
 
 class Rodent(PipelineEnv):
 
@@ -24,7 +23,7 @@ class Rodent(PipelineEnv):
       ctrl_cost_weight=0.1,
       healthy_reward=1.0,
       terminate_when_unhealthy=True,
-      healthy_z_range=(0.01, 0.5),
+      healthy_z_range=(0.03, 0.5),
       reset_noise_scale=1e-2,
       exclude_current_positions_from_observation=True,
       solver="cg",
@@ -45,6 +44,8 @@ class Rodent(PipelineEnv):
     }[solver.lower()]
     mj_model.opt.iterations = iterations
     mj_model.opt.ls_iterations = ls_iterations
+    
+    # mj_model.opt.cone = mujoco.mjtCone.mjCONE_PYRAMIDAL
     
     # index given [dense, sparse, auto] 
     mj_model.opt.jacobian = {
