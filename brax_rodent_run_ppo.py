@@ -38,12 +38,12 @@ config = {
     "env_name": "rodent",
     "algo_name": "ppo",
     "task_name": "run",
-    "num_envs": 1024 * n_gpus,
+    "num_envs": 2048 * n_gpus,
     "num_timesteps": 500_000_000,
     "eval_every": 5_000_000,
     "episode_length": 1000,
-    "batch_size": 1024 * n_gpus,
-    "learning_rate": 5e-5,
+    "batch_size": 2048 * n_gpus,
+    "learning_rate": 1e-4,
     "terminate_when_unhealthy": True,
     "run_platform": "Harvard",
     "solver": "cg",
@@ -81,7 +81,7 @@ train_fn = functools.partial(
     unroll_length=10,
     num_minibatches=64,
     num_updates_per_batch=8,
-    discounting=0.99,
+    discounting=0.97,
     learning_rate=config["learning_rate"],
     entropy_cost=1e-3,
     num_envs=config["num_envs"],
@@ -95,12 +95,7 @@ import uuid
 run_id = uuid.uuid4()
 model_path = f"./model_checkpoints/{run_id}"
 
-run = wandb.init(
-    project="vnl_debug",
-    config=config,
-    notes=f"{config['batch_size']} batchsize, "
-    + f"{config['solver']}, {config['iterations']}/{config['ls_iterations']}",
-)
+run = wandb.init(project="vnl_debug", config=config, notes="")
 
 
 wandb.run.name = (
