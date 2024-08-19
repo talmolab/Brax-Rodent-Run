@@ -105,61 +105,61 @@ wandb.run.name = (
 
 def wandb_progress(num_steps, metrics):
     metrics["num_steps"] = num_steps
-    wandb.log(metrics, commit=False)
+    wandb.log(metrics, commit=True)
 
 
 def policy_params_fn(num_steps, make_policy, params, model_path=model_path):
     policy_params_key = jax.random.PRNGKey(0)
     os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
-    jit_inference_fn = jax.jit(make_policy(params, deterministic=True))
-    _, policy_params_key = jax.random.split(policy_params_key)
-    reset_rng, act_rng = jax.random.split(policy_params_key)
+    # jit_inference_fn = jax.jit(make_policy(params, deterministic=True))
+    # _, policy_params_key = jax.random.split(policy_params_key)
+    # reset_rng, act_rng = jax.random.split(policy_params_key)
 
-    state = jit_reset(reset_rng)
+    # state = jit_reset(reset_rng)
 
-    rollout = [state.pipeline_state]
-    for i in range(500):
-        _, act_rng = jax.random.split(act_rng)
-        obs = state.obs
-        ctrl, extras = jit_inference_fn(obs, act_rng)
-        state = jit_step(state, ctrl)
-        rollout.append(state.pipeline_state)
+    # rollout = [state.pipeline_state]
+    # for i in range(500):
+    #     _, act_rng = jax.random.split(act_rng)
+    #     obs = state.obs
+    #     ctrl, extras = jit_inference_fn(obs, act_rng)
+    #     state = jit_step(state, ctrl)
+    #     rollout.append(state.pipeline_state)
 
-    # Render the walker with the reference expert demonstration trajectory
-    os.environ["MUJOCO_GL"] = "osmesa"
-    qposes_rollout = [data.qpos for data in rollout]
-    qposes_ref = qposes_rollout
+    # # Render the walker with the reference expert demonstration trajectory
+    # os.environ["MUJOCO_GL"] = "osmesa"
+    # qposes_rollout = [data.qpos for data in rollout]
+    # qposes_ref = qposes_rollout
 
-    mj_model = mujoco.MjModel.from_xml_path(f"./models/rodent_pair.xml")
+    # mj_model = mujoco.MjModel.from_xml_path(f"./models/rodent_pair.xml")
 
-    mj_model.opt.solver = {
-        "cg": mujoco.mjtSolver.mjSOL_CG,
-        "newton": mujoco.mjtSolver.mjSOL_NEWTON,
-    }["cg"]
-    mj_model.opt.iterations = 6
-    mj_model.opt.ls_iterations = 6
-    mj_data = mujoco.MjData(mj_model)
+    # mj_model.opt.solver = {
+    #     "cg": mujoco.mjtSolver.mjSOL_CG,
+    #     "newton": mujoco.mjtSolver.mjSOL_NEWTON,
+    # }["cg"]
+    # mj_model.opt.iterations = 6
+    # mj_model.opt.ls_iterations = 6
+    # mj_data = mujoco.MjData(mj_model)
 
-    # save rendering and log to wandb
-    os.environ["MUJOCO_GL"] = "osmesa"
-    mujoco.mj_kinematics(mj_model, mj_data)
-    renderer = mujoco.Renderer(mj_model, height=512, width=512)
+    # # save rendering and log to wandb
+    # os.environ["MUJOCO_GL"] = "osmesa"
+    # mujoco.mj_kinematics(mj_model, mj_data)
+    # renderer = mujoco.Renderer(mj_model, height=512, width=512)
 
-    frames = []
-    # render while stepping using mujoco
-    video_path = f"{model_path}/{num_steps}.mp4"
+    # frames = []
+    # # render while stepping using mujoco
+    # video_path = f"{model_path}/{num_steps}.mp4"
 
-    with imageio.get_writer(video_path, fps=float(1.0 / env.dt)) as video:
-        for qpos1, qpos2 in zip(qposes_ref, qposes_rollout):
-            mj_data.qpos = np.append(qpos1, qpos2)
-            mujoco.mj_forward(mj_model, mj_data)
-            renderer.update_scene(mj_data, camera=f"close_profile")
-            pixels = renderer.render()
-            video.append_data(pixels)
-            frames.append(pixels)
+    # with imageio.get_writer(video_path, fps=float(1.0 / env.dt)) as video:
+    #     for qpos1, qpos2 in zip(qposes_ref, qposes_rollout):
+    #         mj_data.qpos = np.append(qpos1, qpos2)
+    #         mujoco.mj_forward(mj_model, mj_data)
+    #         renderer.update_scene(mj_data, camera=f"close_profile")
+    #         pixels = renderer.render()
+    #         video.append_data(pixels)
+    #         frames.append(pixels)
 
-    wandb.log({"eval/rollout": wandb.Video(video_path, format="mp4")})
+    # wandb.log({"eval/rollout": wandb.Video(video_path, format="mp4")})
 
 
 make_inference_fn, params, _ = train_fn(
