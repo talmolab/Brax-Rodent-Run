@@ -105,14 +105,18 @@ wandb.run.name = (
 
 def wandb_progress(num_steps, metrics):
     metrics["num_steps"] = num_steps
-    wandb.log(metrics)
+    wandb.log(metrics, commit=False)
+
+
+policy_params_key = jax.random.PRNGKey(0)
 
 
 def policy_params_fn(num_steps, make_policy, params, model_path=model_path):
     os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
     jit_inference_fn = jax.jit(make_policy(params, deterministic=True))
-    reset_rng, act_rng = jax.random.split(jax.random.PRNGKey(0))
+    _, policy_params_key = jax.random.split(policy_params_key)
+    reset_rng, act_rng = jax.random.split(policy_params_key)
 
     state = jit_reset(reset_rng)
 
@@ -129,7 +133,7 @@ def policy_params_fn(num_steps, make_policy, params, model_path=model_path):
     qposes_rollout = [data.qpos for data in rollout]
     qposes_ref = qposes_rollout
 
-    mj_model = mujoco.MjModel.from_xml_path(f"./assets/rodent_pair.xml")
+    mj_model = mujoco.MjModel.from_xml_path(f"./models/rodent_pair.xml")
 
     mj_model.opt.solver = {
         "cg": mujoco.mjtSolver.mjSOL_CG,
