@@ -108,10 +108,8 @@ def wandb_progress(num_steps, metrics):
     wandb.log(metrics, commit=False)
 
 
-policy_params_key = jax.random.PRNGKey(0)
-
-
 def policy_params_fn(num_steps, make_policy, params, model_path=model_path):
+    policy_params_key = jax.random.PRNGKey(0)
     os.makedirs(model_path, exist_ok=True)
     model.save_params(f"{model_path}/{num_steps}", params)
     jit_inference_fn = jax.jit(make_policy(params, deterministic=True))
