@@ -59,7 +59,7 @@ class Rodent(PipelineEnv):
 
         super().__init__(sys, **kwargs)
 
-        self_track_pos = track_pos
+        self._track_pos = track_pos
         self._forward_reward_weight = forward_reward_weight
         self._ctrl_cost_weight = ctrl_cost_weight
         self._healthy_reward = healthy_reward
