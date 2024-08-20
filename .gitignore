@@ -1,2 +1,8 @@
-
+wandb/
+.idea
 .DS_Store
+.vscode
+__pycache__
+*.out
+model_checkpoints/
+.ipynb_checkpoints/
