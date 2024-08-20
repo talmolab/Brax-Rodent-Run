@@ -49,8 +49,8 @@ config = {
     "terminate_when_unhealthy": True,
     "run_platform": "Harvard",
     "solver": "cg",
-    "iterations": 6,
-    "ls_iterations": 6,
+    "iterations": 8,
+    "ls_iterations": 8,
     "vision": False,
 }
 
