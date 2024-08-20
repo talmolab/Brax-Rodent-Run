@@ -86,7 +86,7 @@ class Rodent(PipelineEnv):
 
         data = self.pipeline_init(qpos, qvel)
 
-        obs = self._get_obs(data, jp.zeros(self.sys.nu))
+        obs = self._get_obs(data, jp.zeros(self.sys.nu), start_frame)
         reward, done, zero = jp.zeros(3)
         metrics = {
             "pos_reward": zero,
