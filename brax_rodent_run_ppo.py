@@ -58,11 +58,9 @@ envs.register_environment("rodent", Rodent)
 
 reference_path = f"clips/84.p"
 
-if os.path.exists(reference_path):
-    with open(reference_path, "rb") as file:
-        # Use pickle.load() to load the data from the file
-        reference_clip = pickle.load(file)
-else:
+if not os.path.exists(reference_path):
+    os.makedirs(os.path.dirname(reference_path), exist_ok=True)
+
     # Process rodent clip and save as pickle
     reference_clip = process_clip_to_train(
         stac_path="../stac-mjx/transform_snips_new.p",
@@ -73,6 +71,11 @@ else:
     with open(reference_path, "wb") as file:
         # Use pickle.dump() to save the data to the file
         pickle.dump(reference_clip, file)
+else:
+    with open(reference_path, "rb") as file:
+        # Use pickle.load() to load the data from the file
+        reference_clip = pickle.load(file)
+
 
 # instantiate the environment
 env_name = config["env_name"]
