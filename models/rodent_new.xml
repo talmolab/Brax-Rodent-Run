@@ -158,8 +158,9 @@
   <worldbody>
     <geom name="floor" class="collision_floor" pos="0 0 -0.005" size="10 10 0.025" type="plane" material="grid"/>
     <light name="spotlight" mode="targetbody" target="torso"/>
-    <body name="torso" pos="0.03099526054578288 2.058524937651458e-07 0.06808957263119967">
+    <body name="walker">
       <freejoint name="root"/>
+    <body name="torso" pos="0.03099526054578288 2.058524937651458e-07 0.06808957263119967">
       <light name="tracking_light" mode="targetbodycom" pos="0 0 3"/>
       <camera name="back" mode="targetbody" pos="-1 0 0.5" xyaxes="0 -1 0 1 0 2"/>
       <camera name="side" mode="targetbody" pos="0 -3 1" xyaxes="1 0 0 0 1 2"/>
@@ -493,6 +494,7 @@
         </body>
         <geom name="scapula_R_collision" class="no_collision" type="ellipsoid" size="0.005005370266735553 0.01463183127343655 0.02431103959679604" density="513.564646393" pos="0.01757062018850453 -0.008637295267367218 -0.01522952062810994" quat="0.3867556972129688 0.4740321312040688 0.7692223496423682 0.1844194839763772"/>
       </body>
+    </body>
     </body>
   </worldbody>
 <!-- 
