@@ -20,13 +20,13 @@ class Rodent(PipelineEnv):
 
     def __init__(
         self,
+        track_pos: jp.ndarray,
         forward_reward_weight=10,
         ctrl_cost_weight=0.1,
         healthy_reward=1.0,
         terminate_when_unhealthy=True,
         healthy_z_range=(0.03, 0.5),
         reset_noise_scale=1e-2,
-        exclude_current_positions_from_observation=True,
         solver="cg",
         iterations: int = 6,
         ls_iterations: int = 6,
@@ -50,32 +50,38 @@ class Rodent(PipelineEnv):
 
         sys = mjcf_brax.load_model(mj_model)
 
-        physics_steps_per_control_step = 5
+        physics_steps_per_control_step = (
+            10  # 10 times 0.002 = 0.02 => fps of tracking data
+        )
 
         kwargs["n_frames"] = kwargs.get("n_frames", physics_steps_per_control_step)
         kwargs["backend"] = "mjx"
 
         super().__init__(sys, **kwargs)
 
+        self_track_pos = track_pos
         self._forward_reward_weight = forward_reward_weight
         self._ctrl_cost_weight = ctrl_cost_weight
         self._healthy_reward = healthy_reward
         self._terminate_when_unhealthy = terminate_when_unhealthy
         self._healthy_z_range = healthy_z_range
         self._reset_noise_scale = reset_noise_scale
-        self._exclude_current_positions_from_observation = (
-            exclude_current_positions_from_observation
-        )
         self._vision = vision
 
     def reset(self, rng) -> State:
         """Resets the environment to an initial state."""
-        rng, rng1, rng2 = jax.random.split(rng, 3)
+        rng, rng1, rng2, rng_pos = jax.random.split(rng, 4)
+
+        start_frame = jax.random.randint(rng, (), 0, 100)
+
+        info = {
+            "cur_frame": start_frame,
+        }
 
         low, hi = -self._reset_noise_scale, self._reset_noise_scale
-        qpos = self.sys.qpos0 + jax.random.uniform(
-            rng1, (self.sys.nq,), minval=low, maxval=hi
-        )
+        qpos = jp.array(self.sys.qpos0).at[:3].set(
+            self._track_pos[start_frame]
+        ) + jax.random.uniform(rng1, (self.sys.nq,), minval=low, maxval=hi)
         qvel = jax.random.uniform(rng2, (self.sys.nv,), minval=low, maxval=hi)
 
         data = self.pipeline_init(qpos, qvel)
@@ -83,27 +89,28 @@ class Rodent(PipelineEnv):
         obs = self._get_obs(data, jp.zeros(self.sys.nu))
         reward, done, zero = jp.zeros(3)
         metrics = {
-            "forward_reward": zero,
-            "reward_linvel": zero,
+            "pos_reward": zero,
             "reward_quadctrl": zero,
             "reward_alive": zero,
-            "x_position": zero,
-            "y_position": zero,
-            "distance_from_origin": zero,
-            "x_velocity": zero,
-            "y_velocity": zero,
         }
-        return State(data, obs, reward, done, metrics)
+        return State(data, obs, reward, done, metrics, info)
 
     def step(self, state: State, action: jp.ndarray) -> State:
         """Runs one timestep of the environment's dynamics."""
         data0 = state.pipeline_state
         data = self.pipeline_step(data0, action)
 
-        com_before = data0.subtree_com[1]
-        com_after = data.subtree_com[1]
-        velocity = (com_after - com_before) / self.dt
-        forward_reward = self._forward_reward_weight * velocity[0]
+        info = state.info.copy()
+        info["cur_frame"] += 1
+
+        pos_reward = jp.exp(
+            -100
+            * (
+                jp.linalg.norm(
+                    data.qpos[:3] - (self._track_pos[state.info["cur_frame"]])
+                )
+            )
+        )
 
         min_z, max_z = self._healthy_z_range
         is_healthy = jp.where(data.q[2] < min_z, 0.0, 1.0)
@@ -115,47 +122,71 @@ class Rodent(PipelineEnv):
 
         ctrl_cost = self._ctrl_cost_weight * jp.sum(jp.square(action))
 
-        obs = self._get_obs(data, action)
-        reward = forward_reward + healthy_reward - ctrl_cost
+        obs = self._get_obs(data, action, info["cur_frame"])
+        reward = pos_reward + healthy_reward - ctrl_cost
         done = 1.0 - is_healthy if self._terminate_when_unhealthy else 0.0
         state.metrics.update(
-            forward_reward=forward_reward,
-            reward_linvel=forward_reward,
+            pos_reward=pos_reward,
             reward_quadctrl=-ctrl_cost,
             reward_alive=healthy_reward,
-            x_position=com_after[0],
-            y_position=com_after[1],
-            distance_from_origin=jp.linalg.norm(com_after),
-            x_velocity=velocity[0],
-            y_velocity=velocity[1],
         )
 
-        return state.replace(pipeline_state=data, obs=obs, reward=reward, done=done)
+        return state.replace(
+            pipeline_state=data, obs=obs, reward=reward, done=done, info=info
+        )
 
-    def _get_obs(self, data: mjx.Data, action: jp.ndarray) -> jp.ndarray:
+    def _get_obs(
+        self, data: mjx.Data, action: jp.ndarray, cur_frame: int
+    ) -> jp.ndarray:
         """Observes rodent body position, velocities, and angles."""
-        # Optional rodent rendering for benchmarking purposes (becomes tiny noise to qpos)
-        if self._vision:
-
-            def callback(data):
-                return self.render(data, height=64, width=64, camera="egocentric")
-
-            img = jax.pure_callback(
-                callback, np.zeros((64, 64, 3), dtype=np.uint8), data
-            )
-            img = jax.numpy.array(img).flatten()
-            s = jax.numpy.sum(img) * 1e-12
-
-        else:
-            s = 0
+        # get relative tracking position in local frame
+        track_pos_local = self.emil_to_local(
+            data, self._track_pos[cur_frame + 1] - data.qpos[:3]
+        )
+        track_pos_local = jp.concatenate([o.flatten() for o in track_pos_local])
 
         # external_contact_forces are excluded
         return jp.concatenate(
             [
-                data.qpos + s,
+                data.qpos,
                 data.qvel,
                 data.cinert[1:].ravel(),
                 data.cvel[1:].ravel(),
                 data.qfrc_actuator,
+                track_pos_local,
             ]
         )
+
+    def emil_to_local(self, data, vec_in_world_frame):
+        xmat = jp.reshape(data.xmat[1], (3, 3))
+        return xmat @ vec_in_world_frame
+
+    def to_local(self, data, vec_in_world_frame):
+        """Linearly transforms a world-frame vector into entity's local frame.
+
+        Note that this function does not perform an affine transformation of the
+        vector. In other words, the input vector is assumed to be specified with
+        respect to the same origin as this entity's local frame. This function
+        can also be applied to matrices whose innermost dimensions are either 2 or
+        3. In this case, a matrix with the same leading dimensions is returned
+        where the innermost vectors are replaced by their values computed in the
+        local frame.
+
+        Returns the resulting vector, converting to ego-centric frame
+        """
+        # TODO: confirm index
+        xmat = jp.reshape(data.xmat[1], (3, 3))
+        # The ordering of the np.dot is such that the transformation holds for any
+        # matrix whose final dimensions are (2,) or (3,).
+
+        # Each element in xmat is a 3x3 matrix that describes the rotation of a body relative to the global coordinate frame, so
+        # use rotation matrix to dot the vectors in the world frame, transform basis
+        if vec_in_world_frame.shape[-1] == 2:
+            return jp.dot(vec_in_world_frame, xmat[:2, :2])
+        elif vec_in_world_frame.shape[-1] == 3:
+            return jp.dot(vec_in_world_frame, xmat)
+        else:
+            raise ValueError(
+                "`vec_in_world_frame` should have shape with final "
+                "dimension 2 or 3: got {}".format(vec_in_world_frame.shape)
+            )

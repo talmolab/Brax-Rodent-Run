@@ -9,8 +9,10 @@ from brax.training.agents.ppo import train as ppo
 from brax.io import model
 import numpy as np
 from Rodent_Env_Brax import Rodent
-
+import pickle
 import warnings
+from preprocessing.mjx_preprocess import process_clip_to_train
+from jax import numpy as jp
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -41,7 +43,7 @@ config = {
     "num_envs": 1024 * n_gpus,
     "num_timesteps": 500_000_000,
     "eval_every": 5_000_000,
-    "episode_length": 1000,
+    "episode_length": 150,
     "batch_size": 1024 * n_gpus,
     "learning_rate": 5e-5,
     "terminate_when_unhealthy": True,
@@ -54,10 +56,29 @@ config = {
 
 envs.register_environment("rodent", Rodent)
 
+reference_path = f"clips/84.p"
+
+if os.path.exists(reference_path):
+    with open(reference_path, "rb") as file:
+        # Use pickle.load() to load the data from the file
+        reference_clip = pickle.load(file)
+else:
+    # Process rodent clip and save as pickle
+    reference_clip = process_clip_to_train(
+        stac_path="../stac-mjx/transform_snips_new.p",
+        start_step=84 * 250,
+        clip_length=250,
+        mjcf_path="./models/rodent_new.xml",
+    )
+    with open(reference_path, "wb") as file:
+        # Use pickle.dump() to save the data to the file
+        pickle.dump(reference_clip, file)
+
 # instantiate the environment
 env_name = config["env_name"]
 env = envs.get_environment(
     env_name,
+    track_pos=reference_clip.position,
     terminate_when_unhealthy=config["terminate_when_unhealthy"],
     solver=config["solver"],
     iterations=config["iterations"],
@@ -129,7 +150,18 @@ def policy_params_fn(num_steps, make_policy, params, model_path=model_path):
     # Render the walker with the reference expert demonstration trajectory
     os.environ["MUJOCO_GL"] = "osmesa"
     qposes_rollout = [data.qpos for data in rollout]
-    qposes_ref = qposes_rollout
+
+    def f(x):
+        if len(x.shape) != 1:
+            return jax.lax.dynamic_slice_in_dim(
+                x,
+                0,
+                250,
+            )
+        return jp.array([])
+
+    ref_traj = jax.tree_util.tree_map(f, reference_clip)
+    qposes_ref = jp.hstack([ref_traj.position, ref_traj.quaternion, ref_traj.joints])
 
     mj_model = mujoco.MjModel.from_xml_path(f"./models/rodent_pair.xml")
 
