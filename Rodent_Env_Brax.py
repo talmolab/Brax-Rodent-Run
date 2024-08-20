@@ -13,7 +13,7 @@ import numpy as np
 
 import os
 
-_XML_PATH = "./models/rodent_no_skin.xml"
+_XML_PATH = "./models/rodent_new.xml"
 
 
 class Rodent(PipelineEnv):
